@@ -297,11 +297,6 @@ class WRM {
 			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-/*			$html .= "<td><input type=\"radio\" name=\"points".$player->ID."\" value=\"0\" checked=\"checked\">Absent"
-			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".25\">Large Late"
-			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".5\">Medium Late"
-			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".75\">Small Late"
-			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\"1\">Present</td>";*/
             $html .= "<td><div id=\"divNewAttSl".$player->ID."\"></div></td>";
 			$html .= "<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>";
 			$html .= "</tr>";
@@ -309,6 +304,28 @@ class WRM {
 
 		return $html;
 	} 
+	public function EditAttendanceForm() {
+		global $wpdb;
+		$html = "";
+
+		$results = $wpdb->get_results(
+			"SELECT at.ID as RowID, pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, at.Date, at.Points
+			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
+				JOIN WRM_Attendance as at on pl.ID = at.PlayerID");
+
+		foreach($results as $player) {
+			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
+			$html .= "<td>$player->RowID</td>";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
+			$html .= "<td>$player->Date</td>";
+            $html .= "<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>";
+			$html .= "<td><button value=\"$player->RowID\" class=\"delEditAtt\">DELETE</button></td>";
+			$html .= "</tr>";
+		}
+
+		return $html;
+	}
 }
 register_activation_hook(__FILE__, array('WRM', 'Install'));
 register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));

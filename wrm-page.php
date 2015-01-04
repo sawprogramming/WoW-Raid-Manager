@@ -2,15 +2,16 @@
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#playerLoot").DataTable({ "iDisplayLength" : 50 });
-		$("#playerAttendance").DataTable({ "iDisplayLength" : 50 });
+		$("#playerLoot").DataTable({ "iDisplayLength": 50 });
+		$("#playerAttendance").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
 		AddAdminClickHandlers();
 		AddAdminSliders();
 		$("#divAdminTabs").tabs();
-		$("#adminPlayers").DataTable({ "iDisplayLength" : 50 });
-		$("#adminAttendanceForm").DataTable({ "iDisplayLength" : 50 });
+		$("#adminPlayers").DataTable({ "iDisplayLength": 50 });
+		$("#adminAttendanceForm").DataTable({ "iDisplayLength": 50 });
+		$("#tblEditAttendance").DataTable({ "iDisplayLength": 50, "order" : [[ 0, "desc" ]] })
 		<?php } ?>
 	});
 </script>
@@ -62,9 +63,10 @@
 		<div id="adminPanel" style="width: 100%;">
 			<div id="divAdminTabs">
 				<ul>
-					<li><a href="#tabs-1">Player Controls</a></li>
+					<li><a href="#tabs-1">Add/Remove Players</a></li>
 					<li><a href="#tabs-2">Loot Controls</a></li>
-					<li><a href="#tabs-3">Attendance Controls</a></li>
+					<li><a href="#tabs-3">Daily Raid Attendance</a></li>
+					<li><a href="#tabs-4">Edit Attendance Records</a></li>
 				</ul>
 				<div id="tabs-1">
 					<div id="addPlayerForm" align="center">
@@ -102,16 +104,11 @@
 				</div>
 				<div id="tabs-2"></div>
 				<div id="tabs-3">
-					<div style="display: inline-block;">
-						<button id="btnNewAttendance" style="display: inline-block;">New Attendance Form</button>
-						<button id="btnEditAttendance" style="display: inline-block;">Edit Attendance Form</button>
-						<button id="btnUploadAttendance" style="display: inline-block;">Upload Attendance Form</button>
-					</div> 
-					<div style="display: inline-block; float: right">
+					<div style="display: inline-block; float: right;">
 						<button id="btnSaveAttendance">Save</button>
-				    </div> <br /> <br />
+					</div> <br /> <br />
 					<div id="divNewAttendance">
-						<table id="adminAttendanceForm" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822 !important;">
+						<table id="adminAttendanceForm" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -125,6 +122,26 @@
 							</tbody>
 						</table>
 					</div>
+				</div>
+				<div id="tabs-4">
+					<div style="display: inline-block; float: right;">
+						<button id="btnSaveEditAttendance">Save</button>
+					</div> <br /> <br />
+					<table id="tblEditAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822 !important; color: #FFFFFF">
+						<thead>
+							<tr>
+								<th>Row</th>
+								<th>Name</th>
+								<th>Class</th>
+								<th>Date</th>
+								<th>Points</th>
+								<th>Options</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $blah = new WRM(); echo $blah->EditAttendanceForm(); ?>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
