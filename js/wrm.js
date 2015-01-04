@@ -66,7 +66,7 @@ function AddAdminClickHandlers() {
 		// get the attendance points for each player
 		$("#adminAttendanceForm > tbody > tr").each(function (index) {
 			pid = $("td:eq(3) button", this).val();
-			ppoints = $("td:eq(2) input:radio[name='points" + pid + "']:checked", this).val();
+			ppoints = $("#" + $("td:eq(2) div", this).attr("id")).slider("value");
 
 			results[index] = { id: pid, points: ppoints };
 		});

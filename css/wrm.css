@@ -1,7 +1,14 @@
 .nobullet ul { list-style: none; padding-left: 0; }
 
+/* Slider Related Styles */
+.ui-slider { width: 15em; }
+.llate   .ui-slider-range { background: red; }
+.mlate   .ui-slider-range { background: orange; }
+.slate   .ui-slider-range { background: yellow; }
+.present .ui-slider-range { background: green; }
+
 /* WoW Related Styles */
-.deathknight { color: #C41F3B; }
+.deathknight { color: #C41F3B; }	
 .druid       { color: #FF7D0A; }
 .hunter      { color: #ABD473; }
 .mage        { color: #69CCF0; }

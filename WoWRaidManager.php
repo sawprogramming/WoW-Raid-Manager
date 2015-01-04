@@ -271,7 +271,6 @@ class WRM {
 	} 
 	public function GetPlayersAttendance() {
 		global $wpdb;
-
 		$html = "";
 
 		$results = $wpdb->get_results(
@@ -298,11 +297,12 @@ class WRM {
 			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-			$html .= "<td><input type=\"radio\" name=\"points".$player->ID."\" value=\"0\" checked=\"checked\">Absent"
+/*			$html .= "<td><input type=\"radio\" name=\"points".$player->ID."\" value=\"0\" checked=\"checked\">Absent"
 			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".25\">Large Late"
 			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".5\">Medium Late"
 			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\".75\">Small Late"
-			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\"1\">Present</td>";
+			            ."<input type=\"radio\" name=\"points".$player->ID."\" value=\"1\">Present</td>";*/
+            $html .= "<td><div id=\"divNewAttSl".$player->ID."\"></div></td>";
 			$html .= "<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>";
 			$html .= "</tr>";
 		}

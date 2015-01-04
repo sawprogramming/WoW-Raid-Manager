@@ -10,6 +10,53 @@
 		$("#divAdminTabs").tabs();
 		$("#adminPlayers").DataTable({ "iDisplayLength" : 50 });
 		$("#adminAttendanceForm").DataTable({ "iDisplayLength" : 50 });
+		$("#adminAttendanceForm > tbody > tr").each(function(index) {
+			var sliderId = $("td:eq(2) div", this).attr("id");
+
+			$('#' + sliderId).slider({
+				range: "min",
+				value: 1,
+				min: 0,
+				max: 1,
+				step: 0.25,
+				slide: function (event, ui) {
+					switch(ui.value) {
+						case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
+						case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
+						case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
+						case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
+					}
+				},
+				change: function (event, ui) {
+					switch(ui.value) {
+						case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
+						case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
+						case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
+						case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
+					}
+				}
+			});
+			$('#' + sliderId).addClass("present");
+		});
+		$("#divNewAttBulk").slider({
+			range: "min",
+			value: 1,
+			min: 0,
+			max: 1,
+			step: 0.25,
+			slide: function (event, ui) {
+				switch(ui.value) {
+					case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
+					case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
+					case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
+					case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
+				}
+
+				$("#adminAttendanceForm > tbody > tr").each(function() {
+					 $("#" + $("td:eq(2) div", this).attr("id")).slider("value", ui.value);
+				});
+			}
+		}).addClass("present");
 		<?php } ?>
 	});
 </script>
@@ -115,7 +162,7 @@
 								<tr>
 									<th>Name</th>
 									<th>Class</th>
-									<th>Points</th>
+									<th>Points<br /><div id="divNewAttBulk"></div></th>
 									<th>Options</th>
 								</tr>
 							</thead>
