@@ -2,16 +2,16 @@
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#playerLoot").DataTable({ "iDisplayLength": 50 });
+		$("#playerLoot").DataTable({ "iDisplayLength": 10 });
 		$("#playerAttendance").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
 		AddAdminClickHandlers();
 		AddAdminSliders();
 		$("#divAdminTabs").tabs();
-		$("#adminPlayers").DataTable({ "iDisplayLength": 50 });
+		$("#adminPlayers").DataTable({ "iDisplayLength": 10 });
 		$("#adminAttendanceForm").DataTable({ "iDisplayLength": 50 });
-		$("#tblEditAttendance").DataTable({ "iDisplayLength": 50, "order" : [[ 0, "desc" ]] })
+		$("#tblEditAttendance").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] })
 		<?php } ?>
 	});
 </script>
@@ -88,7 +88,7 @@
 						</select>
 						<button id="btnAdminAddPlayer">Add</button>
 					</div> <br />
-					<table id="adminPlayers" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822 !important;">
+					<table id="adminPlayers" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 						<thead>
 							<tr>
 								<th>ID</th>
@@ -127,7 +127,7 @@
 					<div style="display: inline-block; float: right;">
 						<button id="btnSaveEditAttendance">Save</button>
 					</div> <br /> <br />
-					<table id="tblEditAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822 !important; color: #FFFFFF">
+					<table id="tblEditAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 						<thead>
 							<tr>
 								<th>Row</th>

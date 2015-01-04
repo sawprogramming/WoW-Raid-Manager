@@ -61,7 +61,7 @@ class WRM {
 			ID  int(10) NOT NULL AUTO_INCREMENT,
 			PlayerID  smallint(5),
 			Date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			Points  decimal(3, 2),
+			Points  float(3, 2),
 			PRIMARY KEY  ID (ID),
 			FOREIGN KEY (PlayerID) REFERENCES WRM_Player(ID)
 		) $charset_collate;";
@@ -154,7 +154,7 @@ class WRM {
 			foreach($results as $player){
 				$result = $wpdb->query($wpdb->prepare(
 					"INSERT INTO WRM_Attendance (PlayerID, Points)
-					VALUES (%d, %d)", intval($player["id"]), floatval($player["points"])));
+					VALUES (%d, %f)", intval($player["id"]), floatval($player["points"])));
 
 				// stop the transaction if anything failed
 				if(!$result) {
