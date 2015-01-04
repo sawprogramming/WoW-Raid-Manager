@@ -1,4 +1,4 @@
-function AddClickHandlers() {
+function AddAdminClickHandlers() {
 	$('#btnAdminAddPlayer').click(function() {
 		var name = $.trim($('#txtAdminAddPlayer').val());
 		var classId = $('#slAdminAddPlayer').val();

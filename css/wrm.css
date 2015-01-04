@@ -1,22 +1,14 @@
 .nobullet ul { list-style: none; padding-left: 0; }
-.atd-block {
-    padding: 0px 2px 0px 2px;
-    margin-bottom: 2px;
-    display: inline-block;
-    width: 135px;
-    height: 90px;
-    border: 1px solid black;
-    font-size: 11px;
-    vertical-align: text-top;
-}
+
+/* WoW Related Styles */
 .deathknight { color: #C41F3B; }
-.druid { color: #FF7D0A; }
-.hunter { color: #ABD473; }
-.mage { color: #69CCF0; }
-.monk { color: #00FF96; }
-.paladin { color: #F58CBA; }
-.priest { color: #FFFFFF; }
-.rogue { color: #FFF569; }
-.shaman { color: #0070DE; }
-.warlock { color: #9482C9; }
-.warrior { color: #C79C6E; }
+.druid       { color: #FF7D0A; }
+.hunter      { color: #ABD473; }
+.mage        { color: #69CCF0; }
+.monk        { color: #00FF96; }
+.paladin     { color: #F58CBA; }
+.priest      { color: #FFFFFF; }
+.rogue       { color: #FFF569; }
+.shaman      { color: #0070DE; }
+.warlock     { color: #9482C9; }
+.warrior     { color: #C79C6E; }

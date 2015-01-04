@@ -116,11 +116,9 @@ class WRM {
 	// AJAX functions
 	public function AddPlayer() {
 		global $wpdb;
-		$user = wp_get_current_user();
-		$allowed_roles = array('administrator', 'keymaster');
 
 		// only allow authorized users to use this function
-		if(array_intersect($allowed_roles, $user->roles)) {
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
 				$wpdb->query("START TRANSACTION");
 				$result = $wpdb->query($wpdb->prepare(
 					"INSERT INTO WRM_Player (Name, ClassID)
@@ -132,11 +130,9 @@ class WRM {
 	}
 	public function DelPlayer() {
 		global $wpdb;
-		$user = wp_get_current_user();
-		$allowed_roles = array('administrator', 'keymaster');
 
 		// only allow authorized users to use this function
-		if(array_intersect($allowed_roles, $user->roles)) {
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
 			$wpdb->query("START TRANSACTION");
 			$result = $wpdb->query($wpdb->prepare(
 				"DELETE FROM WRM_Player
@@ -148,11 +144,9 @@ class WRM {
 	}
 	public function AddGroupAttendance() {
 		global $wpdb;
-		$user = wp_get_current_user();
-		$allowed_roles = array('administrator', 'keymaster');
-
+		
 		// only allow authorized users to use this function
-		if(array_intersect($allowed_roles, $user->roles)) {
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
 			$results = $_POST['results'];
 
 			$wpdb->query("START TRANSACTION");

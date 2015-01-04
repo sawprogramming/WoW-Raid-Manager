@@ -2,25 +2,15 @@
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#adminPlayers").DataTable({
-			"iDisplayLength" : 50
-		});
+		$("#playerLoot").DataTable({ "iDisplayLength" : 50 });
+		$("#playerAttendance").DataTable({ "iDisplayLength" : 50 });
 
-		$("#playerAttendance").DataTable({
-			"iDisplayLength" : 50
-		});
-
-		$("#playerLoot").DataTable({
-			"iDisplayLength" : 50
-		});
-
-		$("#adminAttendanceForm").DataTable({
-			"iDisplayLength" : 50
-		});
-
+		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
+		AddAdminClickHandlers();
 		$("#divAdminTabs").tabs();
-
-		AddClickHandlers();
+		$("#adminPlayers").DataTable({ "iDisplayLength" : 50 });
+		$("#adminAttendanceForm").DataTable({ "iDisplayLength" : 50 });
+		<?php } ?>
 	});
 </script>
 
@@ -65,10 +55,8 @@
 				</tbody>
 			</table>
 		</div>
-<?php 
-	$user = wp_get_current_user();
-	$allowed_roles = array('administrator', 'keymaster');
-	if(array_intersect($allowed_roles, $user->roles)) { ?>
+		
+		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
 		<h1>Admin Controls</h1>
 		<div id="adminPanel" style="width: 100%;">
 			<div id="divAdminTabs">
@@ -139,4 +127,4 @@
 				</div>
 			</div>
 		</div>
-<?php } ?>
+		<?php } ?>
