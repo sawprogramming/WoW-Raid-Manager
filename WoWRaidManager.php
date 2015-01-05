@@ -289,7 +289,7 @@ class WRM {
 
 		return $html;
 	}
-	public function CreateAttendanceForm() {
+	public function RaidAttendanceForm() {
 		global $wpdb;
 		$html = "";
 
@@ -349,7 +349,7 @@ class WRM {
             $html .= "<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>";
             $html .= "<td>$player->RaidName</td>";
 			$html .= "<td>$player->Date</td>";
-			$html .= "<td><button value=\"$player->RowID\" class=\"delEditAtt\">DELETE</button></td>";
+			$html .= "<td><button value=\"$player->RowID\">DELETE</button></td>";
 			$html .= "</tr>";
 		}
 

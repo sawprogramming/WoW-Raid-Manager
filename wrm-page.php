@@ -10,8 +10,9 @@
 		AddAdminSliders();
 		$("#divAdminTabs").tabs();
 		$("#adminPlayers").DataTable({ "iDisplayLength": 10 });
-		$("#adminAttendanceForm").DataTable({ "iDisplayLength": 50 });
-		$("#tblEditAttendance").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] })
+		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
+		$("#tblEditAttendance").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
+		$("#tblEditLoot").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
 		<?php } ?>
 	});
 </script>
@@ -64,7 +65,7 @@
 			<div id="divAdminTabs">
 				<ul>
 					<li><a href="#tabs-1">Add/Remove Players</a></li>
-					<li><a href="#tabs-2">Loot Controls</a></li>
+					<li><a href="#tabs-2">Edit Loot Records</a></li>
 					<li><a href="#tabs-3">Daily Raid Attendance</a></li>
 					<li><a href="#tabs-4">Edit Attendance Records</a></li>
 				</ul>
@@ -125,7 +126,7 @@
 						<button id="btnSaveAttendance">Save</button>
 					</div> <br /> <br />
 					<div id="divNewAttendance">
-						<table id="adminAttendanceForm" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
+						<table id="tblRaidAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -135,7 +136,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php $blah = new WRM(); echo $blah->CreateAttendanceForm(); ?>
+								<?php $blah = new WRM(); echo $blah->RaidAttendanceForm(); ?>
 							</tbody>
 						</table>
 					</div>

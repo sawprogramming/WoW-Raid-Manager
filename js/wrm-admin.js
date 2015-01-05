@@ -54,7 +54,7 @@ function AddAdminClickHandlers() {
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
 		var nRow = row[0];
-		$("#adminAttendanceForm").dataTable().dataTable().fnDeleteRow(nRow);
+		$("#tblRaidAttendance").dataTable().dataTable().fnDeleteRow(nRow);
 	});
 
 	$("#btnSaveAttendance").click(function() {
@@ -64,7 +64,7 @@ function AddAdminClickHandlers() {
 		$('#btnSaveAttendance').attr("disabled", "disabled");
 
 		// get the attendance points for each player
-		$("#adminAttendanceForm > tbody > tr").each(function (index) {
+		$("#tblRaidAttendance > tbody > tr").each(function (index) {
 			pid = $("td:eq(3) button", this).val();
 			ppoints = $("#" + $("td:eq(2) div", this).attr("id")).slider("value");
 
@@ -84,7 +84,7 @@ function AddAdminClickHandlers() {
 }
 
 function AddAdminSliders() {
-	$("#adminAttendanceForm > tbody > tr").each(function(index) {
+	$("#tblRaidAttendance > tbody > tr").each(function(index) {
 		var sliderId = $("td:eq(2) div", this).attr("id");
 
 		$('#' + sliderId).slider({
@@ -127,7 +127,7 @@ function AddAdminSliders() {
 				case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
 			}
 
-			$("#adminAttendanceForm > tbody > tr").each(function() {
+			$("#tblRaidAttendance > tbody > tr").each(function() {
 				 $("#" + $("td:eq(2) div", this).attr("id")).slider("value", ui.value);
 			});
 		}
