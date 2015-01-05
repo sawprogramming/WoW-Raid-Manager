@@ -1,55 +1,6 @@
-function AddAdminClickHandlers() {
-	$('#btnAdminAddPlayer').click(function() {
-		var name = $.trim($('#txtAdminAddPlayer').val());
-		var classId = $('#slAdminAddPlayer').val();
-
-		// error checking
-		if(classId == 0) { alert("You must select a class for the player."); return; }
-		if(name.length < 3) { alert("Name is too short to be a proper name in WoW"); return; }
-		if(!/^([A-Za-z]+)$/.test(name)) { alert("Name contains non-alphabetical characters."); return; }
-
-		// disable the fields so the user doesn't change them while the request is being processed
-		$('#txtAdminAddPlayer').attr("disabled", "disabled");
-		$('#slAdminAddPlayer').attr("disabled", "disabled");
-		$('#btnAdminAddPlayer').attr("disabled", "disabled");
-
-		// make the ajax call
-		$.ajax({
-			url: ajax_object.ajax_url,
-			type: 'POST',
-			data: { 'action': 'wrm_addplayer', 'name': name.charAt(0).toUpperCase() + name.slice(1), 'classId': classId },
-			success: function () {
-				$('#txtAdminAddPlayer').val('');
-				$('#slAdminAddPlayer').val('0');
-			}, 
-			complete: function () {
-				$('#txtAdminAddPlayer').removeAttr("disabled");
-				$('#slAdminAddPlayer').removeAttr("disabled");
-				$('#btnAdminAddPlayer').removeAttr("disabled");
-			}
-		});
-	});
-
-	$(".del").click(function() {
-		var row = $(this).closest('tr'); 
-		var nRow = row[0];
-
-		// disable the button so the user doesn't resend the request
-		$(this).prop("disabled", true);
-
-		// make the ajax call
-		$.ajax({
-			url: ajax_object.ajax_url,
-			type: 'POST',
-			data: { 'action': 'wrm_delplayer', 'id': $(row).find('td:first').text() },
-			success: function() {
-				$("#adminPlayers").dataTable().dataTable().fnDeleteRow(nRow);
-			},
-			complete: function() {
-				$(this).prop("disabled", false);
-			}
-		});
-	});
+function Admin_AddClickHandlers() {
+	Admin_AddPlayer();
+	Admin_RmPlayer();
 
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
@@ -83,7 +34,7 @@ function AddAdminClickHandlers() {
 	});
 }
 
-function AddAdminSliders() {
+function Admin_AddSliders() {
 	$("#tblRaidAttendance > tbody > tr").each(function(index) {
 		var sliderId = $("td:eq(2) div", this).attr("id");
 
@@ -132,4 +83,86 @@ function AddAdminSliders() {
 			});
 		}
 	}).addClass("present");
+}
+
+function Admin_AddPlayer() {
+	$('#btnAdminAddPlayer').click(function() {
+		var name = $.trim($('#txtAdminAddPlayer').val());
+		var classId = $('#slAdminAddPlayer').val();
+
+		// error checking
+		if(classId == 0) { alert("You must select a class for the player."); return; }
+		if(name.length < 3) { alert("Name is too short to be a proper name in WoW"); return; }
+		if(!/^([A-Za-z]+)$/.test(name)) { alert("Name contains non-alphabetical characters."); return; }
+
+		// disable the fields so the user doesn't change them while the request is being processed
+		$('#txtAdminAddPlayer').attr("disabled", "disabled");
+		$('#slAdminAddPlayer').attr("disabled", "disabled");
+		$('#btnAdminAddPlayer').attr("disabled", "disabled");
+
+		// make the ajax call
+		$.ajax({
+			url: ajax_object.ajax_url,
+			type: 'POST',
+			data: { 'action': 'wrm_addplayer', 'name': name.charAt(0).toUpperCase() + name.slice(1), 'classId': classId },
+			success: function () {
+				$('#txtAdminAddPlayer').val('');
+				$('#slAdminAddPlayer').val('0');
+			}, 
+			complete: function () {
+				$('#txtAdminAddPlayer').removeAttr("disabled");
+				$('#slAdminAddPlayer').removeAttr("disabled");
+				$('#btnAdminAddPlayer').removeAttr("disabled");
+			}
+		});
+	});
+}
+function Admin_RmPlayer() {
+	$(".del").click(function() {
+		var row, nRow, message, plName, plId, plClass, button = this;
+
+		// disable the button so the user doesn't resend the request
+		$(button).prop("disabled", true);
+
+		// get the info from the row
+		row = $(button).closest('tr');
+		nRow = row[0];
+		plId = $(row).find('td:eq(0)').text();
+		plName = $(row).find('td:eq(1)').text();
+		plClass = $(row).find('td:eq(2) span').attr("class");
+
+		// build the confirmation message
+		message = "Are you sure want to remove " +
+		          "<span class=\"" + plClass + "\">" + plName + "</span>?";
+
+		// show confirmation box
+		$("<div>" + message + "</div>").dialog({
+			title: "Confirm Removal",
+			resizable: false,
+			modal: true,
+			close: function() { 
+				$(button).prop("disabled", false);
+				$(this).dialog("close"); 
+			},
+			buttons: {
+				"Remove" : function() {
+					$.ajax({
+						url: ajax_object.ajax_url,
+						type: 'POST',
+						data: { 'action': 'wrm_delplayer', 'id': plId },
+						success: function() { 
+							$("#adminPlayers").dataTable().dataTable().fnDeleteRow(nRow);
+						},
+						complete: function() { $(button).prop("disabled", false); }
+					});
+
+					$(this).dialog("close");
+				},
+				"Cancel" : function() {
+					$(this).dialog("close");
+					$(button).prop("disabled", false);
+				}
+			}
+		});
+	});
 }

@@ -6,8 +6,8 @@
 		$("#playerAttendance").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
-		AddAdminClickHandlers();
-		AddAdminSliders();
+		Admin_AddClickHandlers();
+		Admin_AddSliders();
 		$("#divAdminTabs").tabs();
 		$("#adminPlayers").DataTable({ "iDisplayLength": 10 });
 		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
