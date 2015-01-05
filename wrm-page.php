@@ -102,7 +102,24 @@
 						</tbody>
 					</table>
 				</div>
-				<div id="tabs-2"></div>
+				<div id="tabs-2">
+					<table id="tblEditLoot" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
+						<thead>
+							<tr>
+								<th>Row</th>
+								<th>Name</th>
+								<th>Class</th>
+								<th>Item</th>
+								<th>Raid</th>
+								<th>Date</th>
+								<th>Options</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $blah = new WRM(); echo $blah->EditLootForm(); ?>
+						</tbody>
+					</table>
+				</div>
 				<div id="tabs-3">
 					<div style="display: inline-block; float: right;">
 						<button id="btnSaveAttendance">Save</button>
@@ -133,8 +150,8 @@
 								<th>Row</th>
 								<th>Name</th>
 								<th>Class</th>
-								<th>Date</th>
 								<th>Points</th>
+								<th>Date</th>
 								<th>Options</th>
 							</tr>
 						</thead>

@@ -183,6 +183,19 @@ class WRM {
 			case 11: return "monk";
 		}
 	} 
+	public function BuildLootUrl($itemId, $bonusOne, $bonusTwo, $bonusThree) {
+		$itemUrl = "http://www.wowhead.com/item=".$itemId;
+
+		if($bonusOne != NULL) {
+			$itemUrl .= "&bonus=".$bonusOne;
+			if($bonusTwo != NULL) {
+				$itemUrl .= ":".$bonusTwo;
+				if($bonusThree != NULL) $itemUrl .= ":".$bonusThree;
+			}
+		}
+
+		return $itemUrl;
+	}
 
 	// Database functions
 	public function GetPlayers() {
@@ -208,7 +221,6 @@ class WRM {
 	}
 	public function GetLoot() {
 		global $wpdb;
-
 		$html = "";
 
 		$results = $wpdb->get_results(
@@ -216,18 +228,11 @@ class WRM {
 			 FROM WRM_Player as pl JOIN WRM_Loot as it ON pl.ID = it.PlayerID JOIN WRM_Raid as rd ON it.RaidID = rd.ID");
 
 		foreach($results as $loot) {
-			// build the wowhead link to the item
-			$itemUrl = "http://www.wowhead.com/item=".$loot->ItemID;
-			if($loot->BonusOne != NULL) {
-				$itemUrl .= "&bonus=".$loot->BonusOne;
-				if($loot->BonusTwo != NULL) {
-					$itemUrl .= ":".$loot->BonusTwo;
-					if($loot->BonusThree != NULL) $itemUrl .= ":".$loot->BonusThree;
-				}
-			}
-
-			// make the tr
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\"><td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td><td><a href=\"".$itemUrl."\"></a></td><td>".$loot->RaidName."</td></tr>";
+			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
+			$html .= "<td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td>";
+			$html .= "<td><a href=\"".WRM::BuildLootURL($loot->ItemID, $loot->BonusOne, $loot->BonusTwo, $loot->BonusThree)."\"></a></td>";
+			$html .= "<td>".$loot->RaidName."</td>";
+			$html .= "</tr>";
 		}
 
 		return $html;
@@ -318,8 +323,32 @@ class WRM {
 			$html .= "<td>$player->RowID</td>";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
+			$html .= "<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>";
 			$html .= "<td>$player->Date</td>";
-            $html .= "<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>";
+			$html .= "<td><button value=\"$player->RowID\" class=\"delEditAtt\">DELETE</button></td>";
+			$html .= "</tr>";
+		}
+
+		return $html;
+	}
+	public function EditLootForm() {
+		global $wpdb;
+		$html = "";
+
+		$results = $wpdb->get_results(
+			"SELECT lt.ID as RowID, pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, lt.Date, lt.ItemID, lt.BonusOne, lt.BonusTwo, lt.BonusThree, rd.Name as RaidName
+			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
+				JOIN WRM_Loot as lt on pl.ID = lt.PlayerID
+				JOIN WRM_Raid as rd on rd.ID = lt.RaidID");
+
+		foreach($results as $player) {
+			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
+			$html .= "<td>$player->RowID</td>";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
+            $html .= "<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>";
+            $html .= "<td>$player->RaidName</td>";
+			$html .= "<td>$player->Date</td>";
 			$html .= "<td><button value=\"$player->RowID\" class=\"delEditAtt\">DELETE</button></td>";
 			$html .= "</tr>";
 		}
