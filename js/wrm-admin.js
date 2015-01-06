@@ -31,39 +31,16 @@ function Admin_RmTableRow(tableId, actionName, primaryKey, message, nRow, button
 }
 function Admin_AddClickHandlers() {
 	Admin_AddPlayer();
+	Admin_AddEditAttnd();
 	Admin_RmPlayer();
 	Admin_RmEditAttnd();
 	Admin_RmLoot();
+	Admin_AddRaidAttnd();
 
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
 		var nRow = row[0];
 		$("#tblRaidAttendance").dataTable().dataTable().fnDeleteRow(nRow);
-	});
-
-	$("#btnSaveAttendance").click(function() {
-		var results = [], pid, ppoints;
-		
-		// disable button so the user doesn't resend the request
-		$('#btnSaveAttendance').attr("disabled", "disabled");
-
-		// get the attendance points for each player
-		$("#tblRaidAttendance > tbody > tr").each(function (index) {
-			pid = $("td:eq(3) button", this).val();
-			ppoints = $("#" + $("td:eq(2) div", this).attr("id")).slider("value");
-
-			results[index] = { id: pid, points: ppoints };
-		});
-
-		// make the ajax call
-		$.ajax({
-			url: ajax_object.ajax_url,
-			type: 'POST',
-			data: { 'action': 'wrm_addgrpatt', 'results': results },
-			complete: function() {
-				$('#btnSaveAttendance').removeAttr("disabled");
-			}
-		});
 	});
 }
 function Admin_AddSliders() {
@@ -129,14 +106,31 @@ function Admin_AddSliders() {
 				case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
 				case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
 			}
+		},
+		change: function (event, ui) {
+			switch(ui.value) {
+				case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
+				case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
+				case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
+				case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
+			}
 		}
 	}).addClass("present");
 }
 function Admin_AddDatePickers() {
+	var today = new Date();
+
 	$("#dpEditAttnd").datepicker({
       showOtherMonths: true,
-      selectOtherMonths: true
-    });
+      selectOtherMonths: true,
+      dateFormat: "yy-mm-dd",
+    }).datepicker("setDate", today);
+
+	$("#dpRaidAttnd").datepicker({
+      showOtherMonths: true,
+      selectOtherMonths: true,
+      dateFormat: "yy-mm-dd",
+    }).datepicker("setDate", today);
 }
 
 // Add/Remove Players functions
@@ -238,9 +232,76 @@ function Admin_RmLoot() {
 	});
 }
 
+// Daily Raid Attendance functions
+function Admin_AddRaidAttnd() {
+	$("#btnSaveAttendance").click(function() {
+		var results = [], pid, ppoints;
+		
+		// disable button so the user doesn't resend the request
+		$('#btnSaveAttendance').attr("disabled", "disabled");
+
+		// get the attendance points for each player
+		$("#tblRaidAttendance > tbody > tr").each(function (index) {
+			pid = $("td:eq(3) button", this).val();
+			ppoints = $("#" + $("td:eq(2) div", this).attr("id")).slider("value");
+
+			results[index] = { id: pid, points: ppoints };
+		});
+
+		// make the ajax call
+		$.ajax({
+			url: ajax_object.ajax_url,
+			type: 'POST',
+			data: { 'action': 'wrm_addgrpatt', 'results': results, 'date': $("#dpRaidAttnd").val() },
+			complete: function() {
+				$('#btnSaveAttendance').removeAttr("disabled");
+			}
+		});
+	});
+}
+
 // Edit Attendance Records functions
 function Admin_AddEditAttnd() {
+	$("#btnEditAttnd").click(function() {
+		var name, points, date, month, day;
 
+		// fill variables
+		name = $.trim($('#txtEditAttnd').val()).toLowerCase();
+		name = name.charAt(0).toUpperCase() + name.slice(1);
+		points = $("#EditAttndSlider").slider("value");
+		date = $("#dpEditAttnd").val();
+
+		// error checking
+		if(!(/^([A-Za-z]+)$/.test(name) || /^(\d+)$/.test(name))) { alert("Name field isn't a player name or ID."); return; } 
+		if(!/^(\d{4}[\/-]\d{2}[\/-]\d{2})$/.test(date)) { alert("Date isn't in proper format (yyyy/mm/dd)."); return; }
+
+		// disable the fields so the user doesn't change them while the request is being processed
+		$('#txtEditAttnd').prop("disabled", true);
+		$('#EditAttndSlider').prop("disabled", true);
+		$('#dpEditAttnd').prop("disabled", true);
+		$('#btnEditAttnd').prop("disabled", true);
+
+		// make the call
+		$.ajax({
+			url: ajax_object.ajax_url,
+			type: "POST",
+			data: { "action": "wrm_addattnd", "name": name, "points": points, "date": date },
+			success: function(response, status, junk) {
+				if(response.search("ERROR") == -1) {
+					name = $("#txtEditAttnd").val('');
+					points = $("#EditAttndSlider").slider("value", 1);
+					date = $("#dpEditAttnd").val();
+				}
+				else alert(response);
+			},
+			complete: function() {
+				$('#txtEditAttnd').prop("disabled", false);
+				$('#EditAttndSlider').prop("disabled", false);
+				$('#dpEditAttnd').prop("disabled", false);
+				$('#btnEditAttnd').prop("disabled", false);
+			}
+		});
+	});
 }
 function Admin_RmEditAttnd() {
 	$("#tblEditAttnd").on("click", ".rmEditAttnd", function() {

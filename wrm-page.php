@@ -2,7 +2,7 @@
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#playerLoot").DataTable({ "iDisplayLength": 10 });
+		$("#playerLoot").DataTable({ "iDisplayLength": 15 });
 		$("#playerAttendance").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
@@ -10,10 +10,10 @@
 		Admin_AddSliders();
 		Admin_AddDatePickers();
 		$("#divAdminTabs").tabs();
-		$("#tblEditPlayers").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
+		$("#tblEditPlayers").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
 		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
-		$("#tblEditAttnd").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
-		$("#tblEditLoot").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
+		$("#tblEditAttnd").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
+		$("#tblEditLoot").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
 		<?php } ?>
 	});
 </script>
@@ -123,9 +123,11 @@
 					</table>
 				</div>
 				<div id="tabs-3">
-					<div style="display: inline-block; float: right;">
-						<button id="btnSaveAttendance">Save</button>
-					</div> <br /> <br />
+					<div align="center">
+						<label for="dpRaidAttnd" style="display: inline-block;">Date:</label>
+						<input type="text" id="dpRaidAttnd" placeholder="yyyy/mm/dd" maxlength="10">
+						<button id="btnSaveAttendance" style="float: right;">Save</button>
+					</div> <br />
 					<div id="divNewAttendance">
 						<table id="tblRaidAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 							<thead>
@@ -147,9 +149,8 @@
 						<label for="txtEditAttnd" style="display: inline-block;">Manual Attendance Entry:</label>
 						<input id="txtEditAttnd" type="text" maxlength="12" placeholder="Player Name or ID" />
 						<div id="EditAttndSlider" style="display: inline-block; margin: 0px 6px 0px 6px;"></div>
-						<input type="text" id="dpEditAttnd" placeholder="mm/dd/yyyy" maxlength="10">
+						<input type="text" id="dpEditAttnd" placeholder="yyyy/mm/dd" maxlength="10">
 						<button id="btnEditAttnd">Add</button>
-
 					</div>
 					<table id="tblEditAttnd" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 						<thead>
