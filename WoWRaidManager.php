@@ -277,8 +277,8 @@ class WRM {
 				 FROM WRM_Player as pl 
 				 	JOIN WRM_Attendance as att ON pl.ID = att.PlayerID
 				 	JOIN (SELECT PlayerID, COUNT(Points) as Total
-			 		    FROM WRM_Attendance
-				 		WHERE PlayerID = %d";
+                          FROM WRM_Attendance
+                          WHERE PlayerID = %d";
 		if($interval > 0) $sql .= " AND Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW() ";
 		$sql .= " GROUP BY PlayerID) as Max ON Max.PlayerID = att.PlayerID 
 				 WHERE att.PlayerID = %d ";
@@ -303,37 +303,37 @@ class WRM {
 	}
 	public function UserLootTbl() {
 		$html = "<table id=\"tblUserLoot\" class=\"nowrap compact wrm\">"
-				."<thead><tr><th>Player</th><th>Item</th><th>Raid</th></tr></thead>"
-				."<tbody>".WRM::GetUserLootRows()."</tbody>"
-				."</table>";
+               ."<thead><tr><th>Player</th><th>Item</th><th>Raid</th></tr></thead>"
+               ."<tbody>".WRM::GetUserLootRows()."</tbody>"
+               ."</table>";
 		return $html;
 	}
 	public function EditPlayerTbl() {
 		$html = "<table id=\"tblEditPlayers\" class=\"nowrap compact wrm\">"
-				."<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Options</th></tr></thead>"
-				."<tbody>".WRM::GetEditPlayerRows()."</tbody>"
-				."</table>";
+               ."<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Options</th></tr></thead>"
+               ."<tbody>".WRM::GetEditPlayerRows()."</tbody>"
+               ."</table>";
 		return $html;
 	}
 	public function EditLootTbl() {
 		$html = "<table id=\"tblEditLoot\" class=\"nowrap compact wrm\">"
-				."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Item</th><th>Raid</th><th>Date</th><th>Options</th></tr></thead>"
-				."<tbody>".WRM::GetEditLootRows()."</tbody>"
-				."</table>";
+               ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Item</th><th>Raid</th><th>Date</th><th>Options</th></tr></thead>"
+               ."<tbody>".WRM::GetEditLootRows()."</tbody>"
+               ."</table>";
 		return $html;
 	}
 	public function RaidAttndTbl() {
 		$html = "<table id=\"tblRaidAttendance\" class=\"nowrap compact wrm\">"
-				."<thead><tr><th>Name</th><th>Class</th><th>Points<br /><div id=\"divNewAttBulk\"></div></th><th>Options</th></tr></thead>"
-				."<tbody>".WRM::GetRaidAttndRows()."</tbody>"
-				."</table>";
+               ."<thead><tr><th>Name</th><th>Class</th><th>Points<br /><div id=\"divNewAttBulk\"></div></th><th>Options</th></tr></thead>"
+               ."<tbody>".WRM::GetRaidAttndRows()."</tbody>"
+               ."</table>";
 		return $html;
 	}
 	public function EditAttndTbl() {
 		$html = "<table id=\"tblEditAttnd\" class=\"nowrap compact wrm\">"
-				."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Points</th><th>Date</th><th>Options</th></tr></thead>"
-				."<tbody>".WRM::GetEditAttndRows()."</tbody>"
-				."</table>";
+               ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Points</th><th>Date</th><th>Options</th></tr></thead>"
+               ."<tbody>".WRM::GetEditAttndRows()."</tbody>"
+               ."</table>";
 		return $html;
 	}
 
@@ -348,12 +348,12 @@ class WRM {
 
 		foreach($results as $player) {
 			$html .= "<tr>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-					."<td>".WRM::GetAttendanceOver(14, $player->ID)."</td>"
-					."<td>".WRM::GetAttendanceOver(30, $player->ID)."</td>"
-					."<td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>"
-					."</tr>";
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+                    ."<td>".WRM::GetAttendanceOver(14, $player->ID)."</td>"
+                    ."<td>".WRM::GetAttendanceOver(30, $player->ID)."</td>"
+                    ."<td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>"
+                    ."</tr>";
 		}
 
 		return $html;
@@ -368,10 +368,10 @@ class WRM {
 
 		foreach($results as $loot) {
 			$html .= "<tr>"
-					."<td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td>"
-					."<td><a href=\"".WRM::BuildLootURL($loot->ItemID, $loot->BonusOne, $loot->BonusTwo, $loot->BonusThree)."\"></a></td>"
-					."<td>".$loot->RaidName."</td>"
-					."</tr>";
+                    ."<td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td>"
+                    ."<td><a href=\"".WRM::BuildLootURL($loot->ItemID, $loot->BonusOne, $loot->BonusTwo, $loot->BonusThree)."\"></a></td>"
+                    ."<td>".$loot->RaidName."</td>"
+                    ."</tr>";
 		}
 
 		return $html;
@@ -387,11 +387,11 @@ class WRM {
 
 		foreach($results as $player) {
 			$html .= "<tr>"
-					."<td>$player->ID</td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-					."<td><button class=\"del\">DELETE</button></td>"
-					."</tr>";
+                    ."<td>$player->ID</td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+                    ."<td><button class=\"del\">DELETE</button></td>"
+                    ."</tr>";
 		}
 
 		return $html;
@@ -408,14 +408,14 @@ class WRM {
 
 		foreach($results as $player) {
 			$html .= "<tr>"
-					."<td>$player->RowID</td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-            		."<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>"
-            		."<td>$player->RaidName</td>"
-					."<td>$player->Date</td>"
-					."<td><button class=\"rmLoot\">DELETE</button></td>"
-					."</tr>";
+                    ."<td>$player->RowID</td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+                    ."<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>"
+                    ."<td>$player->RaidName</td>"
+                    ."<td>$player->Date</td>"
+                    ."<td><button class=\"rmLoot\">DELETE</button></td>"
+                    ."</tr>";
 		}
 
 		return $html;
@@ -431,11 +431,11 @@ class WRM {
 
 		foreach($results as $player) {
 			$html .= "<tr>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-            		."<td><div id=\"divNewAttSl".$player->ID."\"></div></td>"
-					."<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>"
-					."</tr>";
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+                    ."<td><div id=\"divNewAttSl".$player->ID."\"></div></td>"
+                    ."<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>"
+                    ."</tr>";
 		}
 
 		return $html;
@@ -451,13 +451,13 @@ class WRM {
 
 		foreach($results as $player) {
 			$html .= "<tr>"
-					."<td>$player->RowID</td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-					."<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>"
-					."<td>$player->Date</td>"
-					."<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>"
-					."</tr>";
+                    ."<td>$player->RowID</td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+                    ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+                    ."<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>"
+                    ."<td>$player->Date</td>"
+                    ."<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>"
+                    ."</tr>";
 		}
 
 		return $html;
