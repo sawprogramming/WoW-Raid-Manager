@@ -6,7 +6,7 @@ function Admin_RmTableRow(tableId, actionName, primaryKey, message, nRow, button
 		modal: true,
 		close: function() { 
 			$(buttonId).prop("disabled", false);
-			$(this).dialog("close"); 
+			$(this).dialog("destroy").remove();
 		},
 		buttons: {
 			"Remove" : function() {
@@ -20,11 +20,11 @@ function Admin_RmTableRow(tableId, actionName, primaryKey, message, nRow, button
 					complete: function() { $(buttonId).prop("disabled", false); }
 				});
 
-				$(this).dialog("close");
+				$(this).dialog("destroy").remove();
 			},
 			"Cancel" : function() {
-				$(this).dialog("close");
 				$(buttonId).prop("disabled", false);
+				$(this).dialog("destroy").remove();
 			}
 		}
 	});
@@ -115,6 +115,28 @@ function Admin_AddSliders() {
 			});
 		}
 	}).addClass("present");
+
+	$("#EditAttndSlider").slider({
+		range: "min",
+		value: 1,
+		min: 0,
+		max: 1,
+		step: 0.25,
+		slide: function (event, ui) {
+			switch(ui.value) {
+				case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
+				case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
+				case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
+				case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
+			}
+		}
+	}).addClass("present");
+}
+function Admin_AddDatePickers() {
+	$("#dpEditAttnd").datepicker({
+      showOtherMonths: true,
+      selectOtherMonths: true
+    });
 }
 
 // Add/Remove Players functions
@@ -167,7 +189,7 @@ function Admin_AddPlayer() {
 	});
 }
 function Admin_RmPlayer() {
-	$(".del").click(function() {
+	$("#tblEditPlayers").on("click", ".del", function() {
 		var row, nRow, message, plName, plId, plClass, button = this;
 
 		// disable the button so the user doesn't resend the request
@@ -191,7 +213,7 @@ function Admin_RmPlayer() {
 
 // Edit Loot Records functions
 function Admin_RmLoot() {
-	$(".rmLoot").click(function() {
+	$("#tblEditLoot").on("click", ".rmLoot", function() {
 		var row, nRow, message, rowId, plName, plClass, rowDate, plItem, button = this;
 
 		// disable the button so the user doesn't resend the request
@@ -217,8 +239,11 @@ function Admin_RmLoot() {
 }
 
 // Edit Attendance Records functions
+function Admin_AddEditAttnd() {
+
+}
 function Admin_RmEditAttnd() {
-	$(".rmEditAttnd").click(function() {
+	$("#tblEditAttnd").on("click", ".rmEditAttnd", function() {
 		var row, nRow, message, rowId, plName, plClass, rowDate, button = this;
 
 		// disable the button so the user doesn't resend the request
