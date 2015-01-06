@@ -9,7 +9,7 @@
 		Admin_AddClickHandlers();
 		Admin_AddSliders();
 		$("#divAdminTabs").tabs();
-		$("#adminPlayers").DataTable({ "iDisplayLength": 10 });
+		$("#tblEditPlayers").DataTable({ "iDisplayLength": 10 });
 		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
 		$("#tblEditAttendance").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
 		$("#tblEditLoot").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
@@ -71,9 +71,9 @@
 				</ul>
 				<div id="tabs-1">
 					<div id="addPlayerForm" align="center">
-						<label for="txtAdminAddPlayer" style="display: inline-block;">Add New Player:</label>
-						<input id="txtAdminAddPlayer" type="text" maxlength="12" placeholder="Raider Name..." />
-						<select id="slAdminAddPlayer">
+						<label for="txtAddPlayer" style="display: inline-block;">Add New Player:</label>
+						<input id="txtAddPlayer" type="text" maxlength="12" placeholder="Raider Name..." />
+						<select id="slAddPlayer">
 							<option value="0">Player class...</option>
 							<option value="10" class="deathknight">Death Knight</option>
 							<option value="1" class="druid">Druid</option>
@@ -87,9 +87,9 @@
 							<option value="8" class="warlock">Warlock</option>
 							<option value="9" class="warrior">Warrior</option>
 						</select>
-						<button id="btnAdminAddPlayer">Add</button>
+						<button id="btnAddPlayer">Add</button>
 					</div> <br />
-					<table id="adminPlayers" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
+					<table id="tblEditPlayers" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 						<thead>
 							<tr>
 								<th>ID</th>

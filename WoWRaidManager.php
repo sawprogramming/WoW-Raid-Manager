@@ -120,12 +120,21 @@ class WRM {
 
 		// only allow authorized users to use this function
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-				$wpdb->query("START TRANSACTION");
-				$result = $wpdb->query($wpdb->prepare(
-					"INSERT INTO WRM_Player (Name, ClassID)
-					 VALUES (%s, %d)", $_POST['name'], intval($_POST['classId'])));
-				if($result) $wpdb->query("COMMIT");
-				else        $wpdb->query("ROLLBACK");
+			// add the player
+			$wpdb->query("START TRANSACTION");
+			$result = $wpdb->query($wpdb->prepare(
+				"INSERT INTO WRM_Player (Name, ClassID)
+				 VALUES (%s, %d)", $_POST['name'], intval($_POST['classId'])));
+			if($result) $wpdb->query("COMMIT");
+			else        $wpdb->query("ROLLBACK");
+
+			// return the id
+			$row = $wpdb->get_row($wpdb->prepare(
+				"SELECT ID 
+				FROM WRM_Player 
+				WHERE Name = %s AND ClassID = %d", $_POST['name'], intval($_POST['classId'])));
+
+			echo $row->ID;
 		}
 		wp_die();
 	}

@@ -86,33 +86,49 @@ function Admin_AddSliders() {
 }
 
 function Admin_AddPlayer() {
-	$('#btnAdminAddPlayer').click(function() {
-		var name = $.trim($('#txtAdminAddPlayer').val());
-		var classId = $('#slAdminAddPlayer').val();
+	$('#btnAddPlayer').click(function() {
+		var name, classId, className, cssClass, table;
+
+		// fill variables
+		name = $.trim($('#txtAddPlayer').val()).toLowerCase();
+		classId = parseInt($('#slAddPlayer').val());
+		table = $("#tblEditPlayers").DataTable();
 
 		// error checking
 		if(classId == 0) { alert("You must select a class for the player."); return; }
 		if(name.length < 3) { alert("Name is too short to be a proper name in WoW"); return; }
 		if(!/^([A-Za-z]+)$/.test(name)) { alert("Name contains non-alphabetical characters."); return; }
 
+		// fill other variables now that basic error checking is done
+		name = name.charAt(0).toUpperCase() + name.slice(1);
+		className = ClassIdToName(classId);
+		cssClass = ClassIdToCss(classId);
+
 		// disable the fields so the user doesn't change them while the request is being processed
-		$('#txtAdminAddPlayer').attr("disabled", "disabled");
-		$('#slAdminAddPlayer').attr("disabled", "disabled");
-		$('#btnAdminAddPlayer').attr("disabled", "disabled");
+		$('#txtAddPlayer').prop("disabled", true);
+		$('#slAddPlayer').prop("disabled", true);
+		$('#btnAddPlayer').prop("disabled", true);
 
 		// make the ajax call
 		$.ajax({
 			url: ajax_object.ajax_url,
 			type: 'POST',
-			data: { 'action': 'wrm_addplayer', 'name': name.charAt(0).toUpperCase() + name.slice(1), 'classId': classId },
-			success: function () {
-				$('#txtAdminAddPlayer').val('');
-				$('#slAdminAddPlayer').val('0');
+			data: { 'action': 'wrm_addplayer', 'name': name, 'classId': classId },
+			success: function (response, status, junk) {
+				$('#txtAddPlayer').val('');
+				$('#slAddPlayer').val('0');
+
+				table.row.add([
+					response,
+					"<span class=\"" + cssClass + "\">" + name + "</span>",
+					"<span class=\"" + cssClass + "\">" + className + "</span>",
+					"<button class=\"del\">DELETE</button>"
+					]).draw().nodes().to$().attr("style", "background: rgba(0,0,0,0);");
 			}, 
 			complete: function () {
-				$('#txtAdminAddPlayer').removeAttr("disabled");
-				$('#slAdminAddPlayer').removeAttr("disabled");
-				$('#btnAdminAddPlayer').removeAttr("disabled");
+				$('#txtAddPlayer').prop("disabled", false);
+				$('#slAddPlayer').prop("disabled", false);
+				$('#btnAddPlayer').prop("disabled", false);
 			}
 		});
 	});
@@ -151,7 +167,7 @@ function Admin_RmPlayer() {
 						type: 'POST',
 						data: { 'action': 'wrm_delplayer', 'id': plId },
 						success: function() { 
-							$("#adminPlayers").dataTable().dataTable().fnDeleteRow(nRow);
+							$("#tblEditPlayers").dataTable().dataTable().fnDeleteRow(nRow);
 						},
 						complete: function() { $(button).prop("disabled", false); }
 					});
