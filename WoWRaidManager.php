@@ -269,6 +269,23 @@ class WRM {
 		return $result;
 	}
 
+	// Display functions
+	public function UserAttndTbl() {
+		$html = "<table id=\"tblUserAttnd\" class=\"nowrap compact\" cellspacing=\"0\" width=\"100%\" style=\"background: rgba(0,0,0,0)\">";
+		$html .= "<thead><tr><th>Name</th><th>Class</th><th>Last 2 Weeks</th><th>Last 30 Days</th><th>All Time</th></tr></thead><tbody>";
+		$html .= WRM::GetUserAttndRows();
+		$html .= "</tbody></table>";
+		return $html;
+	}
+	public function UserLootTbl() {
+		$html = "<table id=\"tblUserLoot\" class=\"nowrap compact\" cellspacing=\"0\" width=\"100%\">";
+		$html .= "<thead><tr><th>Player</th><th>Item</th><th>Raid</th></tr></thead><tbody>";
+		$html .= WRM::GetUserLootRows();
+		$html .= "</tbody></table>";
+		return $html;
+	}
+
+
 	// Database functions
 	public function GetPlayers() {
 		global $wpdb;
@@ -291,7 +308,7 @@ class WRM {
 
 		return $html;
 	}
-	public function GetLoot() {
+	public function GetUserLootRows() {
 		global $wpdb;
 		$html = "";
 
@@ -346,7 +363,7 @@ class WRM {
 		if($results->Total == 0) return '0%';
 		return ceil(($results->Earned / $results->Total)*100).'%';
 	} 
-	public function GetPlayersAttendance() {
+	public function GetUserAttndRows() {
 		global $wpdb;
 		$html = "";
 
@@ -355,8 +372,13 @@ class WRM {
 			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID");
 
 		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\"><td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td><td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-			$html .= "<td>".WRM::GetAttendanceOver(14, $player->ID)."</td><td>".WRM::GetAttendanceOver(30, $player->ID)."</td><td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>";
+			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
+			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
+			$html .= "<td>".WRM::GetAttendanceOver(14, $player->ID)."</td>";
+			$html .= "<td>".WRM::GetAttendanceOver(30, $player->ID)."</td>";
+			$html .= "<td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>";
+			$html .= "</tr>";
 		}
 
 		return $html;

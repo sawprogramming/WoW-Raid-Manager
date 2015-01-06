@@ -2,8 +2,8 @@
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#playerLoot").DataTable({ "iDisplayLength": 15 });
-		$("#playerAttendance").DataTable({ "iDisplayLength": 50 });
+		$("#tblUserLoot").DataTable({ "iDisplayLength": 15 });
+		$("#tblUserAttnd").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
 		Admin_AddClickHandlers();
@@ -18,46 +18,16 @@
 	});
 </script>
 
-<div id="pageheader" class="titleclass">
-	<div class="container">
-		<?php get_template_part('templates/page', 'header'); ?>
-	</div><!--container-->
-</div><!--titleclass-->
-
 <div id="content" class="container">
 	<div class="row" style="padding: 3px;">
-		<h1>Attendance</h1>
-		<div id="attendance" style="margin-bottom: 20px;">
-			<table id="playerAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: rgba(0,0,0,0)">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Class</th>
-						<th>Last 2 Weeks</th>
-						<th>Last 30 Days</th>
-						<th>All Time</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php $blah = new WRM(); echo $blah->GetPlayersAttendance(); ?>
-				</tbody>
-			</table>
+		<div id="divUserAttnd">
+			<h1>Attendance</h1>
+			<?php echo WRM::UserAttndTbl(); ?>
 		</div>
 
-		<h1>Loot Log</h1>
-		<div id="loot" style="margin-bottom: 20px;">
-			<table id="playerLoot" class="nowrap compact" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th>Player</th>
-						<th>Item</th>
-						<th>Raid</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php $blah = new WRM(); echo $blah->GetLoot(); ?>
-				</tbody>
-			</table>
+		<div id="divUserLoot">
+			<h1>Loot Log</h1>
+			<?php echo WRM::UserLootTbl(); ?>
 		</div>
 		
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
