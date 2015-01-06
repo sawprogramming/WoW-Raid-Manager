@@ -31,8 +31,8 @@
 		</div>
 		
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
-		<h1>Admin Controls</h1>
-		<div id="adminPanel" style="width: 100%;">
+		<div id="divAdmin" style="width: 100%;">
+			<h1>Admin Controls</h1>
 			<div id="divAdminTabs">
 				<ul>
 					<li><a href="#tabs-1">Add/Remove Players</a></li>
@@ -60,37 +60,10 @@
 						</select>
 						<button id="btnAddPlayer">Add</button>
 					</div> <br />
-					<table id="tblEditPlayers" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Class</th>
-								<th>Options</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php $blah = new WRM(); echo $blah->GetPlayers(); ?>
-						</tbody>
-					</table>
+					<?php echo WRM::EditPlayerTbl(); ?>
 				</div>
 				<div id="tabs-2">
-					<table id="tblEditLoot" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
-						<thead>
-							<tr>
-								<th>Row</th>
-								<th>Name</th>
-								<th>Class</th>
-								<th>Item</th>
-								<th>Raid</th>
-								<th>Date</th>
-								<th>Options</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php $blah = new WRM(); echo $blah->EditLootForm(); ?>
-						</tbody>
-					</table>
+					<?php echo WRM::EditLootTbl(); ?>
 				</div>
 				<div id="tabs-3">
 					<div align="center">
@@ -99,19 +72,7 @@
 						<button id="btnSaveAttendance" style="float: right;">Save</button>
 					</div> <br />
 					<div id="divNewAttendance">
-						<table id="tblRaidAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Class</th>
-									<th>Points<br /><div id="divNewAttBulk"></div></th>
-									<th>Options</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php $blah = new WRM(); echo $blah->RaidAttendanceForm(); ?>
-							</tbody>
-						</table>
+						<?php echo WRM::RaidAttndTbl(); ?>
 					</div>
 				</div>
 				<div id="tabs-4">
@@ -122,21 +83,7 @@
 						<input type="text" id="dpEditAttnd" placeholder="yyyy/mm/dd" maxlength="10">
 						<button id="btnEditAttnd">Add</button>
 					</div>
-					<table id="tblEditAttnd" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
-						<thead>
-							<tr>
-								<th>Row</th>
-								<th>Name</th>
-								<th>Class</th>
-								<th>Points</th>
-								<th>Date</th>
-								<th>Options</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php $blah = new WRM(); echo $blah->EditAttendanceForm(); ?>
-						</tbody>
-					</table>
+					<?php echo WRM::EditAttndTbl(); ?>
 				</div>
 			</div>
 		</div>

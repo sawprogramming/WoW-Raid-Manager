@@ -1,4 +1,6 @@
-.nobullet ul { list-style: none; padding-left: 0; }
+/* Table Related Styles */
+.wrm thead th { color: #f8f8f2 !important; background: #272822 !important; }
+.wrm tbody tr { color: #f8f8f2 !important; background: #272822 !important; }
 
 /* Slider Related Styles */
 .ui-slider { width: 15em; }

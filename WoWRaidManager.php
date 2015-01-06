@@ -268,42 +268,92 @@ class WRM {
 
 		return $result;
 	}
+	public function GetAttendanceOver($interval, $playerId) {
+		global $wpdb;
+		$results;
+
+		// make the sql
+		$sql = "SELECT SUM(att.Points) as Earned, Max.Total
+				 FROM WRM_Player as pl 
+				 	JOIN WRM_Attendance as att ON pl.ID = att.PlayerID
+				 	JOIN (SELECT PlayerID, COUNT(Points) as Total
+			 		    FROM WRM_Attendance
+				 		WHERE PlayerID = %d";
+		if($interval > 0) $sql .= " AND Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW() ";
+		$sql .= " GROUP BY PlayerID) as Max ON Max.PlayerID = att.PlayerID 
+				 WHERE att.PlayerID = %d ";
+		if($interval > 0) $sql .= " AND att.Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW() ";
+		$sql .= " GROUP BY att.PlayerID";
+
+		// run the sql
+		if($interval < 0) $results = $wpdb->get_row($wpdb->prepare($sql, $playerId, $playerId));
+		else 			  $results = $wpdb->get_row($wpdb->prepare($sql, $playerId, $interval, $playerId, $interval));
+
+		if($results->Total == 0) return '0%';
+		return ceil(($results->Earned / $results->Total)*100).'%';
+	} 
 
 	// Display functions
 	public function UserAttndTbl() {
-		$html = "<table id=\"tblUserAttnd\" class=\"nowrap compact\" cellspacing=\"0\" width=\"100%\" style=\"background: rgba(0,0,0,0)\">";
-		$html .= "<thead><tr><th>Name</th><th>Class</th><th>Last 2 Weeks</th><th>Last 30 Days</th><th>All Time</th></tr></thead><tbody>";
-		$html .= WRM::GetUserAttndRows();
-		$html .= "</tbody></table>";
+		$html = "<table id=\"tblUserAttnd\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>Name</th><th>Class</th><th>Last 2 Weeks</th><th>Last 30 Days</th><th>All Time</th></tr></thead>"
+				."<tbody>".WRM::GetUserAttndRows()."</tbody>"
+				."</table>";
 		return $html;
 	}
 	public function UserLootTbl() {
-		$html = "<table id=\"tblUserLoot\" class=\"nowrap compact\" cellspacing=\"0\" width=\"100%\">";
-		$html .= "<thead><tr><th>Player</th><th>Item</th><th>Raid</th></tr></thead><tbody>";
-		$html .= WRM::GetUserLootRows();
-		$html .= "</tbody></table>";
+		$html = "<table id=\"tblUserLoot\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>Player</th><th>Item</th><th>Raid</th></tr></thead>"
+				."<tbody>".WRM::GetUserLootRows()."</tbody>"
+				."</table>";
+		return $html;
+	}
+	public function EditPlayerTbl() {
+		$html = "<table id=\"tblEditPlayers\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Options</th></tr></thead>"
+				."<tbody>".WRM::GetEditPlayerRows()."</tbody>"
+				."</table>";
+		return $html;
+	}
+	public function EditLootTbl() {
+		$html = "<table id=\"tblEditLoot\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Item</th><th>Raid</th><th>Date</th><th>Options</th></tr></thead>"
+				."<tbody>".WRM::GetEditLootRows()."</tbody>"
+				."</table>";
+		return $html;
+	}
+	public function RaidAttndTbl() {
+		$html = "<table id=\"tblRaidAttendance\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>Name</th><th>Class</th><th>Points<br /><div id=\"divNewAttBulk\"></div></th><th>Options</th></tr></thead>"
+				."<tbody>".WRM::GetRaidAttndRows()."</tbody>"
+				."</table>";
+		return $html;
+	}
+	public function EditAttndTbl() {
+		$html = "<table id=\"tblEditAttnd\" class=\"nowrap compact wrm\">"
+				."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Points</th><th>Date</th><th>Options</th></tr></thead>"
+				."<tbody>".WRM::GetEditAttndRows()."</tbody>"
+				."</table>";
 		return $html;
 	}
 
-
-	// Database functions
-	public function GetPlayers() {
+	// Database GET functions
+	public function GetUserAttndRows() {
 		global $wpdb;
-
 		$html = "";
 
 		$results = $wpdb->get_results(
-			"SELECT pl.ID, pl.Name, cl.ID as ClassID, cl.Name as ClassName
-			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID
-			 ORDER BY pl.Name");
+			"SELECT DISTINCT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
+			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID");
 
 		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td>$player->ID</td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-			$html .= "<td><button class=\"del\">DELETE</button></td>";
-			$html .= "</tr>";
+			$html .= "<tr>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+					."<td>".WRM::GetAttendanceOver(14, $player->ID)."</td>"
+					."<td>".WRM::GetAttendanceOver(30, $player->ID)."</td>"
+					."<td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>"
+					."</tr>";
 		}
 
 		return $html;
@@ -317,115 +367,36 @@ class WRM {
 			 FROM WRM_Player as pl JOIN WRM_Loot as it ON pl.ID = it.PlayerID JOIN WRM_Raid as rd ON it.RaidID = rd.ID");
 
 		foreach($results as $loot) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td>";
-			$html .= "<td><a href=\"".WRM::BuildLootURL($loot->ItemID, $loot->BonusOne, $loot->BonusTwo, $loot->BonusThree)."\"></a></td>";
-			$html .= "<td>".$loot->RaidName."</td>";
-			$html .= "</tr>";
+			$html .= "<tr>"
+					."<td><span class=\"".WRM::GetClassName($loot->ClassID)."\">$loot->Name</span></td>"
+					."<td><a href=\"".WRM::BuildLootURL($loot->ItemID, $loot->BonusOne, $loot->BonusTwo, $loot->BonusThree)."\"></a></td>"
+					."<td>".$loot->RaidName."</td>"
+					."</tr>";
 		}
 
 		return $html;
 	}
-	public function GetAttendanceOver($interval, $playerId) {
-		global $wpdb;
-
-		if($interval < 0) 
-			$results = $wpdb->get_row($wpdb->prepare(
-			"SELECT pl.Name, SUM(att.Points) as Earned, Max.Total
-			 FROM WRM_Player as pl 
-			 	INNER JOIN WRM_Attendance as att 
-			 		ON pl.ID = att.PlayerID
-			 	INNER JOIN (
-			 		SELECT PlayerID, COUNT(Points) as Total
-		 		    FROM WRM_Attendance
-			 		WHERE PlayerID = %d
-			 		GROUP BY PlayerID) as Max 
-						ON Max.PlayerID = att.PlayerID
-			 WHERE att.PlayerID = %d
-			 	GROUP BY att.PlayerID", $playerId, $playerId));
-		else
-			$results = $wpdb->get_row($wpdb->prepare(
-				"SELECT pl.Name, SUM(att.Points) as Earned, Max.Total
-				 FROM WRM_Player as pl 
-				 	INNER JOIN WRM_Attendance as att 
-				 		ON pl.ID = att.PlayerID
-				 	INNER JOIN (
-				 		SELECT PlayerID, COUNT(Points) as Total
-			 		    FROM WRM_Attendance
-				 		WHERE PlayerID = %d
-				 		  	AND Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW()
-				 		GROUP BY PlayerID) as Max 
-							ON Max.PlayerID = att.PlayerID
-				 WHERE att.PlayerID = %d
-				 	AND att.Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW()
-				 	GROUP BY att.PlayerID", $playerId, $interval, $playerId, $interval));
-
-		if($results->Total == 0) return '0%';
-		return ceil(($results->Earned / $results->Total)*100).'%';
-	} 
-	public function GetUserAttndRows() {
+	public function GetEditPlayerRows() {
 		global $wpdb;
 		$html = "";
 
 		$results = $wpdb->get_results(
-			"SELECT DISTINCT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
-			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID");
+			"SELECT pl.ID, pl.Name, cl.ID as ClassID, cl.Name as ClassName
+			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID
+			 ORDER BY pl.Name");
 
 		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-			$html .= "<td>".WRM::GetAttendanceOver(14, $player->ID)."</td>";
-			$html .= "<td>".WRM::GetAttendanceOver(30, $player->ID)."</td>";
-			$html .= "<td>".WRM::GetAttendanceOver(-1, $player->ID)."</td>";
-			$html .= "</tr>";
+			$html .= "<tr>"
+					."<td>$player->ID</td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+					."<td><button class=\"del\">DELETE</button></td>"
+					."</tr>";
 		}
 
 		return $html;
 	}
-	public function RaidAttendanceForm() {
-		global $wpdb;
-		$html = "";
-
-		$results = $wpdb->get_results(
-			"SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
-			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
-			ORDER BY pl.Name");
-
-		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-            $html .= "<td><div id=\"divNewAttSl".$player->ID."\"></div></td>";
-			$html .= "<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>";
-			$html .= "</tr>";
-		}
-
-		return $html;
-	} 
-	public function EditAttendanceForm() {
-		global $wpdb;
-		$html = "";
-
-		$results = $wpdb->get_results(
-			"SELECT at.ID as RowID, pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, at.Date, at.Points
-			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
-				JOIN WRM_Attendance as at on pl.ID = at.PlayerID");
-
-		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td>$player->RowID</td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-			$html .= "<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>";
-			$html .= "<td>$player->Date</td>";
-			$html .= "<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>";
-			$html .= "</tr>";
-		}
-
-		return $html;
-	}
-	public function EditLootForm() {
+	public function GetEditLootRows() {
 		global $wpdb;
 		$html = "";
 
@@ -436,15 +407,57 @@ class WRM {
 				JOIN WRM_Raid as rd on rd.ID = lt.RaidID");
 
 		foreach($results as $player) {
-			$html .= "<tr style=\"background: rgba(0,0,0,0);\">";
-			$html .= "<td>$player->RowID</td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>";
-			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
-            $html .= "<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>";
-            $html .= "<td>$player->RaidName</td>";
-			$html .= "<td>$player->Date</td>";
-			$html .= "<td><button class=\"rmLoot\">DELETE</button></td>";
-			$html .= "</tr>";
+			$html .= "<tr>"
+					."<td>$player->RowID</td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+            		."<td><a href=\"".WRM::BuildLootUrl($player->ItemID, $player->BonusOne, $player->BonusTwo, $player->BonusThree)."\"></a></td>"
+            		."<td>$player->RaidName</td>"
+					."<td>$player->Date</td>"
+					."<td><button class=\"rmLoot\">DELETE</button></td>"
+					."</tr>";
+		}
+
+		return $html;
+	}
+	public function GetRaidAttndRows() {
+		global $wpdb;
+		$html = "";
+
+		$results = $wpdb->get_results(
+			"SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
+			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
+			ORDER BY pl.Name");
+
+		foreach($results as $player) {
+			$html .= "<tr>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+            		."<td><div id=\"divNewAttSl".$player->ID."\"></div></td>"
+					."<td><button value=\"$player->ID\" class=\"delNewAtt\">DELETE</button></td>"
+					."</tr>";
+		}
+
+		return $html;
+	} 
+	public function GetEditAttndRows() {
+		global $wpdb;
+		$html = "";
+
+		$results = $wpdb->get_results(
+			"SELECT at.ID as RowID, pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, at.Date, at.Points
+			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
+				JOIN WRM_Attendance as at on pl.ID = at.PlayerID");
+
+		foreach($results as $player) {
+			$html .= "<tr>"
+					."<td>$player->RowID</td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+					."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+					."<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>"
+					."<td>$player->Date</td>"
+					."<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>"
+					."</tr>";
 		}
 
 		return $html;
