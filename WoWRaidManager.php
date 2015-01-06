@@ -138,7 +138,7 @@ class WRM {
 		}
 		wp_die();
 	}
-	public function DelPlayer() {
+	public function RmPlayer() {
 		global $wpdb;
 
 		// only allow authorized users to use this function
@@ -172,6 +172,20 @@ class WRM {
 				}
 			}
 			$wpdb->query("COMMIT");
+		}
+		wp_die();
+	}
+	public function RmAttnd() {
+		global $wpdb;
+
+		// only allow authorized users to use this function
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
+			$wpdb->query("START TRANSACTION");
+			$result = $wpdb->query($wpdb->prepare(
+				"DELETE FROM WRM_Attendance
+				 WHERE ID = %d", intval($_POST['id'])));
+			if($result) $wpdb->query("COMMIT");
+			else        $wpdb->query("ROLLBACK");
 		}
 		wp_die();
 	}
@@ -334,7 +348,7 @@ class WRM {
 			$html .= "<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>";
 			$html .= "<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>";
 			$html .= "<td>$player->Date</td>";
-			$html .= "<td><button value=\"$player->RowID\" class=\"delEditAtt\">DELETE</button></td>";
+			$html .= "<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>";
 			$html .= "</tr>";
 		}
 
@@ -368,6 +382,7 @@ class WRM {
 register_activation_hook(__FILE__, array('WRM', 'Install'));
 register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));
 add_action('wp_ajax_wrm_addplayer', array('WRM', 'AddPlayer'));
-add_action('wp_ajax_wrm_delplayer', array('WRM', 'DelPlayer'));
+add_action('wp_ajax_wrm_rmplayer', array('WRM', 'RmPlayer'));
+add_action('wp_ajax_wrm_rmattnd', array('WRM', 'RmAttnd'));
 add_action('wp_ajax_wrm_addgrpatt', array('WRM', 'AddGroupAttendance'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

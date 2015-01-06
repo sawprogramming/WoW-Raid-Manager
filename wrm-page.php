@@ -11,7 +11,7 @@
 		$("#divAdminTabs").tabs();
 		$("#tblEditPlayers").DataTable({ "iDisplayLength": 10 });
 		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
-		$("#tblEditAttendance").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
+		$("#tblEditAttnd").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
 		$("#tblEditLoot").DataTable({ "iDisplayLength": 10, "order" : [[ 0, "desc" ]] });
 		<?php } ?>
 	});
@@ -145,7 +145,7 @@
 					<div style="display: inline-block; float: right;">
 						<button id="btnSaveEditAttendance">Save</button>
 					</div> <br /> <br />
-					<table id="tblEditAttendance" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
+					<table id="tblEditAttnd" class="nowrap compact" cellspacing="0" width="100%" style="background: #272822; color: #FFFFFF">
 						<thead>
 							<tr>
 								<th>Row</th>

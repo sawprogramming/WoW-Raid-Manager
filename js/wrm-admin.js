@@ -1,6 +1,38 @@
+// General functions
+function Admin_RmTableRow(tableId, actionName, primaryKey, message, nRow, buttonId) {
+	$("<div>" + message + "</div>").dialog({
+		title: "Confirm Removal",
+		resizable: false,
+		modal: true,
+		close: function() { 
+			$(buttonId).prop("disabled", false);
+			$(this).dialog("close"); 
+		},
+		buttons: {
+			"Remove" : function() {
+				$.ajax({
+					url: ajax_object.ajax_url,
+					type: 'POST',
+					data: { 'action': actionName, 'id': primaryKey },
+					success: function() { 
+						$(tableId).dataTable().dataTable().fnDeleteRow(nRow);
+					},
+					complete: function() { $(buttonId).prop("disabled", false); }
+				});
+
+				$(this).dialog("close");
+			},
+			"Cancel" : function() {
+				$(this).dialog("close");
+				$(buttonId).prop("disabled", false);
+			}
+		}
+	});
+}
 function Admin_AddClickHandlers() {
 	Admin_AddPlayer();
 	Admin_RmPlayer();
+	Admin_RmEditAttnd();
 
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
@@ -33,7 +65,6 @@ function Admin_AddClickHandlers() {
 		});
 	});
 }
-
 function Admin_AddSliders() {
 	$("#tblRaidAttendance > tbody > tr").each(function(index) {
 		var sliderId = $("td:eq(2) div", this).attr("id");
@@ -85,6 +116,7 @@ function Admin_AddSliders() {
 	}).addClass("present");
 }
 
+// Add/Remove Players functions
 function Admin_AddPlayer() {
 	$('#btnAddPlayer').click(function() {
 		var name, classId, className, cssClass, table;
@@ -152,33 +184,32 @@ function Admin_RmPlayer() {
 		          "<span class=\"" + plClass + "\">" + plName + "</span>?";
 
 		// show confirmation box
-		$("<div>" + message + "</div>").dialog({
-			title: "Confirm Removal",
-			resizable: false,
-			modal: true,
-			close: function() { 
-				$(button).prop("disabled", false);
-				$(this).dialog("close"); 
-			},
-			buttons: {
-				"Remove" : function() {
-					$.ajax({
-						url: ajax_object.ajax_url,
-						type: 'POST',
-						data: { 'action': 'wrm_delplayer', 'id': plId },
-						success: function() { 
-							$("#tblEditPlayers").dataTable().dataTable().fnDeleteRow(nRow);
-						},
-						complete: function() { $(button).prop("disabled", false); }
-					});
+		Admin_RmTableRow("#tblEditPlayers", "wrm_rmplayer", plId, message, nRow, button);
+	});
+}
 
-					$(this).dialog("close");
-				},
-				"Cancel" : function() {
-					$(this).dialog("close");
-					$(button).prop("disabled", false);
-				}
-			}
-		});
+// Edit Attendance Records functions
+function Admin_RmEditAttnd() {
+	$(".rmEditAttnd").click(function() {
+		var row, nRow, message, rowId, plName, plClass, rowDate, button = this;
+
+		// disable the button so the user doesn't resend the request
+		$(button).prop("disabled", true);
+
+		// get the info from the row
+		row = $(button).closest('tr');
+		nRow = row[0];
+		rowId = $(row).find('td:eq(0)').text();
+		plName = $(row).find('td:eq(1)').text();
+		plClass = $(row).find('td:eq(2) span').attr("class");
+		rowDate = $(row).find('td:eq(4)').text();
+
+		// build the confirmation message
+		message = "Are you sure want to remove the attendance record for " +
+		          "<span class=\"" + plClass + "\">" + plName + "</span> " + 
+		          "on " + rowDate + "?";
+
+		// show confirmation box
+		Admin_RmTableRow("#tblEditAttnd", "wrm_rmattnd", rowId, message, nRow, button);
 	});
 }
