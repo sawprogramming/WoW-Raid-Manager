@@ -36,6 +36,7 @@ function Admin_AddClickHandlers() {
 	Admin_RmEditAttnd();
 	Admin_RmLoot();
 	Admin_AddRaidAttnd();
+	Admind_EditEditAttnd();
 
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
@@ -45,32 +46,7 @@ function Admin_AddClickHandlers() {
 }
 function Admin_AddSliders() {
 	$("#tblRaidAttendance > tbody > tr").each(function(index) {
-		var sliderId = $("td:eq(2) div", this).attr("id");
-
-		$('#' + sliderId).slider({
-			range: "min",
-			value: 1,
-			min: 0,
-			max: 1,
-			step: 0.25,
-			slide: function (event, ui) {
-				switch(ui.value) {
-					case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
-					case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
-					case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
-					case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
-				}
-			},
-			change: function (event, ui) {
-				switch(ui.value) {
-					case 0.25: $(this).removeClass("absent mlate slate present").addClass("llate"); break;
-					case 0.5:  $(this).removeClass("absent llate slate present").addClass("mlate"); break;
-					case 0.75: $(this).removeClass("absent llate mlate present").addClass("slate"); break;
-					case 1:    $(this).removeClass("absent llate mlate slate").addClass("present"); break;
-				}
-			}
-		});
-		$('#' + sliderId).addClass("present");
+		Admin_CreateAttndSlider("#" + $("td:eq(2) div", this).attr("id"));
 	});
 
 	$("#divNewAttBulk").slider({
@@ -93,7 +69,14 @@ function Admin_AddSliders() {
 		}
 	}).addClass("present");
 
-	$("#EditAttndSlider").slider({
+	Admin_CreateAttndSlider("#EditAttndSlider");
+}
+function Admin_AddDatePickers() {
+	Admin_CreateDatePicker("#dpEditAttnd");
+	Admin_CreateDatePicker("#dpRaidAttnd");
+}
+function Admin_CreateAttndSlider(id) {
+	$(id).slider({
 		range: "min",
 		value: 1,
 		min: 0,
@@ -117,20 +100,14 @@ function Admin_AddSliders() {
 		}
 	}).addClass("present");
 }
-function Admin_AddDatePickers() {
+function Admin_CreateDatePicker(id, date) {
 	var today = new Date();
 
-	$("#dpEditAttnd").datepicker({
+	$(id).datepicker({
       showOtherMonths: true,
       selectOtherMonths: true,
       dateFormat: "yy-mm-dd",
-    }).datepicker("setDate", today);
-
-	$("#dpRaidAttnd").datepicker({
-      showOtherMonths: true,
-      selectOtherMonths: true,
-      dateFormat: "yy-mm-dd",
-    }).datepicker("setDate", today);
+    }).datepicker("setDate", date == null ? today : date);
 }
 
 // Add/Remove Players functions
@@ -325,5 +302,68 @@ function Admin_RmEditAttnd() {
 
 		// show confirmation box
 		Admin_RmTableRow("#tblEditAttnd", "wrm_rmattnd", rowId, message, nRow, button);
+	});
+}
+function Admind_EditEditAttnd() {
+	$("#tblEditAttnd").on("click", ".editEditAttnd", function() {
+		var row, nRow, rowId, plName, plClass, rowDate, button = this, html;
+
+		// disable the button so the user doesn't resend the request
+		$(button).prop("disabled", true);
+
+		// get the info from the row
+		row = $(button).closest('tr');
+		nRow = row[0];
+		rowId = $(row).find('td:eq(0)').text();
+		plName = $(row).find('td:eq(1)').text();
+		plClass = $(row).find('td:eq(2) span').attr("class");
+		rowDate = $(row).find('td:eq(4)').text();
+
+		// build edit box
+		html = "<div>" 
+			+ "<table class=\"wrm\" style=\"width: 100%\">"
+			+ "<tr><td>Row:</td><td>" + rowId + "</td></tr>"
+			+ "<tr><td>Name:</td><td><span class=\"" + plClass + "\">" + plName + "</span></td></tr>"
+			+ "<tr><td>Points:</td><td><div id=\"boxpoints\"></div></td></tr>"
+			+ "<tr><td>Date:</td><td><input id=\"boxdate\"></td></tr>"
+			+ "</table>"
+			+ "</div>";
+
+		$(html).dialog({
+			title: "Confirm Removal",
+			resizable: false,
+			width: 350,
+			modal: true,
+			open: function() {
+				Admin_CreateAttndSlider("#boxpoints");
+				Admin_CreateDatePicker("#boxdate", rowDate);
+
+				$("#boxpoints").slider("value", parseFloat($(row).find('td:eq(3)').text()));
+				$("#boxdate").blur();
+			},
+			close: function() { 
+				$(button).prop("disabled", false);
+				$(this).dialog("destroy").remove();
+			},
+			buttons: {
+				"Save Changes" : function() {
+					var points = $("#boxpoints").slider("value"), date = $("#boxdate").val();
+					$.ajax({
+						url: ajax_object.ajax_url,
+						type: "POST",
+						data: { "action": "wrm_editattnd", "id": rowId, "points": points, "date": date },
+						success: function(response, status, junk) {
+							if(response.search("ERROR") != -1) alert(response);
+						},
+						complete: function() { $(button).prop("disabled", false); }
+					});
+					$(this).dialog("destroy").remove();
+				},
+				"Cancel" : function() {
+					$(button).prop("disabled", false);
+					$(this).dialog("destroy").remove();
+				}
+			}
+		});
 	});
 }

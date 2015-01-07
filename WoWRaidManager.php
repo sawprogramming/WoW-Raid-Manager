@@ -228,6 +228,23 @@ class WRM {
 		}
 		wp_die();
 	}
+	public function EditAttnd() {
+		global $wpdb;
+
+		// only allow authorized users to use this function
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
+			// edit the attendance record
+			$result = WRM::DbTransaction($wpdb->prepare(
+				"UPDATE WRM_Attendance
+				 SET Points = %f, Date = %s
+				 WHERE ID = %d", floatval($_POST['points']), $_POST['date'], intval($_POST['id'])));
+
+			if($result === false) echo "ERROR: An error occurred while updating the database.";
+			else if($result)      echo "Row updated!";
+			else                  echo "No values were changed in the database.";
+		}
+		wp_die();
+	}
 
 	// Utility functions
 	public function GetClassName($classId) {
@@ -456,7 +473,8 @@ class WRM {
 	                ."<td><span class=\"".WRM::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
 	                ."<td><div id=\"divEditAttSl".$player->RowID."\">$player->Points</div></td>"
 	                ."<td>$player->Date</td>"
-	                ."<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button></td>"
+	                ."<td><button value=\"$player->RowID\" class=\"rmEditAttnd\">DELETE</button>"
+	                .    "<button class=\"editEditAttnd\">EDIT</button></td>"
 	                ."</tr>";
 		}
 
@@ -470,5 +488,6 @@ add_action('wp_ajax_wrm_rmplayer', array('WRM', 'RmPlayer'));
 add_action('wp_ajax_wrm_rmattnd', array('WRM', 'RmAttnd'));
 add_action('wp_ajax_wrm_addattnd', array('WRM', 'AddAttnd'));
 add_action('wp_ajax_wrm_rmloot', array('WRM', 'RmLoot'));
+add_action('wp_ajax_wrm_editattnd', array('WRM', 'EditAttnd'));
 add_action('wp_ajax_wrm_addgrpatt', array('WRM', 'AddGroupAttendance'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>
