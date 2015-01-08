@@ -57,7 +57,6 @@ function Admin_AddClickHandlers() {
 					modal: true,
 					buttons: { "Ok" : function() {	$(this).dialog("destroy").remove();	} }
 				});
-				if($("#tblManualSql").length) $("#tblManualSql").DataTable({ "iDisplayLength": 15 });
 			}
 		});
 	});
@@ -75,8 +74,7 @@ function Admin_AddClickHandlers() {
 
 			// add the raids
 			$.each(raids, function(index, value) {
-				raid = JSON.parse(value);
-				$("#slRmRaid").append($("<option></option>").val(raid.ID).text(raid.Name));
+				$("#slRmRaid").append($("<option></option>").val(value.ID).text(value.Name));
 			});
 		}
 	});

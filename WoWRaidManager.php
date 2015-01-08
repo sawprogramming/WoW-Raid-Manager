@@ -7,6 +7,7 @@
  * License: GPL2
  */
 require(plugin_dir_path( __FILE__ ) . 'PageTemplater.php');
+require(plugin_dir_path( __FILE__ ) . 'WRM-DAO.php');
 class WRM {
 	// Installation functions
 	public function Install() {
@@ -232,16 +233,7 @@ class WRM {
 		die();
 	}
 	public function Raids() {
-		global $wpdb;
-		$raids = array();
-
-		// query the database
-		$results = WRM::GetRaids();
-
-		// return the results
-		foreach($results as $raid) array_push($raids, json_encode($raid));
-		echo json_encode($raids);
-
+		echo WRM_DAO::GetRaids();
 		die();
 	}
 
