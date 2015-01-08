@@ -13,9 +13,8 @@ class WRM {
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
 		
-		WRM::Uninstall();
 		// create class table
-		$sql = "CREATE TABLE WRM_Class (
+		$sql = "CREATE TABLE IF NOT EXISTS WRM_Class (
 			ID  tinyint(2) NOT NULL AUTO_INCREMENT,
 			Name tinytext NOT NULL,
 			PRIMARY KEY  ID (ID)
@@ -23,7 +22,7 @@ class WRM {
 		dbDelta($sql);
 		
 		// create raid table
-		$sql = "CREATE TABLE WRM_Raid (
+		$sql = "CREATE TABLE IF NOT EXISTS WRM_Raid (
 			ID  tinyint(3) NOT NULL AUTO_INCREMENT,
 			Name tinytext NOT NULL,
 			PRIMARY KEY  ID (ID)
@@ -31,7 +30,7 @@ class WRM {
 		dbDelta($sql);
 		
 		// create player table
-		$sql = "CREATE TABLE WRM_Player (
+		$sql = "CREATE TABLE IF NOT EXISTS WRM_Player (
 			ID  smallint(5) NOT NULL AUTO_INCREMENT,
 			ClassID  tinyint(3),
 			Name tinytext NOT NULL,
@@ -41,7 +40,7 @@ class WRM {
 		dbDelta($sql);
 		
 		// create loot table
-		$sql = "CREATE TABLE WRM_Loot (
+		$sql = "CREATE TABLE IF NOT EXISTS WRM_Loot (
 			ID  int(10) NOT NULL AUTO_INCREMENT,
 			PlayerID  smallint(5),
 			ItemID  int(10) NOT NULL,
@@ -57,7 +56,7 @@ class WRM {
 		dbDelta($sql);
 		
 		// create attendance table
-		$sql = "CREATE TABLE WRM_Attendance (
+		$sql = "CREATE TABLE IF NOT EXISTS WRM_Attendance (
 			ID  int(10) NOT NULL AUTO_INCREMENT,
 			PlayerID  smallint(5),
 			Date date NOT NULL,
@@ -66,55 +65,16 @@ class WRM {
 			FOREIGN KEY (PlayerID) REFERENCES WRM_Player(ID)
 		) $charset_collate;";
 		dbDelta($sql);
-
-		WRM::Seed();
 	}
 	public function Uninstall() {
 		global $wpdb;
 
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Attendance");
+/*		$wpdb->query("DROP TABLE IF EXISTS WRM_Attendance");
 		$wpdb->query("DROP TABLE IF EXISTS WRM_Loot");
 		$wpdb->query("DROP TABLE IF EXISTS WRM_Player");
 		$wpdb->query("DROP TABLE IF EXISTS WRM_Raid");
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Class");	
-	}
-	public function Seed(){
-		global $wpdb;
-
-		// Seed Class table
-		$wpdb->query("INSERT INTO WRM_Class (Name) 
-			          VALUES ('Druid'), ('Hunter'), ('Mage'), ('Paladin'), ('Priest'), ('Rogue'), ('Shaman'), ('Warlock'), ('Warrior'), ('Death Knight'), ('Monk')");
-
-		// Seed Raid table
-		$wpdb->query("INSERT INTO WRM_Raid (Name)
-			          VALUES ('Highmaul')");
-
-		// Seed Player table
-		$wpdb->query("INSERT INTO WRM_Player (ClassID, Name)
-			          VALUES ('1', 'Bigplayqtay'), ('1', 'Rejuvqtay'), ('1', 'Saytah'),
-			                 ('2', 'Huntaruz'), ('2', 'Jurasu'),
-			                 ('3', 'Oximore'), ('3', 'Wolfy'),
-			                 ('4', 'Dabou'), ('4', 'Jairulnait'),
-			                 ('5', 'Indifer'), ('5', 'Omitted'), ('5', 'Yumae'),
-			                 ('6', 'Greeting'), ('6', 'Shadowburger'),
-			                 ('7', 'Fossy'), ('7', 'Oracni'), ('7', 'Pomsta'), ('7', 'Youmi'),
-			                 ('8', 'Abysselysium'), ('8', 'Glafkos'), ('8', 'Zelant'),
-			                 ('9', 'Envoy'), ('9', 'Oggy'), ('9', 'Sgtwasabi'),
-			                 ('10', 'Rausch'),
-			                 ('11', 'Hitmonchan'), ('11', 'Infleaux')");
-
-		// Seed Attendance Table
-		$wpdb->query("INSERT INTO WRM_Attendance (PlayerID, Points, Date) 
-			          VALUES ('1', '1', '2015-01-01'), ('1', '0', '2015-01-01'), ('4', '1', '2015-01-01'), ('6', '1', '2015-01-01'), 
-			          ('8', '1', '2015-01-01'), ('10', '1', '2015-01-01'), ('13', '1', '2015-01-01'), ('15', '1', '2015-01-01'),
-			          ('19', '1', '2015-01-01'), ('22', '1', '2015-01-01'), ('25', '1', '2015-01-01'), ('26', '1', '2015-01-01')");
-
-		// Seed Loot Table
-		$wpdb->query("INSERT INTO WRM_Loot (PlayerID, ItemID, BonusOne, BonusTwo, BonusThree, RaidID, Date)
-			          VALUES ('26', '113591', '562', '565', '567', '1', '2015-01-01'),
-			                 ('18', '113591', '562', '565', NULL, '1', '2015-01-01'),
-			                 ('14', '113591', '562', NULL , NULL, '1', '2015-01-01')");
-	}		
+		$wpdb->query("DROP TABLE IF EXISTS WRM_Class");	*/
+	}	
 
 	// AJAX functions
 	public function AddPlayer() {
@@ -131,7 +91,7 @@ class WRM {
 			if($result) echo $wpdb->insert_id;
 			else        echo "ERROR: An error occurred while trying to insert the record into the database.";
 		}
-		wp_die();
+		die();
 	}
 	public function RmPlayer() {
 		global $wpdb;
@@ -143,7 +103,7 @@ class WRM {
 				"DELETE FROM WRM_Player
 				 WHERE ID = %d", intval($_POST['id'])));
 		}
-		wp_die();
+		die();
 	}
 	public function AddGroupAttendance() {
 		global $wpdb;
@@ -167,7 +127,7 @@ class WRM {
 			}
 			$wpdb->query("COMMIT");
 		}
-		wp_die();
+		die();
 	}
 	public function RmAttnd() {
 		global $wpdb;
@@ -179,7 +139,7 @@ class WRM {
 				"DELETE FROM WRM_Attendance
 				 WHERE ID = %d", intval($_POST['id'])));
 		}
-		wp_die();
+		die();
 	}
 	public function RmLoot() {
 		global $wpdb;
@@ -191,7 +151,7 @@ class WRM {
 				"DELETE FROM WRM_Loot
 				 WHERE ID = %d", intval($_POST['id'])));
 		}
-		wp_die();
+		die();
 	}
 	public function AddAttnd() {
 		global $wpdb;
@@ -205,8 +165,8 @@ class WRM {
 			if(preg_match('/^([A-Za-z]+)$/', $name)) {
 				// find the id if this was a name
 				$row = $wpdb->get_results($wpdb->prepare("SELECT ID FROM WRM_Player WHERE Name = %s", $name));
-				if(count($row) > 1)  { echo "ERROR: Could not find a unique player with that name."; wp_die(); }
-				if(count($row) == 0) { echo "ERROR: No players exist with that name.";               wp_die(); }
+				if(count($row) > 1)  { echo "ERROR: Could not find a unique player with that name."; die(); }
+				if(count($row) == 0) { echo "ERROR: No players exist with that name.";               die(); }
 
 				$id = intval($row[0]->ID);
 			}
@@ -215,9 +175,9 @@ class WRM {
 
 				// is this a valid id?
 				$row = $wpdb->get_row($wpdb->prepare("SELECT Name FROM WRM_Player WHERE ID = %d", $id));
-				if($row == NULL) { echo "ERROR: Could not find a player with that ID."; wp_die(); }
+				if($row == NULL) { echo "ERROR: Could not find a player with that ID."; die(); }
 			}
-			else { echo "ERROR: Name was not valid (should be a string of characters or an ID number)."; wp_die(); }
+			else { echo "ERROR: Name was not valid (should be a string of characters or an ID number)."; die(); }
 
 			// insert the record
 			$result = WRM::DbTransaction($wpdb->prepare(
@@ -226,7 +186,7 @@ class WRM {
 			if($result) echo $wpdb->insert_id;
 			else        echo "ERROR: An error occurred while trying to insert the record into the database.";
 		}
-		wp_die();
+		die();
 	}
 	public function EditAttnd() {
 		global $wpdb;
@@ -243,7 +203,46 @@ class WRM {
 			else if($result)      echo "Row updated!";
 			else                  echo "No values were changed in the database.";
 		}
-		wp_die();
+		die();
+	}
+	public function FreeSql() {
+		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
+			global $wpdb;
+			
+			// run the sql
+			$results = $wpdb->get_results(str_replace("\\", "", $_GET['sql']));
+			
+			if($results != NULL) {
+				// table header
+				$html = "<table id=\"tblManualSql\" class=\"wrm\"><thead>";
+				foreach($results[0] as $key => $value) $html .= "<th>".$key."</th>"; 
+				$html .= "</thead><tbody>";
+
+				// table body
+				foreach($results as $row) {
+					$html .= "<tr>";
+					foreach($row as $data) $html .= "<td>".$data."</td>";
+					$html .= "</tr>";
+				}
+				$html .= "</tbody></table>";
+
+				echo $html;
+			} else echo "Query did not return any results.\n";
+		}
+		die();
+	}
+	public function Raids() {
+		global $wpdb;
+		$raids = array();
+
+		// query the database
+		$results = WRM::GetRaids();
+
+		// return the results
+		foreach($results as $raid) array_push($raids, json_encode($raid));
+		echo json_encode($raids);
+
+		die();
 	}
 
 	// Utility functions
@@ -480,6 +479,10 @@ class WRM {
 
 		return $html;
 	}
+	public function GetRaids() {
+		global $wpdb;
+		return $wpdb->get_results("SELECT ID, Name FROM WRM_Raid");
+	}
 }
 register_activation_hook(__FILE__, array('WRM', 'Install'));
 register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));
@@ -490,4 +493,6 @@ add_action('wp_ajax_wrm_addattnd', array('WRM', 'AddAttnd'));
 add_action('wp_ajax_wrm_rmloot', array('WRM', 'RmLoot'));
 add_action('wp_ajax_wrm_editattnd', array('WRM', 'EditAttnd'));
 add_action('wp_ajax_wrm_addgrpatt', array('WRM', 'AddGroupAttendance'));
+add_action('wp_ajax_wrm_freesql', array('WRM', 'FreeSql'));
+add_action('wp_ajax_wrm_raids', array('WRM', 'Raids'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

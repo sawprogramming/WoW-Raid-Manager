@@ -39,6 +39,7 @@
 					<li><a href="#tabs-2">Edit Loot Records</a></li>
 					<li><a href="#tabs-3">Daily Raid Attendance</a></li>
 					<li><a href="#tabs-4">Edit Attendance Records</a></li>
+					<li><a href="#tabs-5">Miscellaneous</a></li>
 				</ul>
 				<div id="tabs-1">
 					<div id="addPlayerForm" align="center">
@@ -84,6 +85,37 @@
 						<button id="btnEditAttnd">Add</button>
 					</div>
 					<?php echo WRM::EditAttndTbl(); ?>
+				</div>
+				<div id="tabs-5">
+					<div style="display: inline-block; vertical-align: text-top; width: 45%;">
+						<fieldset>
+							<legend>Raid Table Controls</legend>
+							<table>
+								<tbody>
+									<tr>
+										<td>Add Raid:</td>
+										<td><input id="txtAddRaid" type="text" placeholder="Raid Name..."></td>
+										<td><button id="btnAddRaid">Add</button></td>
+									</tr>
+									<tr>
+										<td>Remove Raid:</td>
+										<td><select id="slRmRaid"></select></td>
+										<td><button id="btnRmRaid">Delete</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</fieldset>
+					</div><br />
+					<div>
+						<fieldset>
+							<legend>Danger Zone</legend>
+							<div style="width: 25em">
+								<textarea id="txtManualSql" style="width: 100%; height: 200px"
+									placeholder="Any SQL entered here will be run without sanitization."></textarea>
+								<button id="btnManualSql" style="float: right;">Query</button>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 			</div>
 		</div>

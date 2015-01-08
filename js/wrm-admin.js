@@ -36,12 +36,49 @@ function Admin_AddClickHandlers() {
 	Admin_RmEditAttnd();
 	Admin_RmLoot();
 	Admin_AddRaidAttnd();
-	Admind_EditEditAttnd();
+	Admin_EditEditAttnd();
 
 	$(".delNewAtt").click(function() {
 		var row = $(this).closest('tr'); 
 		var nRow = row[0];
 		$("#tblRaidAttendance").dataTable().dataTable().fnDeleteRow(nRow);
+	});
+
+	$("#btnManualSql").click(function() {
+		$.ajax({
+			url: ajax_object.ajax_url,
+			data: { "action": "wrm_freesql", "sql": $("#txtManualSql").val() },
+			success: function(response, status, junk) {
+				$("#txtManualSql").val("");
+				$(response).dialog({
+					title: "Query Results",
+					resizable: false,
+					width: 800,
+					modal: true,
+					buttons: { "Ok" : function() {	$(this).dialog("destroy").remove();	} }
+				});
+				if($("#tblManualSql").length) $("#tblManualSql").DataTable({ "iDisplayLength": 15 });
+			}
+		});
+	});
+
+	$.ajax({
+		url: ajax_object.ajax_url,
+		type: "GET",
+		data: { "action": "wrm_raids" },
+		success: function(response, status, junk) {
+			var raid, raids = JSON.parse(response);
+
+			// clear the options
+			$("#slRmRaid option").remove();
+			$("#slRmRaid").append($("<option></option>").val(0).text("Raid Name..."));
+
+			// add the raids
+			$.each(raids, function(index, value) {
+				raid = JSON.parse(value);
+				$("#slRmRaid").append($("<option></option>").val(raid.ID).text(raid.Name));
+			});
+		}
 	});
 }
 function Admin_AddSliders() {
@@ -304,7 +341,7 @@ function Admin_RmEditAttnd() {
 		Admin_RmTableRow("#tblEditAttnd", "wrm_rmattnd", rowId, message, nRow, button);
 	});
 }
-function Admind_EditEditAttnd() {
+function Admin_EditEditAttnd() {
 	$("#tblEditAttnd").on("click", ".editEditAttnd", function() {
 		var row, nRow, rowId, plName, plClass, rowDate, button = this, html;
 
