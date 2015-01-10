@@ -6,14 +6,9 @@
 		$("#tblUserAttnd").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
+		Admin_Setup();
 		Admin_AddClickHandlers();
-		Admin_AddSliders();
-		Admin_AddDatePickers();
 		$("#divAdminTabs").tabs();
-		$("#tblEditPlayers").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
-		$("#tblRaidAttendance").DataTable({ "iDisplayLength": 50 });
-		$("#tblEditAttnd").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
-		$("#tblEditLoot").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
 		<?php } ?>
 	});
 </script>

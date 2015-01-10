@@ -6,7 +6,7 @@
  * Author: Criminal-SR
  * License: GPL2
  */
-require_once(plugin_dir_path( __FILE__ ) . 'PageTemplater.php');
+require_once(plugin_dir_path( __FILE__ ) . 'libs/PageTemplater.php');
 require_once(plugin_dir_path( __FILE__ ) . 'display.php');
 require_once(plugin_dir_path( __FILE__ ) . 'dao.php');
 class WRM {
