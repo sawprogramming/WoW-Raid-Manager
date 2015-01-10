@@ -19,11 +19,11 @@ class WRM_DAO {
 			"INSERT INTO WRM_Player (Name, ClassID)
 			 VALUES (%s, %d)", $name, $classId));
 	}
-	public function AddLoot($playerId, $itemId, $bonusOne, $bonusTwo, $bonusThree, $raidId, $date){
+	public function AddLoot($playerId, $item, $raidId, $date){
 		global $wpdb;
 		return WRM_DAO::Create($wpdb->prepare(
-			"INSERT INTO WRM_Loot (PlayerID, ItemID, RaidID, Date, BonusOne, BonusTwo, BonusThree)
-			 VALUES (%d, %d, %d, %s, %d, %d, %d)", $playerId, $itemId, $raidId, $date, $bonusOne, $bonusTwo, $bonusThree));
+			"INSERT INTO WRM_Loot (PlayerID, Item, RaidID, Date)
+			 VALUES (%d, %s, %d, %s)", $playerId, $item, $raidId, $date));
 	}
 	public function AddAttnd($playerId, $points, $date) {
 		global $wpdb;
@@ -67,7 +67,7 @@ class WRM_DAO {
 	}
 	public function GetLoot() {
 		return WRM_DAO::Read(
-			"SELECT lt.ID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, lt.ItemID, lt.BonusOne, lt.BonusTwo, lt.BonusThree, rd.Name as RaidName, lt.Date
+			"SELECT lt.ID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, lt.Item, rd.Name as RaidName, lt.Date
 			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
 				JOIN WRM_Loot as lt on pl.ID = lt.PlayerID
 				JOIN WRM_Raid as rd on rd.ID = lt.RaidID");
@@ -101,12 +101,12 @@ class WRM_DAO {
 			 SET Name = %s, ClassID = %d
 			 WHERE ID = %d", $playerName, $classId, $playerId));
 	}
-	public function EditLoot($rowId, $playerId, $itemId, $bonusOne, $bonusTwo, $bonusThree) {
+	public function EditLoot($rowId, $playerId, $item) {
 		global $wpdb;
 		return WRM_DAO::Update($wpdb->prepare(
 			"UPDATE WRM_Loot
-			 SET PlayerID = %d, ItemID = %d, BonusOne = %d, BonusTwo = %d, BonusThree = %d,
-			 WHERE ID = %d", $playerId, $itemId, $bonusOne, $bonusTwo, $bonusThree, $rowId));
+			 SET PlayerID = %d, Item = %s
+			 WHERE ID = %d", $playerId, $item, $rowId));
 	}
 	public function EditAttnd($rowId, $points, $date) {
 		global $wpdb;

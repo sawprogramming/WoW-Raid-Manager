@@ -45,10 +45,7 @@ class WRM {
 		$sql = "CREATE TABLE IF NOT EXISTS WRM_Loot (
 			ID  int(10) NOT NULL AUTO_INCREMENT,
 			PlayerID  smallint(5),
-			ItemID  int(10) NOT NULL,
-			BonusOne int(10),
-			BonusTwo int(10),
-			BonusThree int(10),
+			Item tinytext NOT NULL,
 			RaidID  tinyint(3),
 			Date date NOT NULL,
 			PRIMARY KEY  ID (ID),

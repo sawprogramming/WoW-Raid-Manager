@@ -4,18 +4,18 @@ class WRM_Display {
 	// User tables
 	public function UserAttndTbl() {
 		$html = "<table id=\"tblUserAttnd\" class=\"nowrap compact wrm\">"
-	           ."<thead><tr><th>Name</th><th>Class</th><th>Last 2 Weeks</th><th>Last 30 Days</th><th>All Time</th></tr></thead>"
-	           ."<tbody>";
+		       ."<thead><tr><th>Name</th><th>Class</th><th>Last 2 Weeks</th><th>Last 30 Days</th><th>All Time</th></tr></thead>"
+		       ."<tbody>";
 
 	    $data = json_decode(WRM_DAO::GetUserAttndBrkdwn());
 	    foreach($data as $player) {
 	    	$html .= "<tr>"
-	    		    ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->Name</span></td>"
-	    		    ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-	    		    ."<td>$player->I1%</td>"
-	    		    ."<td>$player->I2%</td>"
-	    		    ."<td>$player->I3%</td>"
-	    		    ."</tr>";
+	    	        ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->Name</span></td>"
+	    	        ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
+	    	        ."<td>$player->I1%</td>"
+	    	        ."<td>$player->I2%</td>"
+	    	        ."<td>$player->I3%</td>"
+	    	        ."</tr>";
 	    }
 
 	    $html .= "</tbody>"
@@ -31,10 +31,10 @@ class WRM_Display {
 	    $data = json_decode(WRM_DAO::GetLoot());
 	    foreach($data as $row) {
 	    	$html .= "<tr>"
-	    			."<td><span class=\"".WRM_Display::GetClassName($row->ClassID)."\">$row->PlayerName</span></td>"
-	    			."<td><a href=\"".WRM_Display::BuildLootUrl($row->ItemID, $row->BonusOne, $row->BonusTwo, $row->BonusThree)."\"></a></td>"
-	    			."<td>$row->RaidName</td>"
-	    			."</tr>";
+	    	        ."<td><span class=\"".WRM_Display::GetClassName($row->ClassID)."\">$row->PlayerName</span></td>"
+	    	        ."<td><a href=\"".WRM_Display::BuildLootUrl($row->Item)."\"></a></td>"
+	    	        ."<td>$row->RaidName</td>"
+	    	        ."</tr>";
 	    }
 
 	    $html .= "</tbody>"
@@ -46,8 +46,8 @@ class WRM_Display {
 	// Admin tables
 	public function EditPlayerTbl() {
 		$html = "<table id=\"tblEditPlayers\" class=\"nowrap compact wrm\">"
-	           ."<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Options</th></tr></thead>"
-	           ."<tbody>";
+		       ."<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Options</th></tr></thead>"
+		       ."<tbody>";
 
 	    $data = json_decode(WRM_DAO::GetPlayers());
 	    foreach($data as $player) {
@@ -66,8 +66,8 @@ class WRM_Display {
 	}
 	public function EditLootTbl() {
 		$html = "<table id=\"tblEditLoot\" class=\"nowrap compact wrm\">"
-	           ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Item</th><th>Raid</th><th>Date</th><th>Options</th></tr></thead>"
-	           ."<tbody>";
+		       ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Item</th><th>Raid</th><th>Date</th><th>Options</th></tr></thead>"
+		       ."<tbody>";
 
 	    $data = json_decode(WRM_DAO::GetLoot());
 	    foreach($data as $row) {
@@ -75,7 +75,7 @@ class WRM_Display {
 	    	        ."<td>$row->ID</td>"
 	    	        ."<td><span class=\"".WRM_Display::GetClassName($row->ClassID)."\">$row->PlayerName</span></td>"
 	    	        ."<td><span class=\"".WRM_Display::GetClassName($row->ClassID)."\">$row->ClassName</span></td>"
-	    	        ."<td><a href=\"".WRM_Display::BuildLootUrl($row->ItemID, $row->BonusOne, $row->BonusTwo, $row->BonusThree)."\"></a></td>"
+	    	        ."<td><a href=\"".WRM_Display::BuildLootUrl($row->Item)."\"></a></td>"
 	    	        ."<td>$row->RaidName</td>"
 	    	        ."<td>$row->Date</td>"
 	    	        ."<td><button class=\"rmLoot\">DELETE</button></td>"
@@ -89,8 +89,8 @@ class WRM_Display {
 	}
 	public function RaidAttndTbl() {
 		$html = "<table id=\"tblRaidAttendance\" class=\"nowrap compact wrm\">"
-	           ."<thead><tr><th>Name</th><th>Class</th><th>Points<br /><div id=\"divNewAttBulk\"></div></th><th>Options</th></tr></thead>"
-	           ."<tbody>";
+		       ."<thead><tr><th>Name</th><th>Class</th><th>Points<br /><div id=\"divNewAttBulk\"></div></th><th>Options</th></tr></thead>"
+		       ."<tbody>";
 
 	    $data = json_decode(WRM_DAO::GetPlayers());
 	    foreach($data as $player) {
@@ -109,8 +109,8 @@ class WRM_Display {
 	}
 	public function EditAttndTbl() {
 		$html = "<table id=\"tblEditAttnd\" class=\"nowrap compact wrm\">"
-	           ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Points</th><th>Date</th><th>Options</th></tr></thead>"
-	           ."<tbody>";
+		       ."<thead><tr><th>Row</th><th>Name</th><th>Class</th><th>Points</th><th>Date</th><th>Options</th></tr></thead>"
+		       ."<tbody>";
 
 	    $data = json_decode(WRM_DAO::GetAttnd());
 	    foreach($data as $row) {
@@ -147,17 +147,7 @@ class WRM_Display {
 			case 11: return "monk";
 		}
 	} 
-	public function BuildLootUrl($itemId, $bonusOne, $bonusTwo, $bonusThree) {
-		$itemUrl = "http://www.wowhead.com/item=".$itemId;
-
-		if($bonusOne != NULL) {
-			$itemUrl .= "&bonus=".$bonusOne;
-			if($bonusTwo != NULL) {
-				$itemUrl .= ":".$bonusTwo;
-				if($bonusThree != NULL) $itemUrl .= ":".$bonusThree;
-			}
-		}
-
-		return $itemUrl;
+	public function BuildLootUrl($item) {
+		return "http://www.wowhead.com/item=".$item;
 	}
 } ?>
