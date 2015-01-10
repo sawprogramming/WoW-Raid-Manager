@@ -4,7 +4,7 @@ WoW-Raid-Manager
 WordPress plugin to keep track of World of Warcraft raid loot and attendance.
 
 Installation instructions:
-if($_SERVER["REQUEST_URI"] == "/attendance/") {
+`if($_SERVER["REQUEST_URI"] == "/attendance/") {
 	wp_enqueue_script('blah', 'http://criminal-sr.com/wp-content/plugins/WoWRaidManager/libs/js/jquery-2.1.3.min.js');
 	wp_enqueue_script('datatables', 'http://criminal-sr.com/wp-content/plugins/WoWRaidManager/libs/js/jquery.dataTables.min.js');
 	wp_enqueue_script('jqui', 'http://criminal-sr.com/wp-content/plugins/WoWRaidManager/libs/js/jquery-ui.min.js');
@@ -22,4 +22,4 @@ if($_SERVER["REQUEST_URI"] == "/attendance/") {
 		wp_enqueue_script('wrm-admin-loot', 'http://criminal-sr.com/wp-content/plugins/WoWRaidManager/js/admin-loot.js', array('wrm-admin'));
 		wp_enqueue_script('wrm-admin-attnd', 'http://criminal-sr.com/wp-content/plugins/WoWRaidManager/js/admin-attnd.js', array('wrm-admin'));
 	}
-}
+}`
