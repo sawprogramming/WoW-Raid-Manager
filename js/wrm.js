@@ -1,3 +1,4 @@
+// Helper functions
 function ClassIdToName(id) {
 	switch(id) {
 		case 1: return "Druid";
@@ -13,7 +14,6 @@ function ClassIdToName(id) {
 		case 11: return "Monk";
 	}
 }
-
 function ClassIdToCss(id) {
 	return ClassIdToName(id).toLowerCase().replace(/\s/g, '');
 }

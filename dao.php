@@ -47,7 +47,7 @@ class WRM_DAO {
 
 		// return results
 		foreach($results as $player) {
-			array_push($brkdwn, ["Name" => $player->Name, "ClassName" => $player->ClassName, 
+			array_push($brkdwn, ["Name" => $player->Name, "ClassID" => $player->ClassID, "ClassName" => $player->ClassName, 
 				"I1" => WRM_DAO::GetAttndOver(14, $player->ID), "I2" => WRM_DAO::GetAttndOver(30, $player->ID),
 				"I3" => WRM_DAO::GetPlayerAttnd($player->ID)]);
 		}
@@ -61,20 +61,20 @@ class WRM_DAO {
 	}
 	public function GetPlayers() {
 		return WRM_DAO::Read(
-			"SELECT pl.ID, pl.Name, cl.Name as ClassName
+			"SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
 			 FROM WRM_Player as pl JOIN WRM_Class as cl on pl.ClassID = cl.ID
 			 ORDER BY pl.Name");
 	}
 	public function GetLoot() {
 		return WRM_DAO::Read(
-			"SELECT lt.ID as RowID, pl.Name, cl.Name as ClassName, lt.ItemID, lt.BonusOne, lt.BonusTwo, lt.BonusThree, rd.Name as RaidName, lt.Date
+			"SELECT lt.ID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, lt.ItemID, lt.BonusOne, lt.BonusTwo, lt.BonusThree, rd.Name as RaidName, lt.Date
 			FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
 				JOIN WRM_Loot as lt on pl.ID = lt.PlayerID
 				JOIN WRM_Raid as rd on rd.ID = lt.RaidID");
 	}
 	public function GetAttnd() {
 		return WRM_DAO::Read(
-			"SELECT at.ID as RowID, pl.Name, cl.Name as ClassName, at.Points, at.Date
+			"SELECT at.ID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, at.Points, at.Date
 			 FROM WRM_Player as pl JOIN WRM_Class as cl ON pl.ClassID = cl.ID
 				JOIN WRM_Attendance as at on pl.ID = at.PlayerID");
 	}
