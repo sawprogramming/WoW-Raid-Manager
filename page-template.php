@@ -22,12 +22,12 @@
 	<div class="row" style="padding: 3px;">
 		<div id="divUserAttnd">
 			<h1>Attendance</h1>
-			<?php echo WRM::UserAttndTbl(); ?>
+			<?php echo WRM_Display::UserAttndTbl(); ?>
 		</div>
 
 		<div id="divUserLoot">
 			<h1>Loot Log</h1>
-			<?php echo WRM::UserLootTbl(); ?>
+			<?php echo WRM_Display::UserLootTbl(); ?>
 		</div>
 		
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
@@ -61,10 +61,10 @@
 						</select>
 						<button id="btnAddPlayer">Add</button>
 					</div> <br />
-					<?php echo WRM::EditPlayerTbl(); ?>
+					<?php echo WRM_Display::EditPlayerTbl(); ?>
 				</div>
 				<div id="tabs-2">
-					<?php echo WRM::EditLootTbl(); ?>
+					<?php echo WRM_Display::EditLootTbl(); ?>
 				</div>
 				<div id="tabs-3">
 					<div align="center">
@@ -73,7 +73,7 @@
 						<button id="btnSaveAttendance" style="float: right;">Save</button>
 					</div> <br />
 					<div id="divNewAttendance">
-						<?php echo WRM::RaidAttndTbl(); ?>
+						<?php echo WRM_Display::RaidAttndTbl(); ?>
 					</div>
 				</div>
 				<div id="tabs-4">
@@ -84,7 +84,7 @@
 						<input type="text" id="dpEditAttnd" placeholder="yyyy/mm/dd" maxlength="10">
 						<button id="btnEditAttnd">Add</button>
 					</div>
-					<?php echo WRM::EditAttndTbl(); ?>
+					<?php echo WRM_Display::EditAttndTbl(); ?>
 				</div>
 				<div id="tabs-5">
 					<div style="display: inline-block; vertical-align: text-top; width: 45%;">

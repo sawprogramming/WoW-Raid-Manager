@@ -13,11 +13,11 @@ class WRM_DAO {
 			"INSERT INTO WRM_Raid (Name)
 			 VALUES (%s)", $name));
 	}
-	public function AddPlayer($playerId, $classId) {
+	public function AddPlayer($name, $classId) {
 		global $wpdb;
 		return WRM_DAO::Create($wpdb->prepare(
 			"INSERT INTO WRM_Player (Name, ClassID)
-			 VALUES (%s, %d)", $playerId, $classId));
+			 VALUES (%s, %d)", $name, $classId));
 	}
 	public function AddLoot($playerId, $itemId, $bonusOne, $bonusTwo, $bonusThree, $raidId, $date){
 		global $wpdb;
@@ -112,7 +112,7 @@ class WRM_DAO {
 		global $wpdb;
 		return WRM_DAO::Update($wpdb->prepare(
 			"UPDATE WRM_Attendance
-			 SET Points = %f, Date = %s,
+			 SET Points = %f, Date = %s
 			 WHERE ID = %d", $points, $date, $rowId));
 	}
 	

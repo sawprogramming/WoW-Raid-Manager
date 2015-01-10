@@ -27,7 +27,7 @@ class PageTemplater {
         add_filter('template_include', array($this, 'view_project_template'));
 
         // Add your templates to this array.
-        $this->templates = array('wrm-page.php' => 'WRM',);		
+        $this->templates = array('page-template.php' => 'WRM',);		
 	} 
 
 	public function register_project_templates( $atts ) {
