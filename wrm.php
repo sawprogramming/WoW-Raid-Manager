@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WoW Raid Manager
+ * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
  * Version: 0.0.1
  * Author: Criminal-SR
@@ -8,110 +8,90 @@
  */
 require_once(plugin_dir_path( __FILE__ ) . 'libs/PageTemplater.php');
 require_once(plugin_dir_path( __FILE__ ) . 'display.php');
-require_once(plugin_dir_path( __FILE__ ) . 'dao.php');
+require_once(plugin_dir_path( __FILE__ ) . "./dao/DAOFactory.php");
+require_once (plugin_dir_path( __FILE__ ) . "./entities/Player.php");
+require_once (plugin_dir_path( __FILE__ ) . "./entities/Attnd.php");
+require_once (plugin_dir_path( __FILE__ ) . "./entities/Item.php");
+require_once (plugin_dir_path( __FILE__ ) . "./entities/LootItem.php");
+require_once (plugin_dir_path( __FILE__ ) . "./entities/LootImport.php");
+
 class WRM {
 	// Installation functions
 	public function Install() {
-		global $wpdb;
-		$charset_collate = $wpdb->get_charset_collate();
-		
-		// create class table
-		$sql = "CREATE TABLE IF NOT EXISTS WRM_Class (
-			ID  tinyint(2) NOT NULL AUTO_INCREMENT,
-			Name tinytext NOT NULL,
-			PRIMARY KEY  ID (ID)
-		) $charset_collate;";
-		dbDelta($sql);
-		
-		// create raid table
-		$sql = "CREATE TABLE IF NOT EXISTS WRM_Raid (
-			ID  tinyint(3) NOT NULL AUTO_INCREMENT,
-			Name tinytext NOT NULL,
-			PRIMARY KEY  ID (ID)
-		) $charset_collate;";
-		dbDelta($sql);
-		
-		// create player table
-		$sql = "CREATE TABLE IF NOT EXISTS WRM_Player (
-			ID  smallint(5) NOT NULL AUTO_INCREMENT,
-			ClassID  tinyint(3),
-			Name tinytext NOT NULL,
-			PRIMARY KEY  ID (ID),
-			FOREIGN KEY (ClassID) REFERENCES WRM_Class(ID)
-		) $charset_collate;";
-		dbDelta($sql);
-		
-		// create loot table
-		$sql = "CREATE TABLE IF NOT EXISTS WRM_Loot (
-			ID  int(10) NOT NULL AUTO_INCREMENT,
-			PlayerID  smallint(5),
-			Item tinytext NOT NULL,
-			RaidID  tinyint(3),
-			Date date NOT NULL,
-			PRIMARY KEY  ID (ID),
-			FOREIGN KEY (PlayerID) REFERENCES WRM_Player(ID),
-			FOREIGN KEY (RaidID) REFERENCES WRM_Raid(ID)
-		) $charset_collate;";
-		dbDelta($sql);
-		
-		// create attendance table
-		$sql = "CREATE TABLE IF NOT EXISTS WRM_Attendance (
-			ID  int(10) NOT NULL AUTO_INCREMENT,
-			PlayerID  smallint(5),
-			Date date NOT NULL,
-			Points  float(3, 2),
-			PRIMARY KEY  ID (ID),
-			FOREIGN KEY (PlayerID) REFERENCES WRM_Player(ID)
-		) $charset_collate;";
-		dbDelta($sql);
+        $factory = new DAOFactory();
+        
+        // create tables
+        $factory->GetItemDAO()->CreateTable();
+        $factory->GetHeroClassDAO()->CreateTable();
+        $factory->GetRaidDAO()->CreateTable();
+        $factory->GetPlayerDAO()->CreateTable();
+        $factory->GetLootImportDAO()->CreateTable();
+        $factory->GetLootItemDAO()->CreateTable();
+        $factory->GetAttndDAO()->CreateTable();
+
+		//WRM::UpdateGuildLoot();
 	}
 	public function Uninstall() {
-		global $wpdb;
-
-/*		$wpdb->query("DROP TABLE IF EXISTS WRM_Attendance");
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Loot");
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Player");
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Raid");
-		$wpdb->query("DROP TABLE IF EXISTS WRM_Class");	*/
+        $factory = new DAOFactory();
+        
+        if(false) {
+            $factory->GetItemDAO()->DropTable();
+            $factory->GetHeroClassDAO()->DropTable();
+            $factory->GetRaidDAO()->DropTable();
+            $factory->GetPlayerDAO()->DropTable();
+            $factory->GetLootItemDAO()->DropTable();
+            $factory->GetAttndDAO()->DropTable();
+            $factory->GetLootImportDAO()->DropTable();
+        }
 	}	
 
 	// AJAX functions
 	public function AddPlayer() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			echo WRM_DAO::AddPlayer($_POST['name'], intval($_POST['classId']));
+            $factory = new DAOFactory();     
+            echo $factory->GetPlayerDAO()->Add(new Player(0, $_POST['name'], intval($_POST['classId'])));
 		}
 		die();
 	}
 	public function RmPlayer() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			echo WRM_DAO::RmPlayer(intval($_POST['id']));
+            $factory = new DAOFactory();     
+            echo $factory->GetPlayerDAO()->Delete(intval($_POST['id']));
 		}
 		die();
 	}
 	public function AddGroupAttendance() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
+            $factory = new DAOFactory();  
 			$results = $_POST['results'];
 			$today = $_POST['date'];
-
-			foreach($results as $player) WRM_DAO::AddAttnd(intval($player["id"]), floatval($player["points"]), $today);
+            
+            // add attendance to db
+            $dao = $factory->GetAttndDAO();
+			foreach($results as $player) {
+                $dao->Add(new Attnd(0, intval($player["id"]), $today, floatval($player["points"])));
+            }
 		}
 		die();
 	}
 	public function RmAttnd() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			WRM_DAO::RmAttnd(intval($_POST['id']));
+            $factory = new DAOFactory();     
+            echo $factory->GetAttndDAO()->Delete(intval($_POST['id']));
 		}
 		die();
 	}
 	public function RmLoot() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			echo WRM_DAO::RmLoot(intval($_POST['id']));
+            $factory = new DAOFactory();     
+            echo $factory->GetLootItemDAO()->Delete(intval($_POST['id']));
 		}
 		die();
 	}
 	public function AddAttnd() {
 		global $wpdb;
-
+        $factory = new DAOFactory(); 
+        
 		// only allow authorized users to use this function
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
 			$id;
@@ -120,65 +100,116 @@ class WRM {
 			// get the player id from the name
 			if(preg_match('/^([A-Za-z]+)$/', $name)) {
 				// find the id if this was a name
-				$row = $wpdb->get_results($wpdb->prepare("SELECT ID FROM WRM_Player WHERE Name = %s", $name));
-				if(count($row) > 1)  { echo "ERROR: Could not find a unique player with that name."; die(); }
-				if(count($row) == 0) { echo "ERROR: No players exist with that name.";               die(); }
+				$results = $factory->GetPlayerDAO()->GetId($name);
+				if(count($results) > 1)  { echo "ERROR: Could not find a unique player with that name."; die(); }
+				if(count($results) == 0) { echo "ERROR: No players exist with that name.";               die(); }
 
-				$id = intval($row[0]->ID);
+				$id = intval($results[0]->ID);
 			}
-			else if(preg_match('/^([0-9]+)$/', $name)) {
-				$id = intval($name);
-
-				// is this a valid id?
-				$row = $wpdb->get_row($wpdb->prepare("SELECT Name FROM WRM_Player WHERE ID = %d", $id));
-				if($row == NULL) { echo "ERROR: Could not find a player with that ID."; die(); }
-			}
+			else if(preg_match('/^([0-9]+)$/', $name)) $id = intval($name);
 			else { echo "ERROR: Name was not valid (should be a string of characters or an ID number)."; die(); }
 
 			// insert the record
-			$result = WRM::DbTransaction($wpdb->prepare(
-				"INSERT INTO WRM_Attendance (PlayerID, Points, Date)
-				VALUES (%d, %f, %s)", $id, floatval($_POST['points']), $_POST['date']));
-			if($result) echo $wpdb->insert_id;
-			else        echo "ERROR: An error occurred while trying to insert the record into the database.";
+			$result = $factory->GetAttndDAO()->Add(new Attnd(0, $id, $_POST['date'], floatval($_POST['points'])));
+			if(!$result) echo "ERROR: An error occurred while entering that data into the database. Maybe that PlayerID doesn't exist?";
 		}
 		die();
 	}
 	public function EditAttnd() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			echo WRM_DAO::EditAttnd(intval($_POST['id']), floatval($_POST['points'], $_POST['date']));
+            $factory = new DAOFactory();
+			echo $factory->GetAttndDAO()->Update(new Attnd(intval($_POST['id']), 0, $_POST['date'], floatval($_POST['points'])));
 		}
 		die();
 	}
 	public function FreeSql() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			global $wpdb;
+            global $wpdb;
 			
-			// run the sql
-			$results = $wpdb->get_results(str_replace("\\", "", $_GET['sql']));
+            // run the sql
+            $results = $wpdb->get_results(str_replace("\\", "", $_GET['sql']));
 			
-			if($results != NULL) {
-				// table header
-				$html = "<table id=\"tblManualSql\" class=\"wrm\"><thead>";
-				foreach($results[0] as $key => $value) $html .= "<th>".$key."</th>"; 
-				$html .= "</thead><tbody>";
+            if($results != NULL) {
+                // table header
+                $html = "<table id=\"tblManualSql\" class=\"wrm\"><thead>";
+                foreach($results[0] as $key => $value) $html .= "<th>".$key."</th>"; 
+                $html .= "</thead><tbody>";
 
-				// table body
-				foreach($results as $row) {
-					$html .= "<tr>";
-					foreach($row as $data) $html .= "<td>".$data."</td>";
-					$html .= "</tr>";
-				}
-				$html .= "</tbody></table>";
+                // table body
+                foreach($results as $row) {
+                    $html .= "<tr>";
+                    foreach($row as $data) $html .= "<td>".$data."</td>";
+                    $html .= "</tr>";
+                }
+                $html .= "</tbody></table>";
 
-				echo $html;
-			} else echo "Query did not return any results.\n";
+                echo "<div>".$html."</div>";
+            } else echo "<div>Query did not return any results.</div>";
 		}
 		die();
 	}
 	public function Raids() {
-		echo WRM_DAO::GetRaids();
+        $factory = new DAOFactory();     
+        echo json_encode($factory->GetRaidDAO()->GetAll());
 		die();
+	}
+
+	// WoW API
+	public function UpdateGuildLoot() { 
+		$raiders       = array();
+		$raiderIDs     = array();
+        $factory       = new DAOFactory();
+        $itemDAO       = $factory->GetItemDAO();
+        $lootImportDAO = $factory->GetLootImportDAO();
+        $lootItemDAO   = $factory->GetLootItemDAO();
+        $charBnetUrl   = "http://us.battle.net/api/wow/character/Stormrage/";
+        
+		// get a list of our raiders because we don't care who else gets loot
+		$players = $factory->GetPlayerDAO()->GetAll();
+		foreach($players as $player){
+			array_push($raiders, $player->Name);
+			array_push($raiderIDs, $player->ID);
+		}
+
+		// fetch the news for each player
+		foreach($raiders as $i => $raider) {
+			$data = $ilvl = $lastImported = NULL;
+            
+			// only process process data we haven't read
+            $data = json_decode(file_get_contents("http://us.battle.net/api/wow/character/Stormrage/".$raider."?fields=feed"));
+            $lastImported = $lootImportDAO->GetLastImported($raiderIDs[$i]);
+			if(!($lastImported == NULL) && $data->lastModified < $lastImported) continue;
+
+			// process the data
+            $news = $data->feed;
+			foreach($news as $event) {
+				if(!($lastImported == NULL) && $event->timestamp < $lastImported) break;
+				if($event->type != "LOOT") continue;
+                
+                
+				if(($ilvl = $itemDAO->GetItemLevel($event->itemId, NULL)) == NULL) {       
+					$item = json_decode(file_get_contents("http://us.battle.net/api/wow/item/".$event->itemId));
+					if(isset($item->availableContexts) && $item->availableContexts != [""]) {
+                        $contexts = $item->availableContexts;
+                        foreach($contexts as $context) {
+                            $item = json_decode(file_get_contents("http://us.battle.net/api/wow/item/".$event->itemId."/".$context));
+					        $itemDAO->Add(new Item($item->id, $context, $item->itemLevel));
+                        }
+					} else $itemDAO->Add(new Item($item->id, NULL, $item->itemLevel));
+					$ilvl = $item->itemLevel;
+					
+				}
+                
+                // skip non relevant loot
+				if($ilvl < 655) continue;
+
+				$lootItemDAO->Add(new LootItem(0, $raiderIDs[$i], $event->itemId, 1, date("Y-m-d", $event->timestamp / 1000)));
+			}
+
+			// record that we read this data
+            if($lastImported === NULL) $lootImportDAO->Add(new LootImport(0, $raiderIDs[$i], $data->lastModified));
+            else                       $lootImportDAO->Update(new LootImport(0, $raiderIDs[$i], $data->lastModified));
+		}
 	}
 }
 register_activation_hook(__FILE__, array('WRM', 'Install'));

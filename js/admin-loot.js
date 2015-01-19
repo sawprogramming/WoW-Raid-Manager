@@ -2,7 +2,7 @@
 function Admin_SetupLoot() {
 	SetupRmLoot();
 
-	$("#tblEditLoot").DataTable({ "iDisplayLength": 15, "order" : [[ 0, "desc" ]] });
+	$("#tblEditLoot").DataTable({ "iDisplayLength": 15 });
 }
 
 // Edit Loot Records functions

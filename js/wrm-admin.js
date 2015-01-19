@@ -93,7 +93,7 @@ function Admin_RmTableRow(tableId, actionName, primaryKey, message, nRow, button
 					url: ajax_object.ajax_url,
 					type: 'POST',
 					data: { 'action': actionName, 'id': primaryKey },
-					success: function() { 
+					success: function (response, status, junk) {
 						$(tableId).dataTable().dataTable().fnDeleteRow(nRow);
 					},
 					complete: function() { $(buttonId).prop("disabled", false); }

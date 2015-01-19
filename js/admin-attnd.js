@@ -95,7 +95,7 @@ function SetupAddEditAttnd() {
 			url: ajax_object.ajax_url,
 			type: "POST",
 			data: { "action": "wrm_addattnd", "name": name, "points": points, "date": date },
-			success: function(response, status, junk) {
+			success: function (response, status, junk) {
 				if(response.search("ERROR") == -1) {
 					name = $("#txtEditAttnd").val('');
 					points = $("#EditAttndSlider").slider("value", 1);
