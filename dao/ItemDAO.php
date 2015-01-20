@@ -26,12 +26,13 @@ class ItemDAO extends DAO {
         global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
         
+        $wpdb->show_errors();
         dbDelta("
             CREATE TABLE IF NOT EXISTS $this->tableName (
 			    ID double NOT NULL,
                 Context tinytext NULL,
 			    ItemLevel smallint NOT NULL,
-			    PRIMARY KEY  ID (ID)
+			    PRIMARY KEY  (ID,Context(255))
             ) $charset_collate;");
     }
     public function DropTable() {
@@ -70,6 +71,6 @@ class ItemDAO extends DAO {
         return $this->ExecuteNonQuery($wpdb->prepare("
             UPDATE $this->tableName
             SET ID = %d, Context = %s, Level = %d
-            WHERE ID = %d", $obj->ID, $obj->Context, $obj->Level, $obj->ID));
+            WHERE ID = %d AND Context = %s", $obj->ID, $obj->Context, $obj->Level, $obj->ID, $obj->Context));
     }
 }
