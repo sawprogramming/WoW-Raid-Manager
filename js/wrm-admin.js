@@ -3,7 +3,7 @@ function Admin_AddClickHandlers() {
 	$("#btnManualSql").click(function() {
 		$.ajax({
 			url: ajax_object.ajax_url,
-			data: { "action": "wrm_freesql", "sql": $("#txtManualSql").val() },
+			data: { "action": "wro_freesql", "sql": $("#txtManualSql").val() },
 			success: function(response, status, junk) {
 				$("#txtManualSql").val("");
 				$(response).dialog({

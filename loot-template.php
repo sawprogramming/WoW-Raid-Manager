@@ -1,24 +1,18 @@
 <script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#tblUserLoot").DataTable({ "iDisplayLength": 15, "order" : [[ 3, "desc" ]]});
-		$("#tblUserAttnd").DataTable({ "iDisplayLength": 50 });
+    $(document).ready(function () {
+        $("#tblUserLoot").DataTable({ "iDisplayLength": 15, "order": [[3, "desc"]] });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
-		Admin_AddClickHandlers();
-		$("#divAdminTabs").tabs();
-		<?php } ?>
+	    Admin_AddClickHandlers();
+	    $("#divAdminTabs").tabs();
+	    <?php } ?>
 	});
 </script>
 
 <div id="content" class="container">
 	<div class="row" style="padding: 3px;">
-		<div id="divUserAttnd">
-			<h1>Attendance</h1>
-            <?php include(plugin_dir_path( __FILE__ ) . "./views/_AttndBrkdwn.php"); ?>
-		</div>
-
 		<div id="divUserLoot">
 			<h1>Loot Log</h1>
 			<?php include(plugin_dir_path( __FILE__ ) . "./views/_Loot.php"); ?>
@@ -31,15 +25,11 @@
 				<ul>
 					<li><a href="#tabs-1">Add/Remove Players</a></li>
 					<li><a href="#tabs-2">Edit Loot Records</a></li>
-					<li><a href="#tabs-3">Daily Raid Attendance</a></li>
-					<li><a href="#tabs-4">Edit Attendance Records</a></li>
-					<li><a href="#tabs-5">Miscellaneous</a></li>
+					<li><a href="#tabs-3">Miscellaneous</a></li>
 				</ul>
 				<div id="tabs-1"><?php include(plugin_dir_path(__FILE__)."./views/_EditPlayers.php"); ?></div>
 				<div id="tabs-2"><?php include(plugin_dir_path(__FILE__)."./views/_EditLoot.php"); ?></div>
-				<div id="tabs-3"><?php include(plugin_dir_path(__FILE__)."./views/_DailyAttnd.php"); ?></div>
-				<div id="tabs-4"><?php include(plugin_dir_path(__FILE__)."./views/_EditAttnd.php"); ?></div>
-				<div id="tabs-5">
+				<div id="tabs-3">
 					<div style="display: inline-block; vertical-align: text-top; width: 45%;">
                         <?php include(plugin_dir_path(__FILE__)."./views/_EditRaid.php"); ?>
 					</div><br />

@@ -18,7 +18,7 @@ require_once (plugin_dir_path(__FILE__)."./services/RaidService.php");
 require_once (plugin_dir_path(__FILE__)."./services/AttndService.php");
 require_once (plugin_dir_path(__FILE__)."./services/LootService.php");
 
-class WRM {
+class WRO {
 	// Installation functions
 	public function Install() {
         $factory = new DAOFactory();
@@ -120,7 +120,7 @@ class WRM {
 		}
 	}
 }
-register_activation_hook(__FILE__, array('WRM', 'Install'));
-register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));;
-add_action('wp_ajax_wrm_freesql', array('WRM', 'FreeSql'));
+register_activation_hook(__FILE__, array('WRO', 'Install'));
+register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));;
+add_action('wp_ajax_wro_freesql', array('WRO', 'FreeSql'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>
