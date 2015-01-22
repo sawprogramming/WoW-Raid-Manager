@@ -6,15 +6,17 @@
  * Author: Criminal-SR
  * License: GPL2
  */
-require_once(plugin_dir_path( __FILE__ ) . 'libs/PageTemplater.php');
-require_once(plugin_dir_path( __FILE__ ) . 'display.php');
-require_once(plugin_dir_path( __FILE__ ) . "./dao/DAOFactory.php");
-require_once (plugin_dir_path( __FILE__ ) . "./entities/Player.php");
-require_once (plugin_dir_path( __FILE__ ) . "./entities/Attnd.php");
-require_once (plugin_dir_path( __FILE__ ) . "./entities/Item.php");
-require_once (plugin_dir_path( __FILE__ ) . "./entities/LootItem.php");
-require_once (plugin_dir_path( __FILE__ ) . "./entities/LootImport.php");
-require_once (plugin_dir_path( __FILE__ ) . "./WowAPI.php");
+require_once (plugin_dir_path(__FILE__).'libs/PageTemplater.php');
+require_once (plugin_dir_path(__FILE__).'display.php');
+require_once (plugin_dir_path(__FILE__)."./dao/DAOFactory.php");
+require_once (plugin_dir_path(__FILE__)."./entities/Item.php");
+require_once (plugin_dir_path(__FILE__)."./entities/LootItem.php");
+require_once (plugin_dir_path(__FILE__)."./entities/LootImport.php");
+require_once (plugin_dir_path(__FILE__)."./WowAPI.php");
+require_once (plugin_dir_path(__FILE__)."./services/PlayerService.php");
+require_once (plugin_dir_path(__FILE__)."./services/RaidService.php");
+require_once (plugin_dir_path(__FILE__)."./services/AttndService.php");
+require_once (plugin_dir_path(__FILE__)."./services/LootService.php");
 
 class WRM {
 	// Installation functions
@@ -31,7 +33,7 @@ class WRM {
         $factory->GetAttndDAO()->CreateTable();
 
         // seed tables
-		self::UpdateGuildLoot();
+		//self::UpdateGuildLoot();
 	}
 	public function Uninstall() {
         $factory = new DAOFactory();
@@ -48,82 +50,6 @@ class WRM {
 	}	
 
 	// AJAX functions
-	public function AddPlayer() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();     
-            echo $factory->GetPlayerDAO()->Add(new Player(0, $_POST['name'], intval($_POST['classId'])));
-		}
-		die();
-	}
-	public function RmPlayer() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();     
-            echo $factory->GetPlayerDAO()->Delete(intval($_POST['id']));
-		}
-		die();
-	}
-	public function AddGroupAttendance() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();  
-			$results = $_POST['results'];
-			$today = $_POST['date'];
-            
-            // add attendance to db
-            $dao = $factory->GetAttndDAO();
-			foreach($results as $player) {
-                $dao->Add(new Attnd(0, intval($player["id"]), $today, floatval($player["points"])));
-            }
-		}
-		die();
-	}
-	public function RmAttnd() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();     
-            echo $factory->GetAttndDAO()->Delete(intval($_POST['id']));
-		}
-		die();
-	}
-	public function RmLoot() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();     
-            echo $factory->GetLootItemDAO()->Delete(intval($_POST['id']));
-		}
-		die();
-	}
-	public function AddAttnd() {
-		global $wpdb;
-        $factory = new DAOFactory(); 
-        
-		// only allow authorized users to use this function
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-			$id;
-			$name = $_POST['name'];
-
-			// get the player id from the name
-			if(preg_match('/^([A-Za-z]+)$/', $name)) {
-				// find the id if this was a name
-				$results = $factory->GetPlayerDAO()->GetId($name);
-				if(count($results) > 1)  { echo "ERROR: Could not find a unique player with that name."; die(); }
-				if(count($results) == 0) { echo "ERROR: No players exist with that name.";               die(); }
-
-				$id = intval($results[0]->ID);
-			}
-			else if(preg_match('/^([0-9]+)$/', $name)) $id = intval($name);
-			else { echo "ERROR: Name was not valid (should be a string of characters or an ID number)."; die(); }
-
-			// insert the record
-			$result = $factory->GetAttndDAO()->Add(new Attnd(0, $id, $_POST['date'], floatval($_POST['points'])));
-			if(!$result) echo "ERROR: An error occurred while entering that data into the database. Maybe that PlayerID doesn't exist?";
-		}
-		die();
-	}
-	public function EditAttnd() {
-		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            $factory = new DAOFactory();
-			echo $factory->GetAttndDAO()->Update(new Attnd(intval($_POST['id']), 0, $_POST['date'], floatval($_POST['points'])));
-		}
-		die();
-	}
 	public function FreeSql() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
             global $wpdb;
@@ -148,11 +74,6 @@ class WRM {
                 echo "<div>".$html."</div>";
             } else echo "<div>Query did not return any results.</div>";
 		}
-		die();
-	}
-	public function Raids() {
-        $factory = new DAOFactory();     
-        echo json_encode($factory->GetRaidDAO()->GetAll());
 		die();
 	}
 
@@ -200,14 +121,6 @@ class WRM {
 	}
 }
 register_activation_hook(__FILE__, array('WRM', 'Install'));
-register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));
-add_action('wp_ajax_wrm_addplayer', array('WRM', 'AddPlayer'));
-add_action('wp_ajax_wrm_rmplayer', array('WRM', 'RmPlayer'));
-add_action('wp_ajax_wrm_rmattnd', array('WRM', 'RmAttnd'));
-add_action('wp_ajax_wrm_addattnd', array('WRM', 'AddAttnd'));
-add_action('wp_ajax_wrm_rmloot', array('WRM', 'RmLoot'));
-add_action('wp_ajax_wrm_editattnd', array('WRM', 'EditAttnd'));
-add_action('wp_ajax_wrm_addgrpatt', array('WRM', 'AddGroupAttendance'));
+register_deactivation_hook(__FILE__, array('WRM', 'Uninstall'));;
 add_action('wp_ajax_wrm_freesql', array('WRM', 'FreeSql'));
-add_action('wp_ajax_wrm_raids', array('WRM', 'Raids'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

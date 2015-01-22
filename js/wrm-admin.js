@@ -1,9 +1,4 @@
 // Setup functions
-function Admin_Setup() {
-	if(typeof Admin_SetupPlayer == 'function') Admin_SetupPlayer();
-	if(typeof Admin_SetupLoot == 'function')   Admin_SetupLoot();
-	if(typeof Admin_SetupAttnd == 'function')  Admin_SetupAttnd();
-}
 function Admin_AddClickHandlers() {
 	$("#btnManualSql").click(function() {
 		$.ajax({
@@ -20,24 +15,6 @@ function Admin_AddClickHandlers() {
 				});
 			}
 		});
-	});
-
-	$.ajax({
-		url: ajax_object.ajax_url,
-		type: "GET",
-		data: { "action": "wrm_raids" },
-		success: function(response, status, junk) {
-			var raid, raids = JSON.parse(response);
-
-			// clear the options
-			$("#slRmRaid option").remove();
-			$("#slRmRaid").append($("<option></option>").val(0).text("Raid Name..."));
-
-			// add the raids
-			$.each(raids, function(index, value) {
-				$("#slRmRaid").append($("<option></option>").val(value.ID).text(value.Name));
-			});
-		}
 	});
 }
 

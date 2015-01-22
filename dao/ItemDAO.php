@@ -26,7 +26,6 @@ class ItemDAO extends DAO {
         global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
         
-        $wpdb->show_errors();
         dbDelta("
             CREATE TABLE IF NOT EXISTS $this->tableName (
 			    ID double NOT NULL,

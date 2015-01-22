@@ -6,7 +6,6 @@
 		$("#tblUserAttnd").DataTable({ "iDisplayLength": 50 });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
-		Admin_Setup();
 		Admin_AddClickHandlers();
 		$("#divAdminTabs").tabs();
 		<?php } ?>
@@ -36,29 +35,13 @@
 					<li><a href="#tabs-4">Edit Attendance Records</a></li>
 					<li><a href="#tabs-5">Miscellaneous</a></li>
 				</ul>
-				<div id="tabs-1"><?php include(plugin_dir_path( __FILE__ ) . "./views/_EditPlayers.php"); ?></div>
-				<div id="tabs-2"><?php include(plugin_dir_path( __FILE__ ) . "./views/_EditLoot.php"); ?></div>
-				<div id="tabs-3"><?php include(plugin_dir_path( __FILE__ ) . "./views/_DailyAttnd.php"); ?></div>
-				<div id="tabs-4"><?php include(plugin_dir_path( __FILE__ ) . "./views/_EditAttnd.php"); ?></div>
+				<div id="tabs-1"><?php include(plugin_dir_path(__FILE__)."./views/_EditPlayers.php"); ?></div>
+				<div id="tabs-2"><?php include(plugin_dir_path(__FILE__)."./views/_EditLoot.php"); ?></div>
+				<div id="tabs-3"><?php include(plugin_dir_path(__FILE__)."./views/_DailyAttnd.php"); ?></div>
+				<div id="tabs-4"><?php include(plugin_dir_path(__FILE__)."./views/_EditAttnd.php"); ?></div>
 				<div id="tabs-5">
 					<div style="display: inline-block; vertical-align: text-top; width: 45%;">
-						<fieldset>
-							<legend>Raid Table Controls</legend>
-							<table>
-								<tbody>
-									<tr>
-										<td>Add Raid:</td>
-										<td><input id="txtAddRaid" type="text" placeholder="Raid Name..."></td>
-										<td><button id="btnAddRaid">Add</button></td>
-									</tr>
-									<tr>
-										<td>Remove Raid:</td>
-										<td><select id="slRmRaid"></select></td>
-										<td><button id="btnRmRaid">Delete</button></td>
-									</tr>
-								</tbody>
-							</table>
-						</fieldset>
+                        <?php include(plugin_dir_path(__FILE__)."./views/_EditRaid.php"); ?>
 					</div><br />
 					<div>
 						<fieldset>
