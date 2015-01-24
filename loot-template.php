@@ -50,4 +50,11 @@
 	</div>
 </div>
 <?php } ?>
+<script type="text/javascript">
+    function RefreshLootLinks() {
+        setTimeout(function () {
+            $WowheadPower.refreshLinks();
+        }, 25);
+    }
+</script>
 <?php echo wp_footer(); ?>

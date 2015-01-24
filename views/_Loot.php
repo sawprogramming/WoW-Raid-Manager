@@ -24,3 +24,8 @@
         ?>
 	</tbody>
 </table>
+
+<script type="text/javascript">
+    $("#tblUserLoot").on("length.dt", function () { RefreshLootLinks(); });
+    $("#tblUserLoot").on("page.dt", function () { RefreshLootLinks(); });
+</script>

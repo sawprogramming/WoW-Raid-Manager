@@ -33,6 +33,9 @@
 </table>
 
 <script type="text/javascript">
+    $("#tblEditLoot").on("length.dt", function () { RefreshLootLinks(); });
+    $("#tblEditLoot").on("page.dt", function () { RefreshLootLinks(); });
+
     $(document).ready(function () {
         $("#tblEditLoot").DataTable({ "iDisplayLength": 15 });
 
