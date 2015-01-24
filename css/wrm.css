@@ -1,10 +1,6 @@
 /* General Styles */
 label { display: inline-block !important; }
 
-/* Table Related Styles */
-.wrm thead th { color: #f8f8f2 !important; background: #272822 !important; }
-.wrm tbody tr { color: #f8f8f2 !important; background: #272822 !important; }
-
 /* Slider Related Styles */
 .ui-slider { width: 15em; }
 .llate   .ui-slider-range { background: red; }

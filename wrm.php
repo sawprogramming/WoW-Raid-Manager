@@ -48,7 +48,30 @@ class WRO {
             $factory->GetLootImportDAO()->DropTable();
         }
 	}	
-
+    public function EnqueueScriptsStyles() {
+        $template = get_page_template_slug(get_queried_object_id()); 
+        
+        if($template == "../attnd-template.php" || $template == "../loot-template.php") {
+            $appUrl = plugins_url()."/WoWRaidManager";
+            
+            // add scripts
+            wp_enqueue_script('blah',       "$appUrl/libs/js/jquery-2.1.3.min.js");
+            wp_enqueue_script('datatables', "$appUrl/libs/js/jquery.dataTables.min.js");
+            wp_enqueue_script('jqui',       "$appUrl/libs/js/jquery-ui.min.js");
+            wp_enqueue_script('wrm',        "$appUrl/js/wrm.js");
+            if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
+                wp_register_script('wrm-admin', "$appUrl/js/wrm-admin.js", array('wrm'), '', true);
+                wp_localize_script('wrm-admin', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+                wp_enqueue_script('wrm-admin');
+            }
+            
+            // add styles
+            wp_enqueue_style('datatables', "$appUrl/libs/css/jquery.dataTables.min.css");
+            wp_enqueue_style('jqui',       "$appUrl/libs/css/jquery-ui.min.css");
+            wp_enqueue_style('wrm',        "$appUrl/css/wrm.css");
+        }
+    }
+    
 	// AJAX functions
 	public function FreeSql() {
 		if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
@@ -123,4 +146,5 @@ class WRO {
 register_activation_hook(__FILE__, array('WRO', 'Install'));
 register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));;
 add_action('wp_ajax_wro_freesql', array('WRO', 'FreeSql'));
+add_action('wp_enqueue_scripts', array('WRO', 'EnqueueScriptsStyles'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>
