@@ -19,8 +19,8 @@ require_once (plugin_dir_path(__FILE__)."./services/AttndService.php");
 require_once (plugin_dir_path(__FILE__)."./services/LootService.php");
 
 class WRO {
-	// Installation functions
-	public function Install() {
+    // Installation functions
+    public function Install() {
         $factory = new DAOFactory();
         
         // create tables
@@ -34,8 +34,8 @@ class WRO {
         
         // seed tables
         //self::UpdateGuildLoot();
-	}
-	public function Uninstall() {
+    }
+    public function Uninstall() {
         $factory = new DAOFactory();
         
         if(false) {
@@ -47,7 +47,7 @@ class WRO {
             $factory->GetAttndDAO()->DropTable();
             $factory->GetLootImportDAO()->DropTable();
         }
-	}	
+    }	
     public function EnqueueScriptsStyles() {
         $template = get_page_template_slug(get_queried_object_id()); 
         
@@ -72,14 +72,14 @@ class WRO {
         }
     }
     
-	// AJAX functions
+    // AJAX functions
     public function FreeSql() {
         if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
             global $wpdb;
-			
+            
             // run the sql
             $results = $wpdb->get_results(str_replace("\\", "", $_GET['sql']));
-			
+            
             if($results != NULL) {
                 // table header
                 $html = "<table id=\"tblManualSql\" class=\"wrm\"><thead>";
@@ -100,8 +100,8 @@ class WRO {
         die();
     }
 
-	// WoW API
-	public function UpdateGuildLoot() { 
+    // WoW API
+    public function UpdateGuildLoot() { 
         $factory       = new DAOFactory();
         $wowApi        = new WowApi();
         $itemDAO       = $factory->GetItemDAO();
