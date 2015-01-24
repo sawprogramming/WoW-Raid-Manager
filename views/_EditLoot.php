@@ -24,7 +24,7 @@
                     ."<td><a href=\"".WRM_Display::BuildLootUrl($row->Item)."\"></a></td>"
                     ."<td>$row->RaidName</td>"
                     ."<td>$row->Date</td>"
-                    ."<td><button class=\"rmLoot\">DELETE</button></td>"
+                    ."<td><button class=\"btn-del rmLoot\"></button></td>"
                     ."</tr>";
             }
         }

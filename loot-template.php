@@ -4,6 +4,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#tblUserLoot").DataTable({ "iDisplayLength": 15, "order": [[3, "desc"]] });
+        $(".btn-del").button({ icons: { primary: "ui-icon-closethick" }, text: false });
+        $(".btn-edit").button({ icons: { primary: "ui-icon-pencil" }, text: false });
 
 		<?php if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) { ?>
 	    Admin_AddClickHandlers();

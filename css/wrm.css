@@ -1,5 +1,7 @@
 /* General Styles */
 label { display: inline-block !important; }
+.btn-del { width: 21px !important; height: 21px !important; float: right; }
+.btn-edit { width: 21px !important; height: 21px !important; float: right; }
 
 /* Slider Related Styles */
 .ui-slider { width: 15em; }

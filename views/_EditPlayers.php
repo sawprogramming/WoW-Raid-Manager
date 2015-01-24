@@ -38,7 +38,7 @@
                     ."<td>$player->ID</td>"
                     ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->Name</span></td>"
                     ."<td><span class=\"".WRM_Display::GetClassName($player->ClassID)."\">$player->ClassName</span></td>"
-                    ."<td><button class=\"del\">DELETE</button></td>"
+                    ."<td><button class=\"btn-del del\"></button></td>"
                     ."</tr>";
             }
         }

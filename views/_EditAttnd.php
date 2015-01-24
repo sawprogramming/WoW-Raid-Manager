@@ -30,8 +30,8 @@
                     ."<td><span class=\"".WRM_Display::GetClassName($row->ClassID)."\">$row->ClassName</span></td>"
                     ."<td><div id=\"divEditAttSl".$row->ID."\">$row->Points</div></td>"
                     ."<td>$row->Date</td>"
-                    ."<td><button value=\"$row->ID\" class=\"rmEditAttnd\">DELETE</button>"
-                    .    "<button class=\"editEditAttnd\">EDIT</button></td>"
+                    ."<td><button value=\"$row->ID\" class=\"btn-del rmEditAttnd\"></button>"
+                .    "<button class=\"btn-edit editEditAttnd\"></button></td>"
                     ."</tr>";
             }
         }
