@@ -45,6 +45,7 @@
 						</div>
 					</fieldset>
 				</div>
+                <button id="btnUpdateGuildLoot">Get Latest Loot</button>
 			</div>
 		</div>
 	</div>

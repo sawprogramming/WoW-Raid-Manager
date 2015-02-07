@@ -24,6 +24,10 @@ class WowApi {
         if(($json = file_get_contents($itemUrl)) === FALSE) return NULL;
         $data = json_decode($json);
         
+        // skip non weapon or armor loot
+        if(isset($data->itemClass) && $data->itemClass != 2 && $data->itemClass != 4) return NULL;
+        if(isset($data->equippable) && $data->equippable == false) return NULL;
+        
         if(isset($data->availableContexts) && $data->availableContexts != [""]) {
             // get ItemLevel for all contexts
             foreach($data->availableContexts as $context) {
@@ -39,7 +43,7 @@ class WowApi {
     
     // helper functions
     private function BuildItemUrl($itemId) { return "http://$this->region.battle.net/api/wow/item/$itemId"; }
-    private function BuildCharUrl($name) { return "http://$this->region.battle.net/api/wow/character/$this->realm/$name"; }
+    private function BuildCharUrl($name) {   return "http://$this->region.battle.net/api/wow/character/$this->realm/$name"; }
     
     // members
     private $region;

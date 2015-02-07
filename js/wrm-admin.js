@@ -16,6 +16,22 @@ function Admin_AddClickHandlers() {
 			}
 		});
 	});
+
+	$("#btnUpdateGuildLoot").click(function () {
+	    $.ajax({
+	        url: ajax_object.ajax_url,
+	        data: { "action": "wro_updateguildloot" },
+	        beforeSend: function (blah, blah) {
+	            $("<div>Request sent!</div>").dialog({
+	                title: "Acknowledgement",
+	                resizble: false,
+	                width: 800,
+	                modal: true,
+	                buttons: { "Ok" : function() {	$(this).dialog("destroy").remove();	} }
+	            });
+	        }
+	    });
+	});
 }
 
 // UI Creation functions

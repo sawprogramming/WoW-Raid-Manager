@@ -53,7 +53,7 @@ class PlayerDAO extends DAO {
         return $this->ExecuteQuery("
             SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
             FROM $this->tableName as pl
-                JOIN HeroClass as cl ON pl.ClassID = cl.ID");
+                JOIN ".self::$dbPrefix."HeroClass as cl ON pl.ClassID = cl.ID");
     }
     public function Delete($key) {
         global $wpdb;

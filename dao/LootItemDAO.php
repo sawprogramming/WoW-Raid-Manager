@@ -47,9 +47,9 @@ class LootItemDAO extends DAO {
         return $this->ExecuteQuery("
             SELECT li.ID, li.PlayerID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, li.Item, li.RaidID, rd.Name as RaidName, li.Date
             FROM $this->tableName as li
-                JOIN player as pl ON li.PlayerID = pl.ID
-                JOIN raid as rd ON li.RaidID = rd.ID
-                JOIN heroclass as cl ON pl.ClassID = cl.ID");
+                JOIN ".self::$dbPrefix."Player as pl ON li.PlayerID = pl.ID
+                JOIN ".self::$dbPrefix."Raid as rd ON li.RaidID = rd.ID
+                JOIN ".self::$dbPrefix."HeroClass as cl ON pl.ClassID = cl.ID");
     }
     public function Delete($key) {
         global $wpdb;

@@ -16,7 +16,7 @@ class AttndDAO extends DAO {
 		// query the database
 		$results = $wpdb->get_results(
 			"SELECT DISTINCT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName
-			 FROM player as pl JOIN heroclass as cl on pl.ClassID = cl.ID");
+			 FROM ".self::$dbPrefix."Player as pl JOIN ".self::$dbPrefix."HeroClass as cl on pl.ClassID = cl.ID");
 
 		// error checking
 		if($results == [""]) return NULL;
@@ -65,9 +65,9 @@ class AttndDAO extends DAO {
     public function GetAll() {
         return $this->ExecuteQuery("
             SELECT at.ID, pl.Name as PlayerName, pl.ClassID, cl.Name as ClassName, at.Points, at.Date
-			FROM player as pl 
-                JOIN heroclass as cl ON pl.ClassID = cl.ID
-				JOIN attendance as at on pl.ID = at.PlayerID");
+			FROM ".self::$dbPrefix."Player as pl 
+                JOIN ".self::$dbPrefix."HeroClass as cl ON pl.ClassID = cl.ID
+				JOIN $this->tableName as at on pl.ID = at.PlayerID");
     }
     public function Delete($key) {
         global $wpdb;
@@ -92,10 +92,10 @@ class AttndDAO extends DAO {
 
 		// make the sql
 		$sql = "SELECT SUM(att.Points) as Earned, Max.Total
-	            FROM Player as pl 
-	                JOIN Attendance as att ON pl.ID = att.PlayerID
+	            FROM ".self::$dbPrefix."Player as pl 
+	                JOIN $this->tableName as att ON pl.ID = att.PlayerID
 	                JOIN (SELECT PlayerID, COUNT(Points) as Total
-	                      FROM Attendance
+	                      FROM $this->tableName
 	                      WHERE PlayerID = %d
 							AND Date BETWEEN DATE_SUB(NOW(), INTERVAL %d DAY) AND NOW()
 						  GROUP BY PlayerID) as Max ON Max.PlayerID = att.PlayerID 
@@ -113,9 +113,9 @@ class AttndDAO extends DAO {
 		// make the sql
 		$sql = "SELECT SUM(att.Points) as Earned, Max.Total
 	            FROM Player as pl 
-	                JOIN Attendance as att ON pl.ID = att.PlayerID
+	                JOIN $this->tableName as att ON pl.ID = att.PlayerID
 	                JOIN (SELECT PlayerID, COUNT(Points) as Total
-	                      FROM Attendance
+	                      FROM $this->tableName
 	                      WHERE PlayerID = %d
 	                      GROUP BY PlayerID) as Max ON Max.PlayerID = att.PlayerID
 				WHERE att.PlayerID = %d

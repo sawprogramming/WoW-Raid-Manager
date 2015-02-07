@@ -31,9 +31,6 @@ class WRO {
         $factory->GetLootImportDAO()->CreateTable();
         $factory->GetLootItemDAO()->CreateTable();
         $factory->GetAttndDAO()->CreateTable();
-        
-        // seed tables
-        //self::UpdateGuildLoot();
     }
     public function Uninstall() {
         $factory = new DAOFactory();
@@ -52,7 +49,7 @@ class WRO {
         $template = get_page_template_slug(get_queried_object_id()); 
         
         if($template == "../attnd-template.php" || $template == "../loot-template.php") {
-            $appUrl = plugins_url()."/WoWRaidManager";
+            $appUrl = plugins_url()."/WoWRaidOrganizer";
             
             // add scripts
             wp_enqueue_script('blah',       "$appUrl/libs/js/jquery-2.1.3.min.js");
@@ -99,8 +96,7 @@ class WRO {
         }
         die();
     }
-
-    // WoW API
+    
     public function UpdateGuildLoot() { 
         $factory       = new DAOFactory();
         $wowApi        = new WowApi();
@@ -122,10 +118,18 @@ class WRO {
             foreach($data->feed as $event) {
                 if(!($lastImported == NULL) && $event->timestamp < $lastImported) break;
                 if($event->type != "LOOT") continue;
+                               
+                // check first context if it has one
+                if(isset($event->availableContexts) && $event->availableContexts != [""]) 
+                    $ilvl = $itemDAO->GetItemLevel($event->itemId, $event->availableContexts[0]);
+                else
+                    $ilvl = $itemDAO->GetItemLevel($event->itemId, NULL);
                 
-                if(($ilvl = $itemDAO->GetItemLevel($event->itemId, NULL)) == NULL) {
+                // cache it if it already isn't
+                if($ilvl == NULL) {
                     // add the item to our database since it wasn't in there (saves API calls)
                     $itemLevels = $wowApi->GetItemLevel($event->itemId);
+                    if($itemLevels == NULL) continue;
                     foreach($itemLevels as $item) $itemDAO->Add($item);
                     
                     $ilvl = $itemLevels[0]->Level;
@@ -134,17 +138,19 @@ class WRO {
                 // skip non relevant loot
                 if($ilvl < 655) continue;
                 
-                $lootItemDAO->Add(new LootItem(0, $raider->ID, $event->itemId, 1, date("Y-m-d", $event->timestamp / 1000)));
+                $lootItemDAO->Add(new LootItem(0, $raider->ID, $event->itemId, ($ilvl <= 655 ? 1 : 2), date("Y-m-d", $event->timestamp / 1000)));
             }
             
             // record that we read this data
             if($lastImported === NULL) $lootImportDAO->Add(new LootImport(0, $raider->ID, $data->lastModified));
             else                       $lootImportDAO->Update(new LootImport(0, $raider->ID, $data->lastModified));
         }
+        die();
     }
 }
 register_activation_hook(__FILE__, array('WRO', 'Install'));
 register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));;
 add_action('wp_ajax_wro_freesql', array('WRO', 'FreeSql'));
+add_action('wp_ajax_wro_updateguildloot', array('WRO', 'UpdateGuildLoot'));
 add_action('wp_enqueue_scripts', array('WRO', 'EnqueueScriptsStyles'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>
