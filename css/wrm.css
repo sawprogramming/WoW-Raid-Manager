@@ -1,15 +1,3 @@
-/* General Styles */
-label { display: inline-block !important; }
-.btn-del { width: 21px !important; height: 21px !important; float: right; }
-.btn-edit { width: 21px !important; height: 21px !important; float: right; }
-
-/* Slider Related Styles */
-.ui-slider { width: 15em; }
-.llate   .ui-slider-range { background: red; }
-.mlate   .ui-slider-range { background: orange; }
-.slate   .ui-slider-range { background: yellow; }
-.present .ui-slider-range { background: green; }
-
 /* WoW Related Styles */
 .deathknight { color: #C41F3B; }	
 .druid       { color: #FF7D0A; }
@@ -22,3 +10,7 @@ label { display: inline-block !important; }
 .shaman      { color: #0070DE; }
 .warlock     { color: #9482C9; }
 .warrior     { color: #C79C6E; }
+
+tbody tr {
+	color: #fff;
+}

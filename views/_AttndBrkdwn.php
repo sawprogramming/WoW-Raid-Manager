@@ -1,4 +1,4 @@
-<table id="tblUserAttnd" class="nowrap compact wrm">
+<table id="tblUserAttnd" class="nowrap compact" datatable="ng" dt-options="model.dtOptions">
 	<thead>
         <tr>
             <th>Name</th>
@@ -9,23 +9,12 @@
         </tr>
 	</thead>
     <tbody>
-        <?php 
-        $factory = new DAOFactory();
-        
-	    $data = $factory->GetAttndDAO()->GetBreakdown();
-        if($data != NULL) {
-            foreach($data as $player) {
-                echo "<tr>"
-                    ."<td><span class=\"".WRM_Display::GetClassName($player["ClassID"])."\">".$player["Name"]."</span></td>"
-                    ."<td><span class=\"".WRM_Display::GetClassName($player["ClassID"])."\">".$player["ClassName"]."</span></td>"
-                    ."<td>".$player["I1"]."%</td>"
-                    ."<td>".$player["I2"]."%</td>"
-                    ."<td>".$player["I3"]."%</td>"
-                    ."</tr>";
-            }
-        }
-        
-        echo $html;
-        ?>
+        <tr ng-repeat="entity in model.BreakdownEntities">
+            <td><span ng-class="entity.ClassID" ng-bind="entity.Name"></span></td>
+            <td><span ng-class="entity.ClassID" ng-bind="entity.ClassName"></span></td>
+            <td><span ng-bind="entity.TwoWeek"></span>%</td>
+            <td><span ng-bind="entity.Month"></span>%</td>
+            <td><span ng-bind="entity.AllTime"></span>%</td>
+        </tr>
     </tbody>
 </table>

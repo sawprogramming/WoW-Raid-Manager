@@ -1,6 +1,6 @@
 <?php
 
-require_once(plugin_dir_path( __FILE__ ) . "./entities/Item.php");
+include_once (plugin_dir_path( __FILE__ )."./entities/ItemEntity.php");
 
 class WowApi {
     function __construct() {
@@ -34,9 +34,9 @@ class WowApi {
                 if(($json = file_get_contents($itemUrl."/$context")) === FALSE) continue;
                 $subData = json_decode($json);
                 
-                array_push($results, new Item($itemId, $context, $subData->itemLevel)); 
+                array_push($results, new ItemEntity($itemId, $context, $subData->itemLevel)); 
             }
-        } else array_push($results, new Item($itemId, NULL, $data->itemLevel));
+        } else array_push($results, new ItemEntity($itemId, NULL, $data->itemLevel));
         
         return $results;
     }

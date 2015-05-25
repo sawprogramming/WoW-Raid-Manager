@@ -1,0 +1,76 @@
+<div class="wrap">
+	<div class="row" ng-app="WRO" ng-controller="RaidLootCtrl">
+		<div class="col-md-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<span class="glyphicon glyphicon-list"></span> Raid Loot Table
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-info btn-xs" ng-click="RefreshTable()">
+						    Refresh <span class="glyphicon glyphicon-refresh"></span>
+						</button>
+					</div>
+				</div>
+				<div class="panel-body">
+					<table id="tblEditLoot" class="nowrap compact wrm" datatable="ng" dt-options="model.dtOptions">
+					    <thead>
+					        <tr>
+					            <th>Row</th>
+					            <th>Name</th>
+					            <th>Class</th>
+					            <th>Item</th>
+					            <th>Raid</th>
+					            <th>Date</th>
+					            <th>Options</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr ng-repeat="row in model.RaidLoot">
+					            <td><span ng-bind="row.ID"></span></td>
+					            <td><span ng-class="row.ClassID" ng-bind="row.PlayerName"></span></td>
+					            <td><span ng-class="row.ClassID" ng-bind="row.ClassName"></span></td>
+					            <td><a ng-href="{{row.Item}}"></a></td>
+					            <td><span ng-bind="row.RaidName"></span></td>
+					            <td><span ng-bind="row.Date"></span></td>
+					            <td align="right">
+					                <button type="button" class="btn-xs btn-danger" ng-click="Remove($index)">
+					                    <span class="glyphicon glyphicon-remove"></span>
+					                </button>
+					            </td> 
+					        </tr>
+					    </tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<span class="glyphicon glyphicon-cog"></span> Table Settings
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal" role="form">
+						Coming soon!
+					</form>
+				</div>
+				<div class="panel-footer" align="right">
+					<button class="btn btn-primary">
+						Save <small><span class="glyphicon glyphicon-floppy-disk"></span></small>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
+<script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
+<script type="text/javascript">
+    function RefreshLootLinks() {
+        setTimeout(function () {
+            $WowheadPower.refreshLinks();
+        }, 25);
+    }
+
+    $("#tblEditLoot").on("length.dt", function () { RefreshLootLinks(); });
+    $("#tblEditLoot").on("page.dt", function () { RefreshLootLinks(); });
+    $("#tblEditLoot").on("search.dt", function () { RefreshLootLinks(); });
+</script>
