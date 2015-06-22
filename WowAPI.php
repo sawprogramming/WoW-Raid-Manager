@@ -9,6 +9,15 @@ class WowApi {
     }
     
     // public functions
+    public function GetCharIcon($name) {
+        $charUrl = self::BuildCharUrl($name);
+
+        $json = file_get_contents($charUrl);
+        $obj = json_decode($json);
+
+        return $obj->thumbnail;
+    }
+
     public function GetCharFeed($name) {
         $charUrl = self::BuildCharUrl($name);
         
@@ -16,6 +25,7 @@ class WowApi {
         
         return $json === FALSE ? NULL : json_decode($json);
     }
+
     public function GetItemLevel($itemId) {
         $results = array();
         $itemUrl = self::BuildItemUrl($itemId);

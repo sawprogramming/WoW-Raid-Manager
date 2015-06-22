@@ -16,7 +16,7 @@
 				<div class="panel-body">
 					<tabset justified="true">
 						<tab heading="Daily Attendance" ng-click="model.ActiveTab = 0">
-							<table class="nowrap compact" datatable="ng" dt-options="model.ddtOptions">
+							<table class="table">
 							    <thead>
 							        <tr>
 							            <th>Name</th>
@@ -26,7 +26,7 @@
 							        </tr>
 							    </thead>
 							    <tbody>
-							        <tr ng-repeat="player in model.DailyEntities">
+							        <tr pagination-id="tblDailyAttnd" dir-paginate="player in model.DailyEntities | itemsPerPage: 15" current-page="model.dailyPage">
 							            <td><span ng-class="player.ClassID" ng-bind="player.Name"></span></td>
 							            <td><span ng-class="player.ClassID" ng-bind="player.ClassName"></span></td>
 							            <td>
@@ -46,9 +46,10 @@
 							        </tr>
 							    </tbody>
 							</table>
+        					<dir-pagination-controls pagination-id="tblDailyAttnd"></dir-pagination-controls>
 						</tab>
 						<tab heading="Edit Records" ng-click="model.ActiveTab = 1">
-							<table class="nowrap compact wrm" datatable="ng" dt-options="model.dddtOptions">
+							<table class="table">
 							    <thead>
 							        <tr>
 							            <th>Row</th>
@@ -60,7 +61,7 @@
 							        </tr>
 							    </thead>
 							    <tbody>
-							    	<tr ng-repeat="record in model.AttendanceEntities">
+							    	<tr pagination-id="tblEditAttnd" dir-paginate="record in model.AttendanceEntities | itemsPerPage: 15" current-page="model.editPage">
 							    		<td><span ng-bind="record.ID"></span></td>
 							    		<td><span ng-class="record.ClassID" ng-bind="record.Name"></span></td>
 							    		<td><span ng-class="record.ClassID" ng-bind="record.ClassName"></span></td>
@@ -77,6 +78,7 @@
 							    	</tr>
 							    </tbody>
 							</table>
+        					<dir-pagination-controls pagination-id="tblEditAttnd"></dir-pagination-controls>
 						</tab>
 					</tabset>
 				</div>

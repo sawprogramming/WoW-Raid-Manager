@@ -10,7 +10,7 @@ class GetBreakdown {
 
 		try {
 			$results = $wpdb->get_results("
-				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, IFNULL(tw.TwoWeek, 0) as TwoWeek, IFNULL(m.Month, 0) as Month, at.AllTime
+				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, pl.Icon, IFNULL(tw.TwoWeek, 0) as TwoWeek, IFNULL(m.Month, 0) as Month, at.AllTime
 				FROM Player as pl
 					LEFT JOIN (SELECT PlayerID, FLOOR((SUM(Points) / COUNT(Points)) * 100) as TwoWeek
 						  FROM Attendance

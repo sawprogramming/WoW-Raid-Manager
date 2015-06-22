@@ -11,6 +11,34 @@
 .warlock     { color: #9482C9; }
 .warrior     { color: #C79C6E; }
 
-tbody tr {
-	color: #fff;
+.player-columns {
+	-moz-column-count: 6;
+	-moz-column-gap: 1em;
+	-webkit-column-count: 6;
+	-webkit-column-gap: 1em;
+	column-count: 6;
+	column-gap: 1em;
+}
+
+.no-margin {
+	margin: 1px 0 !important;
+}
+
+.half-margin {
+	margin: 5px 0 !important;
+}
+
+.sublime {
+	background: #272822;
+	color: #FFFFFF;
+}
+
+.panel-epic {
+	border-color: #a335ee !important;
+}
+
+.panel-epic > .panel-heading {
+	color: #ffffff;
+	background-color: #a335ee;
+	border-color: #a335ee;
 }

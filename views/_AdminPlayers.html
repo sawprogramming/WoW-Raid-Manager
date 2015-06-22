@@ -2,7 +2,7 @@
 	<h2>Player Settings</h2>
 	<div class="row" ng-app="WRO" ng-controller="PlayerCtrl">
 		<div class="col-md-8">
-			<div class="panel panel-primary">
+			<div class="panel panel-primary sublime">
 				<div class="panel-heading">
 					<span class="glyphicon glyphicon-list"></span> Player Table
 					<div class="btn-group pull-right">
@@ -14,31 +14,30 @@
 						</button>
 					</div>
 				</div>
-				<div class="panel-body">
-					<table id="tblEditPlayers" class="nowrap compact wrm" datatable="ng" dt-options="model.dtOptions">
-					    <thead>
-					        <tr>
-					            <th>ID</th>
-					            <th>Name</th>
-					            <th>Class</th>
-					            <th>Options</th>
-					        </tr>
-					    </thead>
-					    <tbody>
-					        <tr ng-repeat="player in model.Players">
-					            <td><span ng-bind="player.ID"></span></td>
-					            <td><span ng-class="player.ClassID" ng-bind="player.Name"></span></td>
-					            <td><span ng-class="player.ClassID" ng-bind="player.ClassName"></span></td>
-					            <td align="right">
-					                <button type="button" class="btn-xs btn-danger" ng-click="Remove($index)">
-					                    <span class="glyphicon glyphicon-remove"></span>
-					                </button>
-					            </td>
-					        </tr>
-					    </tbody>
-					</table>
-				</div>
+				<table id="tblEditPlayers" class="table">
+				    <thead>
+				        <tr>
+				            <th>ID</th>
+				            <th>Name</th>
+				            <th>Class</th>
+				            <th>Options</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr dir-paginate="player in model.Players | itemsPerPage: 15" current-page="model.currentPage">
+				            <td><span ng-bind="player.ID"></span></td>
+				            <td><span ng-class="player.ClassID" ng-bind="player.Name"></span></td>
+				            <td><span ng-class="player.ClassID" ng-bind="player.ClassName"></span></td>
+				            <td align="right">
+				                <button type="button" class="btn-xs btn-danger" ng-click="Remove($index)">
+				                    <span class="glyphicon glyphicon-remove"></span>
+				                </button>
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
 			</div>
+			<dir-pagination-controls class="pull-right"></dir-pagination-controls>
 		</div>
 
 		<div class="col-md-3">

@@ -5,7 +5,7 @@ include_once plugin_dir_path(__FILE__)."../../../entities/ImportHistoryEntity.ph
 class Add {
 	private function __construct() {}
 
-	public static function Run(\PlayerEntity $entity) {
+	public static function Run(\ImportHistoryEntity $entity) {
 		global $wpdb;
 		$result = NULL;
 

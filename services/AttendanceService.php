@@ -23,8 +23,16 @@ class AttendanceService {
         return $this->dao->GetAll();
     }
 
+    public function GetAllById($id) {
+        return $this->dao->GetAllById($id);
+    }
+
     public function GetBreakdown() {
         return $this->dao->GetBreakdown();
+    }
+
+    public function GetChart($id) {
+        return $this->dao->GetChart($id);
     }
 
     public function Update(AttendanceEntity $entity) {

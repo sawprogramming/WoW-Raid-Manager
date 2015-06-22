@@ -1,11 +1,11 @@
-app.controller('PlayerCtrl', function($scope, $modal, PlayerSvc, DTOptionsBuilder) {
+app.controller('PlayerCtrl', function($scope, $modal, PlayerSvc) {
 	$scope.model = {
 		Players: [],
-		dtOptions: null,
 		NewPlayer: {
 			Name: null,
 			ClassID: 0
-		}
+		},
+		currentPage: 1
 	};
 	var vm = $scope.model;
 
@@ -28,10 +28,6 @@ app.controller('PlayerCtrl', function($scope, $modal, PlayerSvc, DTOptionsBuilde
 
 	$scope.populate = function() {
 		RefreshPlayers();
-
-		vm.dtOptions = DTOptionsBuilder.newOptions()
-							   		   .withPaginationType('full_numbers')
-							   		   .withDisplayLength(15);
 	};
 	$scope.populate();
 

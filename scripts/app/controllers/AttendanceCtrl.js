@@ -1,13 +1,12 @@
-app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerSvc, DTOptionsBuilder) {
+app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerSvc) {
 	$scope.model = {
 		BreakdownEntities: [],
 		AttendanceEntities: [],
 		DailyEntities: [],
 		ActiveTab: 0,
 		DailyDate: new Date(),
-		dtOptions: null,
-		ddtOptions: null,
-		dddtOptions: null
+		dailyPage: 1,
+		editPage: 1
 	};
 	var vm = $scope.model;
 
@@ -20,10 +19,6 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 				angular.forEach(vm.BreakdownEntities, function(value, key) {
 					value.ClassID = ClassIdToCss(parseInt(value.ClassID));
 				});
-
-				vm.dtOptions = DTOptionsBuilder.newOptions()
-											   .withPaginationType('full_numbers')
-											   .withDisplayLength(vm.BreakdownEntities.length);
 			},
 			function(errmsg) {
 
@@ -69,14 +64,6 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 		RefreshBreakdown();
 		RefreshDaily();
 		RefreshRecords();
-		
-		vm.ddtOptions = DTOptionsBuilder.newOptions()
-			   .withPaginationType('full_numbers')
-			   .withDisplayLength(15);
-
-		vm.dddtOptions = DTOptionsBuilder.newOptions()
-					   .withPaginationType('full_numbers')
-					   .withDisplayLength(20);
 	};
 	$scope.populate();
 

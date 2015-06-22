@@ -14,7 +14,9 @@ class RaidController {
 			case "PUT":
 				break;
 			case "DELETE":
-				$this->DeleteRow();
+				if(current_user_can("remove_users")) {
+					$this->DeleteRow();
+				}
 				break;
 			default:
 				die();
@@ -54,3 +56,4 @@ class RaidController {
 	private $service;
 }
 add_action('wp_ajax_wro_raid', array(new RaidController(), 'Reroute'));
+add_action('wp_ajax_nopriv_wro_raid', array(new RaidController(), 'Reroute'));

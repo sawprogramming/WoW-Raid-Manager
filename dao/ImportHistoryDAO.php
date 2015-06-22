@@ -8,7 +8,7 @@ include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Upd
 
 class ImportHistoryDAO {
     public function Add(ImportHistoryEntity $entity) {
-        return ImportHistory\Add::Run($entity)
+        return ImportHistory\Add::Run($entity);
     }
 
     public function Get($playerId) {

@@ -14,6 +14,7 @@ class PlayerTable {
 			    ID  smallint(5) NOT NULL AUTO_INCREMENT,
 			    ClassID  tinyint(3),
 			    Name tinytext NOT NULL,
+			    Icon text,
 			    PRIMARY KEY  ID (ID),
 			    FOREIGN KEY (ClassID) REFERENCES Class(ID)
             ) $charset_collate;

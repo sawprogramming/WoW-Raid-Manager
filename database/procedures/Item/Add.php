@@ -11,7 +11,7 @@ class Add {
 
 		try {
 			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO Item (ID, Context, Level)
+				INSERT INTO Item (ID, Context, ItemLevel)
 				VALUES (%d, %s, %d);
 			", $entity->ID, $entity->Context, $entity->Level));
 		} catch (Exception $e) {

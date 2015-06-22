@@ -12,13 +12,19 @@ class AttendanceController {
 				$this->Get();
 				break;
 			case "PUT":
-				$this->Add();
+				if(current_user_can("create_users")) {
+					$this->Add();
+				}
 				break;
 			case "POST":
-				$this->Update();
+				if(current_user_can("edit_users")) {
+					$this->Update();
+				}
 				break;
 			case "DELETE":
-				$this->Delete();
+				if(current_user_can("remove_users")) {
+					$this->Delete();
+				}
 				break;
 			default:
 				die();
@@ -101,10 +107,17 @@ class AttendanceController {
 		if($_REQUEST['func']) {
 			switch($_REQUEST['func']) {
 				case 'all': 
-					$result = $this->service->GetAll();
+					if($_REQUEST['id']) {
+						$result = $this->service->GetAllById($_REQUEST['id']);
+					} else {
+						$result = $this->service->GetAll();
+					}
 					break;
 				case 'breakdown': 
 					$result = $this->service->GetBreakdown();
+					break;
+				case 'chart':
+					$result = $this->service->GetChart($_REQUEST['id']);
 					break;
 				default:
 					break;
@@ -118,3 +131,4 @@ class AttendanceController {
 	private $service;
 }
 add_action('wp_ajax_wro_attendance', array(new AttendanceController(), 'Reroute'));
+add_action('wp_ajax_nopriv_wro_attendance', array(new AttendanceController(), 'Reroute'));

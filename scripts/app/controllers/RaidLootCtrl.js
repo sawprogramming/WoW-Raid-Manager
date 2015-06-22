@@ -1,9 +1,16 @@
-app.controller("RaidLootCtrl", function($scope, RaidLootSvc, DTOptionsBuilder) {
+app.controller("RaidLootCtrl", function($scope, RaidLootSvc) {
 	$scope.model = {
 		RaidLoot: [],
-		dtOptions: null
+		currentPage: 1
 	};
 	var vm = $scope.model;
+
+    function RefreshLootLinks() {
+        setTimeout(function () {
+            $WowheadPower.refreshLinks();
+        }, 25);
+    }
+    $scope.RefreshLootLinks = RefreshLootLinks;
 
 	function Refresh() {
 		RaidLootSvc.GetAll().then(
@@ -27,9 +34,6 @@ app.controller("RaidLootCtrl", function($scope, RaidLootSvc, DTOptionsBuilder) {
 
 	$scope.populate = function() {
 		Refresh();
-		vm.dtOptions = DTOptionsBuilder.newOptions()
-							   .withPaginationType('full_numbers')
-							   .withDisplayLength(15);
 	};
 	$scope.populate();
 

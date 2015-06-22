@@ -30,6 +30,17 @@ app.factory("AttendanceSvc", function($http) {
 				}
 			});
 		},
+		GetAllById: function(id) {
+			return $http({
+				method: 'GET',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_attendance',
+					'func': 'all',
+					'id': id
+				}
+			});
+		},
 		GetBreakdown: function() {
 			return $http({
 				method: 'GET',
@@ -37,6 +48,17 @@ app.factory("AttendanceSvc", function($http) {
 				params: {
 					'action': 'wro_attendance',
 					'func': 'breakdown'
+				}
+			});
+		},
+		GetChart: function(id) {
+			return $http({
+				method: 'GET',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_attendance',
+					'func': 'chart',
+					'id': id
 				}
 			});
 		},

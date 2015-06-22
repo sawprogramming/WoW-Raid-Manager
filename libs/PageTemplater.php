@@ -28,8 +28,7 @@ class PageTemplater {
 
         // Add your templates to this array.
         $this->templates = array(
-            '../attnd-template.php' => 'Attendance',
-            '../loot-template.php'  => 'Loot');		
+            '../attnd-template.php' => 'Attendance');		
 	} 
 
 	public function register_project_templates( $atts ) {

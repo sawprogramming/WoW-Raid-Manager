@@ -7,6 +7,7 @@ class RaidLootController {
 	}
 
 	public function Reroute () {
+
 		switch($_SERVER['REQUEST_METHOD']) {
 			case "GET":
 				$this->GetAll();
@@ -14,7 +15,9 @@ class RaidLootController {
 			case "POST":
 				break;
 			case "DELETE":
-				$this->DeleteRow();
+				if(current_user_can('remove_users')) {
+					$this->DeleteRow();
+				}
 				break;
 			default:
 				die();
@@ -41,3 +44,4 @@ class RaidLootController {
 	private $service;
 }
 add_action('wp_ajax_wro_raidloot', array(new RaidLootController(), 'Reroute'));
+add_action('wp_ajax_nopriv_wro_raidloot', array(new RaidLootController(), 'Reroute'));

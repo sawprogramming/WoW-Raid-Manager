@@ -11,9 +11,9 @@ class Add {
 
 		try {
 			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO Player (ClassID, Name)
-				VALUES (%d, %s);
-			", $entity->ClassID, $entity->Name));
+				INSERT INTO Player (ClassID, Name, Icon)
+				VALUES (%d, %s, %s);
+			", $entity->ClassID, $entity->Name, $entity->Icon));
 		} catch (Exception $e) {
 
 		}

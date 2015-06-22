@@ -4,7 +4,7 @@ namespace ImportHistory;
 class Get {
 	private function __construct() {}
 
-	public static function Run(int $id) {
+	public static function Run($id) {
 		global $wpdb;
 		$result = NULL;
 

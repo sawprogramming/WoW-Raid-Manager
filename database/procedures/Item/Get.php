@@ -10,10 +10,10 @@ class Get {
 		$result = NULL;
 
 		try {
-			$result = $wpdb->get_row("
+			$result = $wpdb->get_row($wpdb->prepare("
 				SELECT * FROM Item
 				WHERE ID = %d AND Context = %s;
-			", $entity->ID, $entity->Context);
+			", $entity->ID, $entity->Context));
 		} catch (Exception $e) {
 
 		}

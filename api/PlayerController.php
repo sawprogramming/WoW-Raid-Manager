@@ -12,12 +12,16 @@ class PlayerController {
 				$this->GetAll();
 				break;
 			case "PUT":
-				$this->Add();
+				if(current_user_can("create_users")) {
+					$this->Add();
+				}
 				break;
 			case "POST":
 				break;
 			case "DELETE":
-				$this->Delete();
+				if(current_user_can("remove_users")) {
+					$this->Delete();
+				}
 				break;
 			default:
 				die();
@@ -62,3 +66,4 @@ class PlayerController {
 	private $service;
 }
 add_action('wp_ajax_wro_player', array(new PlayerController(), 'Reroute'));
+add_action('wp_ajax_nopriv_wro_player', array(new PlayerController(), 'Reroute'));

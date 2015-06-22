@@ -10,6 +10,7 @@ require_once (plugin_dir_path(__FILE__).'libs/PageTemplater.php');
 require_once (plugin_dir_path(__FILE__).'display.php');
 require_once (plugin_dir_path(__FILE__)."./WowAPI.php");
 require_once (plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
+require_once (plugin_dir_path(__FILE__)."./services/RaidLootService.php");
 require_once (plugin_dir_path(__FILE__)."./api/AttendanceController.php");
 require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
 require_once (plugin_dir_path(__FILE__)."./api/RaidLootController.php");
@@ -47,9 +48,8 @@ class WRO {
         
         // add scripts
         wp_enqueue_script('blah',       "$appUrl/libs/js/jquery-2.1.3.min.js");
-        wp_enqueue_script('datatables', "$appUrl/libs/js/jquery.dataTables.min.js");
         wp_enqueue_script('angular',    "$appUrl/libs/js/angular.min.js");
-        wp_enqueue_script('angulardt',  "$appUrl/libs/js/angular-datatables.min.js");
+        wp_enqueue_script('panything',  "$appUrl/libs/js/dirPagination.js");
         wp_enqueue_script('angularui',  "$appUrl/libs/js/ui-bootstrap-tpls-0.13.0.min.js");
         self::AddAngularScripts($appUrl);
         wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
@@ -61,62 +61,15 @@ class WRO {
         
         // add styles
         wp_enqueue_style('bootstrap',  "$appUrl/libs/css/bootstrap.min.css");
-        wp_enqueue_style('datatables', "$appUrl/libs/css/jquery.dataTables.min.css");
         wp_enqueue_style('wrm',        "$appUrl/css/wrm.css");
     }
 
-    // AJAX functions
-   /*     
+    // AJAX functions   
     public function UpdateGuildLoot() { 
-        $factory       = new DAOFactory();
-        $wowApi        = new WowApi();
-        $itemDAO       = $factory->GetItemDAO();
-        $lootItemDAO   = $factory->GetLootItemDAO();
-        $lootImportDAO = $factory->GetLootImportDAO();
-        
-        // fetch the news for each raider
-        $raiders = $factory->GetPlayerDAO()->GetAll();
-        foreach($raiders as $raider) {
-            $data = $ilvl = $lastImported = NULL;
-            
-            // only process process data we haven't read
-            $data = $wowApi->GetCharFeed($raider->Name);
-            $lastImported = $lootImportDAO->GetLastImported($raider->ID);
-            if(!($lastImported == NULL) && $data->lastModified < $lastImported) continue;
-            
-            // add relevant loot from feed to LootItem table
-            foreach($data->feed as $event) {
-                if(!($lastImported == NULL) && $event->timestamp < $lastImported) break;
-                if($event->type != "LOOT") continue;
-                               
-                // check first context if it has one
-                if(isset($event->availableContexts) && $event->availableContexts != [""]) 
-                    $ilvl = $itemDAO->GetItemLevel($event->itemId, $event->availableContexts[0]);
-                else
-                    $ilvl = $itemDAO->GetItemLevel($event->itemId, NULL);
-                
-                // cache it if it already isn't
-                if($ilvl == NULL) {
-                    // add the item to our database since it wasn't in there (saves API calls)
-                    $itemLevels = $wowApi->GetItemLevel($event->itemId);
-                    if($itemLevels == NULL) continue;
-                    foreach($itemLevels as $item) $itemDAO->Add($item);
-                    
-                    $ilvl = $itemLevels[0]->Level;
-                }
-                
-                // skip non relevant loot
-                if($ilvl < 655) continue;
-                
-                $lootItemDAO->Add(new LootItem(0, $raider->ID, $event->itemId, ($ilvl <= 655 ? 1 : 2), date("Y-m-d", $event->timestamp / 1000)));
-            }
-            
-            // record that we read this data
-            if($lastImported === NULL) $lootImportDAO->Add(new LootImport(0, $raider->ID, $data->lastModified));
-            else                       $lootImportDAO->Update(new LootImport(0, $raider->ID, $data->lastModified));
-        }
-        die();
-    }*/
+        $raidLootSvc = new RaidLootService();
+
+        $raidLootSvc->FetchLoot();
+    }
 
     private static function AddAngularScripts($appUrl) {
         wp_enqueue_script('app',  "$appUrl/scripts/app.js");
@@ -145,11 +98,13 @@ class WRO {
         wp_localize_script('RaidLootSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
         wp_enqueue_script('RaidLootSvc');
         wp_enqueue_script('RaidLootCtrl',  "$appUrl/scripts/app/controllers/RaidLootCtrl.js");
+
+        // user ui
+        wp_enqueue_script('UserUICtrl',  "$appUrl/scripts/app/controllers/UserUICtrl.js");
     }
 }
 register_activation_hook(__FILE__, array('WRO', 'Install'));
 register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));;
-add_action('wp_ajax_wro_freesql', array('WRO', 'FreeSql'));
 add_action('wp_ajax_wro_updateguildloot', array('WRO', 'UpdateGuildLoot'));
 add_action('wp_enqueue_scripts', array('WRO', 'EnqueueScriptsStyles'));
 add_action('admin_enqueue_scripts', array('WRO', 'AdminEnqueueScriptsStyles'));

@@ -11,7 +11,7 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<table id="tblEditLoot" class="nowrap compact wrm" datatable="ng" dt-options="model.dtOptions">
+					<table id="tblEditLoot" class="table">
 					    <thead>
 					        <tr>
 					            <th>Row</th>
@@ -24,7 +24,7 @@
 					        </tr>
 					    </thead>
 					    <tbody>
-					        <tr ng-repeat="row in model.RaidLoot">
+					        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | itemsPerPage: 15" current-page="model.currentPage">
 					            <td><span ng-bind="row.ID"></span></td>
 					            <td><span ng-class="row.ClassID" ng-bind="row.PlayerName"></span></td>
 					            <td><span ng-class="row.ClassID" ng-bind="row.ClassName"></span></td>
@@ -39,6 +39,7 @@
 					        </tr>
 					    </tbody>
 					</table>
+        			<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot"></dir-pagination-controls>
 				</div>
 			</div>
 		</div>

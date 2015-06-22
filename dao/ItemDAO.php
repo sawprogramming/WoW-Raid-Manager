@@ -4,7 +4,7 @@ include_once plugin_dir_path(__FILE__)."../database/procedures/Item/Add.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Item/Get.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Item/GetAll.php";
 
-class ItemDAO extends DAO {
+class ItemDAO {
     public function Add(ItemEntity $entity) {
         return Item\Add::Run($entity);
     }
