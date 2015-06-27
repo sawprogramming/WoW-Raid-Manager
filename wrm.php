@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: Steven Williams
  * License: GPL2
  */

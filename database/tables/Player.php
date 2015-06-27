@@ -18,7 +18,7 @@ class PlayerTable {
 			    Icon text NULL,
 			    PRIMARY KEY  ID (ID),
 			    FOREIGN KEY (ClassID) REFERENCES Class(ID),
-			    FOREIGN KEY (UserID) REFERENCES wp_users(ID)
+			    FOREIGN KEY (UserID) REFERENCES ".$wpdb->prefix."users(ID)
             ) $charset_collate;
         ");
 	}

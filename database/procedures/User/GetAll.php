@@ -11,7 +11,7 @@ class GetAll {
 		try {
 			$result = $wpdb->get_results("
 				SELECT ID, user_login as Username, user_nicename, display_name
-            	FROM wp_users;
+            	FROM ".$wpdb->prefix."users;
 			");
 		} catch (Exception $e) {
 
