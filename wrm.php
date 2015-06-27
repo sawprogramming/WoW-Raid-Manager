@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.0.0
+ * Version: 2.1.1
  * Author: Steven Williams
  * License: GPL2
  */
@@ -15,6 +15,8 @@ require_once (plugin_dir_path(__FILE__)."./api/AttendanceController.php");
 require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
 require_once (plugin_dir_path(__FILE__)."./api/RaidLootController.php");
 require_once (plugin_dir_path(__FILE__)."./api/RaidController.php");
+require_once (plugin_dir_path(__FILE__)."./api/UserController.php");
+require_once (plugin_dir_path(__FILE__)."./api/ClassController.php");
 require_once (plugin_dir_path(__FILE__)."./dashboard.php");
 
 class WRO {
@@ -53,11 +55,6 @@ class WRO {
         wp_enqueue_script('angularui',  "$appUrl/libs/js/ui-bootstrap-tpls-0.13.0.min.js");
         self::AddAngularScripts($appUrl);
         wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
-        if(array_intersect(array('administrator', 'keymaster'), wp_get_current_user()->roles)) {
-            wp_register_script('wrm-admin', "$appUrl/scripts/wrm-admin.js", array('wrm'), '', true);
-            wp_localize_script('wrm-admin', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
-            wp_enqueue_script('wrm-admin');
-        }
         
         // add styles
         wp_enqueue_style('bootstrap',  "$appUrl/libs/css/bootstrap.min.css");
@@ -74,6 +71,18 @@ class WRO {
     private static function AddAngularScripts($appUrl) {
         wp_enqueue_script('app',  "$appUrl/scripts/app.js");
         wp_enqueue_script('playerSelect', "$appUrl/scripts/app/directives/playerSelect.js");
+        wp_enqueue_script('userSelect', "$appUrl/scripts/app/directives/userSelect.js");
+        wp_enqueue_script('classSelect', "$appUrl/scripts/app/directives/classSelect.js");
+
+        // user
+        wp_register_script('UserSvc', "$appUrl/scripts/app/services/UserSvc.js");
+        wp_localize_script('UserSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script('UserSvc');
+
+        // class
+        wp_register_script('ClassSvc', "$appUrl/scripts/app/services/ClassSvc.js");
+        wp_localize_script('ClassSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script('ClassSvc');
 
         // attendance
         wp_register_script('AttendanceSvc', "$appUrl/scripts/app/services/AttendanceSvc.js");
@@ -91,7 +100,6 @@ class WRO {
         wp_register_script('RaidSvc', "$appUrl/scripts/app/services/RaidSvc.js");
         wp_localize_script('RaidSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
         wp_enqueue_script('RaidSvc');
-        //wp_enqueue_script('RaidCtrl',  "$appUrl/scripts/app/controllers/RaidCtrl.js");
 
         // raidloot
         wp_register_script('RaidLootSvc', "$appUrl/scripts/app/services/RaidLootSvc.js");

@@ -27,8 +27,8 @@
 							    </thead>
 							    <tbody>
 							        <tr pagination-id="tblDailyAttnd" dir-paginate="player in model.DailyEntities | itemsPerPage: 15" current-page="model.dailyPage">
-							            <td><span ng-class="player.ClassID" ng-bind="player.Name"></span></td>
-							            <td><span ng-class="player.ClassID" ng-bind="player.ClassName"></span></td>
+							            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
+							            <td><span ng-class="player.ClassStyle" ng-bind="player.ClassName"></span></td>
 							            <td>
 							                <div class="btn-group">
 							                    <label class="btn btn-danger"  ng-model="player.Points" btn-radio="0.00">Absent</label>
@@ -63,15 +63,15 @@
 							    <tbody>
 							    	<tr pagination-id="tblEditAttnd" dir-paginate="record in model.AttendanceEntities | itemsPerPage: 15" current-page="model.editPage">
 							    		<td><span ng-bind="record.ID"></span></td>
-							    		<td><span ng-class="record.ClassID" ng-bind="record.Name"></span></td>
-							    		<td><span ng-class="record.ClassID" ng-bind="record.ClassName"></span></td>
+							    		<td><span ng-class="record.ClassStyle" ng-bind="record.Name"></span></td>
+							    		<td><span ng-class="record.ClassStyle" ng-bind="record.ClassName"></span></td>
 							    		<td><span ng-bind="record.Points"></span></td>
 							    		<td><span ng-bind="record.Date"></span></td>
 							    		<td align="right">
-							    			<button type="button" class="btn-xs btn-info" ng-click="EditRecord($index)">
+							    			<button type="button" class="btn-xs btn-info" ng-click="EditRecord(record)">
 							    				<span class="glyphicon glyphicon-edit"></span>
 							    			</button>
-							    			<button type="button" class="btn-xs btn-danger" ng-click="DeleteRecord($index)">
+							    			<button type="button" class="btn-xs btn-danger" ng-click="DeleteRecord(record)">
 							    				<span class="glyphicon glyphicon-remove"></span>
 							    			</button>
 							    		</td>
@@ -131,23 +131,23 @@
 			</div>
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
-					<label class="col-xs-2">Row:</label>
+					<label class="control-label col-xs-2">Row:</label>
 					<span class="col-xs-10" ng-bind="row.ID"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Player:</label>
-					<div class="col-xs-10">
-						<player-select class="form-control" ng-class="row.ClassID" ng-model="row.PlayerID"></player-select>
+					<label class="control-label col-xs-2">Player:</label>
+					<div class="col-xs-10 select-fix">
+						<player-select class="form-control" ng-class="row.ClassStyle" ng-model="row.PlayerID"></player-select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Date:</label>
+					<label class="control-label col-xs-2">Date:</label>
 					<div class="col-xs-10">
 						<input class="form-control" ng-model="row.Date"></input>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Points:</label>
+					<label class="control-label col-xs-2">Points:</label>
 		            <div class="btn-group col-xs-10" role="group">
 		                <label class="btn btn-danger"  ng-model="row.Points" btn-radio="0.00">Absent</label>
 		                <label class="btn btn-default" ng-model="row.Points" btn-radio="0.25">10:00+</label>
@@ -179,13 +179,13 @@
 			</div>
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
-					<label class="col-xs-2">Player:</label>
-					<div class="col-xs-10">
-						<player-select class="form-control" ng-class="row.ClassID" ng-model="row.PlayerID"></player-select>
+					<label class="control-label col-xs-2">Player:</label>
+					<div class="col-xs-10 select-fix">
+						<player-select class="form-control" ng-class="row.ClassStyle" ng-model="row.PlayerID"></player-select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Date:</label>
+					<label class="control-label col-xs-2">Date:</label>
 					<div class="col-xs-10">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="yyyy/mm/dd" maxlength="10"
@@ -199,7 +199,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Points:</label>
+					<label class="control-label col-xs-2">Points:</label>
 		            <div class="btn-group col-xs-10" role="group">
 		                <label class="btn btn-danger"  ng-model="row.Points" btn-radio="0.00">Absent</label>
 		                <label class="btn btn-default" ng-model="row.Points" btn-radio="0.25">10:00+</label>
@@ -228,19 +228,19 @@
 			</div>
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
-					<label class="col-xs-2">Row:</label>
+					<label class="control-label col-xs-2">Row:</label>
 					<span class="col-xs-10" ng-bind="row.ID"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Player:</label>
-					<span class="col-xs-10" ng-class="row.ClassID" ng-bind="row.Name"></span>
+					<label class="control-label col-xs-2">Player:</label>
+					<span class="col-xs-10" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Date:</label>
+					<label class="control-label col-xs-2">Date:</label>
 					<span class="col-xs-10" ng-bind="row.Date"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Points:</label>
+					<label class="control-label col-xs-2">Points:</label>
 					<span class="col-xs-10" ng-bind="row.Points"></span>
 				</div>
 			</div>

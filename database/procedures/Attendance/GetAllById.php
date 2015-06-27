@@ -14,7 +14,8 @@ class GetAllById {
 				FROM Attendance as at
 					JOIN Player as pl ON at.PlayerID = pl.ID
 					JOIN Class as cl ON pl.ClassID = cl.ID
-				WHERE at.PlayerID = %d;
+				WHERE at.PlayerID = %d
+				ORDER BY at.Date DESC;
 			", $id));
 		} catch (Exception $e) {
 

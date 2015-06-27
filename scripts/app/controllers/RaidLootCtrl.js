@@ -19,7 +19,7 @@ app.controller("RaidLootCtrl", function($scope, RaidLootSvc) {
 
 				// transform data into proper stuff for view
 				angular.forEach(vm.RaidLoot, function(value, key) {
-					value.ClassID = ClassIdToCss(parseInt(value.ClassID));
+					value.ClassStyle = ClassIdToCss(parseInt(value.ClassID));
 					value.Item = BuildLootURL(value.Item);
 				});
 
@@ -37,10 +37,9 @@ app.controller("RaidLootCtrl", function($scope, RaidLootSvc) {
 	};
 	$scope.populate();
 
-	$scope.Remove = function(index) {
-		RaidLootSvc.Delete(vm.RaidLoot[index].ID).then(
+	$scope.Remove = function(row) {
+		RaidLootSvc.Delete(row.ID).then(
 			function(response) {
-				vm.RaidLoot.splice(index, 1);
 			},
 			function(errormsg) {
 

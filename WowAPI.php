@@ -12,7 +12,9 @@ class WowApi {
     public function GetCharIcon($name) {
         $charUrl = self::BuildCharUrl($name);
 
-        $json = file_get_contents($charUrl);
+        if(($json = @file_get_contents($charUrl)) === FALSE) {
+            throw new Exception("Character '$name' could not be found on $this->region-$this->realm.");
+        }
         $obj = json_decode($json);
 
         return $obj->thumbnail;

@@ -9,13 +9,16 @@ class Add {
 		global $wpdb;
 		$result = NULL;
 
-		try {
+		if($entity->UserID === NULL) {
 			$result = $wpdb->query($wpdb->prepare("
 				INSERT INTO Player (ClassID, Name, Icon)
 				VALUES (%d, %s, %s);
 			", $entity->ClassID, $entity->Name, $entity->Icon));
-		} catch (Exception $e) {
-
+		} else {
+			$result = $wpdb->query($wpdb->prepare("
+				INSERT INTO Player (UserID, ClassID, Name, Icon)
+				VALUES (%d, %d, %s, %s);
+			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon));
 		}
 
 		return $result;

@@ -2,12 +2,11 @@ app.factory('PlayerSvc', function($http) {
 	return {
 		AddPlayer: function(obj) {
 			return $http({
-				method: 'PUT',
+				method: 'POST',
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_player',
-					'name': obj.Name,
-					'classId': obj.ClassID
+					'entity': JSON.stringify(obj)
 				}
 			});
 		},
@@ -20,6 +19,16 @@ app.factory('PlayerSvc', function($http) {
 					'id': id
 				}
 			});
+		},
+		EditPlayer: function(entity) {
+			return $http({
+				method: 'PUT',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_player',
+					'entity': JSON.stringify(entity)
+				}
+			})
 		},
 		GetPlayers: function() {
 			return $http({

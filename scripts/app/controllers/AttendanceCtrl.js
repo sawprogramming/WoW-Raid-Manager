@@ -1,6 +1,5 @@
 app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerSvc) {
 	$scope.model = {
-		BreakdownEntities: [],
 		AttendanceEntities: [],
 		DailyEntities: [],
 		ActiveTab: 0,
@@ -10,22 +9,6 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	};
 	var vm = $scope.model;
 
-	function RefreshBreakdown() {
-		AttendanceSvc.GetBreakdown().then(
-			function(response) {
-				vm.BreakdownEntities = response.data;
-
-				// transform ClassID to CSS class name
-				angular.forEach(vm.BreakdownEntities, function(value, key) {
-					value.ClassID = ClassIdToCss(parseInt(value.ClassID));
-				});
-			},
-			function(errmsg) {
-
-			}
-		);
-	}
-
 	function RefreshDaily() {
 		PlayerSvc.GetPlayers().then(
 			function(response) {
@@ -34,8 +17,9 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 					vm.DailyEntities.push({
 						ID: value.ID,
 						Name: value.Name,
-						ClassID: ClassIdToCss(parseInt(value.ClassID)),
+						ClassID: value.ClassID,
 						ClassName: value.ClassName,
+						ClassStyle: ClassIdToCss(parseInt(value.ClassID)),
 						Date: new Date(),
 						Points: 1.00
 					});
@@ -51,7 +35,7 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 
 				// transform ClassID to CSS class name
 				angular.forEach(vm.AttendanceEntities, function(value, key) {
-					value.ClassID = ClassIdToCss(parseInt(value.ClassID));
+					value.ClassStyle = ClassIdToCss(parseInt(value.ClassID));
 				});
 			},
 			function(errmsg) {
@@ -61,7 +45,6 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	}
 
 	$scope.populate = function() {
-		RefreshBreakdown();
 		RefreshDaily();
 		RefreshRecords();
 	};
@@ -94,28 +77,25 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 		});
 	};
 
-	$scope.EditRecord = function(index) { 
+	$scope.EditRecord = function(record) { 
 		var modalInstance = $modal.open({
 			templateUrl: 'editRowModal.html',
 			controller: 'EditAttndModalCtrl',
 			resolve: {
 				entity: function() {
-					return vm.AttendanceEntities[index];
+					return record;
 				}
 			}
 		});
 	};
 
-	$scope.DeleteRecord = function(index) { 
+	$scope.DeleteRecord = function(record) { 
 		var modalInstance = $modal.open({
 			templateUrl: 'deleteRowModal.html',
 			controller: 'DeleteAttndModalCtrl',
 			resolve: {
 				entities: function() {
-					return vm.AttendanceEntities;
-				},
-				index: function() {
-					return index;
+					return record;
 				}
 			}
 		});
@@ -143,6 +123,7 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 			Name: entity.Name,
 			ClassID: entity.ClassID,
 			ClassName: entity.ClassName,
+			ClassStyle: entity.ClassStyle,
 			Date: entity.Date,
 			Points: entity.Points
 		};
@@ -157,6 +138,7 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 				entity.Name = $scope.row.Name;
 				entity.ClassID = $scope.row.ClassID;
 				entity.ClassName = $scope.row.ClassName;
+				entity.ClassStyle = $scope.row.ClassStyle;
 				entity.Date = $scope.row.Date;
 				entity.Points = $scope.row.Points;
 			},
@@ -172,13 +154,12 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 	}
 });
 
-app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entities, index, AttendanceSvc) {
-	$scope.row = entities[index];
+app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, AttendanceSvc) {
+	$scope.row = record;
 
 	$scope.delete = function() {
 		AttendanceSvc.DeleteRecord($scope.row.ID).then(
 			function(response) {
-				entities.splice(index, 1);
 			},
 			function(errmsg) {
 

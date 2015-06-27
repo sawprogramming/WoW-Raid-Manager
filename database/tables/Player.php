@@ -11,12 +11,14 @@ class PlayerTable {
         
         \dbDelta("
 			CREATE TABLE IF NOT EXISTS Player (
-			    ID  smallint(5) NOT NULL AUTO_INCREMENT,
+			    ID  smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+			    UserID bigint(20) unsigned NULL,
 			    ClassID  tinyint(3),
 			    Name tinytext NOT NULL,
-			    Icon text,
+			    Icon text NULL,
 			    PRIMARY KEY  ID (ID),
-			    FOREIGN KEY (ClassID) REFERENCES Class(ID)
+			    FOREIGN KEY (ClassID) REFERENCES Class(ID),
+			    FOREIGN KEY (UserID) REFERENCES wp_users(ID)
             ) $charset_collate;
         ");
 	}

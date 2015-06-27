@@ -18,18 +18,23 @@
 				    <thead>
 				        <tr>
 				            <th>ID</th>
+			            	<th>User Name</th>
 				            <th>Name</th>
 				            <th>Class</th>
 				            <th>Options</th>
 				        </tr>
 				    </thead>
 				    <tbody>
-				        <tr dir-paginate="player in model.Players | itemsPerPage: 15" current-page="model.currentPage">
+				        <tr dir-paginate="player in model.Players | itemsPerPage: 15">
 				            <td><span ng-bind="player.ID"></span></td>
-				            <td><span ng-class="player.ClassID" ng-bind="player.Name"></span></td>
-				            <td><span ng-class="player.ClassID" ng-bind="player.ClassName"></span></td>
+				            <td><span ng-bind="player.Username"></span></td>
+				            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
+				            <td><span ng-class="player.ClassStyle" ng-bind="player.ClassName"></span></td>
 				            <td align="right">
-				                <button type="button" class="btn-xs btn-danger" ng-click="Remove($index)">
+				    			<button type="button" class="btn-xs btn-info" ng-click="Edit(player)">
+				    				<span class="glyphicon glyphicon-edit"></span>
+				    			</button>
+				                <button type="button" class="btn-xs btn-danger" ng-click="Remove(player)">
 				                    <span class="glyphicon glyphicon-remove"></span>
 				                </button>
 				            </td>
@@ -67,16 +72,20 @@
 			</div>
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
-					<label class="col-xs-2">ID:</label>
-					<span class="col-xs-10" ng-bind="row.ID"></span>
+					<label class="control-label col-xs-3">ID:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.ID"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Name:</label>
-					<span class="col-xs-10" ng-class="row.ClassID" ng-bind="row.Name"></span>
+					<label class="control-label col-xs-3">User Name:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Username"></span>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-2">Class:</label>
-					<span class="col-xs-10" ng-class="row.ClassID" ng-bind="row.ClassName"></span>
+					<label class="control-label col-xs-3">Name:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Class:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.ClassName"></span>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -99,28 +108,26 @@
 			<div class="modal-body">
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
-						<label class="control-label col-xs-2">Name:</label>
-						<div class="col-xs-10">
-							<input class="form-control" ng-model="NewPlayer.Name"></input>
+						<label class="control-label col-xs-3">User Name:</label>
+						<div class="col-xs-9">
+							<div class="input-group select-fix">
+								<span class="input-group-addon">
+									<input type="checkbox" ng-model="HasUserID">
+								</span>
+								<user-select class="form-control" ng-model="NewPlayer.UserID" ng-disabled="!HasUserID" />
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-xs-2">Class:</label>
-						<div class="col-xs-10">
-							<select id="slAddPlayer" class="form-control" ng-model="NewPlayer.ClassID">
-								<option value="0">Player class...</option>
-								<option value="10" class="deathknight">Death Knight</option>
-								<option value="1" class="druid">Druid</option>
-								<option value="2" class="hunter">Hunter</option>
-								<option value="3" class="mage">Mage</option>
-								<option value="11" class="monk">Monk</option>
-								<option value="4" class="paladin">Paladin</option>
-								<option value="5">Priest</option>
-								<option value="6" class="rogue">Rogue</option>
-								<option value="7" class="shaman">Shaman</option>
-								<option value="8" class="warlock">Warlock</option>
-								<option value="9" class="warrior">Warrior</option>
-							</select>
+						<label class="control-label col-xs-3">Name:</label>
+						<div class="col-xs-9">
+							<input class="form-control" ng-model="NewPlayer.Name">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-3">Class:</label>
+						<div class="col-xs-9 select-fix">
+							<class-select class="form-control" ng-model="NewPlayer.ClassID"></class-select>
 						</div>
 					</div>
 				</form>
@@ -131,6 +138,54 @@
 				</button>
 				<button class="btn btn-primary" ng-click="add()">
 					Add <small><i class="glyphicon glyphicon-plus" /></small>
+				</button>
+			</div>
+		</script>
+
+		<script type="text/ng-template" id="editRowModal.html">
+			<div class="modal-header">
+  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
+  					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">Edit Player</h3>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-xs-3">ID:</label>
+						<span class="col-xs-9 form-control-static" ng-bind="row.ID"></span>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-3">User Name:</label>
+						<div class="col-xs-9">
+							<div class="input-group select-fix">
+								<span class="input-group-addon">
+									<input type="checkbox" ng-model="HasUserID">
+								</span>
+								<user-select class="form-control" ng-model="row.UserID" ng-disabled="!HasUserID" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-3">Name:</label>
+						<div class="col-xs-9">
+							<input class="form-control" ng-model="row.Name">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-3">Class:</label>
+						<div class="col-xs-9 select-fix">
+							<class-select class="form-control" ng-model="row.ClassID"></class-select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-warning" ng-click="cancel()">
+					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
+				</button>
+				<button class="btn btn-primary" ng-click="save()">
+					Edit <small><i class="glyphicon glyphicon-floppy-disk" /></small>
 				</button>
 			</div>
 		</script>

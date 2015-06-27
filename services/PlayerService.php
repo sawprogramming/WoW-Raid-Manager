@@ -19,12 +19,21 @@ class PlayerService {
         return $this->dao->Add($entity);
     }
 
-    public function GetAll() {
-        return $this->dao->GetAll();
+    public function Delete($id) {
+        $raidLootDAO = new RaidLootDAO();
+        $attendanceDAO = new AttendanceDAO();
+
+        $raidLootDAO->DeletePlayer($id);
+        $attendanceDAO->DeletePlayer($id);
+        return $this->dao->Delete($id);
+    }
+    
+    public function Get($id) {
+        return $this->dao->Get($id);
     }
 
-    public function Update(PlayerEntity $entity) {
-        return $this->dao->Update($entity);
+    public function GetAll() {
+        return $this->dao->GetAll();
     }
 
     public function RefreshPlayerIcons() {
@@ -41,6 +50,7 @@ class PlayerService {
 
             array_push($newPlayers, new PlayerEntity(
                 $player->ID,
+                $player->UserID,
                 $player->ClassID,
                 $player->Name,
                 $icon
@@ -52,13 +62,13 @@ class PlayerService {
         }
     }
 
-    public function Delete($id) {
-        $raidLootDAO = new RaidLootDAO();
-        $attendanceDAO = new AttendanceDAO();
+    public function Update(PlayerEntity $entity) {
+        $wowApi = new WowAPI();
 
-        $raidLootDAO->DeletePlayer($id);
-        $attendanceDAO->DeletePlayer($id);
-        return $this->dao->Delete($id);
+        $icon = $wowApi->GetCharIcon($entity->Name);
+        $entity->Icon = $icon;
+        
+        return $this->dao->Update($entity);
     }
 
     private $dao;

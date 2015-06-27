@@ -14,7 +14,8 @@ class GetAll {
             	FROM RaidLoot as li
                 	JOIN Player as pl ON li.PlayerID = pl.ID
                 	JOIN Raid as rd ON li.RaidID = rd.ID
-                	JOIN Class as cl ON pl.ClassID = cl.ID;
+                	JOIN Class as cl ON pl.ClassID = cl.ID
+            	ORDER BY li.ID DESC;
 			");
 		} catch (Exception $e) {
 
