@@ -2,7 +2,7 @@ app.factory("AttendanceSvc", function($http) {
 	return {
 		AddRecord: function(entity) {
 			return $http({
-				method: 'PUT',
+				method: 'POST',
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_attendance',
@@ -64,7 +64,7 @@ app.factory("AttendanceSvc", function($http) {
 		},
 		SaveGroupAttnd: function(entities) {
 			return $http({
-				method: 'PUT',
+				method: 'POST',
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_attendance',
@@ -74,7 +74,7 @@ app.factory("AttendanceSvc", function($http) {
 		},
 		UpdateRecord: function(entity) {
 			return $http({
-				method: 'POST',
+				method: 'PUT',
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_attendance',

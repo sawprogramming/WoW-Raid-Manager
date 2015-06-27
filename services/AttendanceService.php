@@ -19,6 +19,10 @@ class AttendanceService {
         return true;
     }
 
+    public function Get($id) {
+        return $this->dao->Get($id);
+    }
+
     public function GetAll() {
         return $this->dao->GetAll();
     }

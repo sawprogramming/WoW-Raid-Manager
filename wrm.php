@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.1.2
+ * Version: 2.1.3
  * Author: Steven Williams
  * License: GPL2
  */
@@ -32,7 +32,7 @@ class WRO {
     }
 
     public function AdminEnqueueScriptsStyles($hook) {
-        if($hook == 'toplevel_page_raid' || $hook == 'raid_page_attendance' || $hook == 'raid_page_loot') {
+        if($hook == 'toplevel_page_raid' || $hook == 'raid_page_attendance' || $hook == 'raid_page_loot' || $hook == 'raid_page_players') {
             self::ActualEnqueue();
         }
     }
@@ -109,6 +109,9 @@ class WRO {
 
         // user ui
         wp_enqueue_script('UserUICtrl',  "$appUrl/scripts/app/controllers/UserUICtrl.js");
+
+        // admin dashboard
+        wp_enqueue_script('DashboardCtrl',  "$appUrl/scripts/app/controllers/DashboardCtrl.js");
     }
 }
 register_activation_hook(__FILE__, array('WRO', 'Install'));

@@ -1,7 +1,7 @@
 <div class="wrap">
 	<div class="row" ng-app="WRO" ng-controller="RaidLootCtrl">
 		<div class="col-md-8">
-			<div class="panel panel-primary">
+			<div class="panel panel-primary sublime">
 				<div class="panel-heading">
 					<span class="glyphicon glyphicon-list"></span> Raid Loot Table
 					<div class="btn-group pull-right">
@@ -10,38 +10,36 @@
 						</button>
 					</div>
 				</div>
-				<div class="panel-body">
-					<table id="tblEditLoot" class="table">
-					    <thead>
-					        <tr>
-					            <th>Row</th>
-					            <th>Name</th>
-					            <th>Class</th>
-					            <th>Item</th>
-					            <th>Raid</th>
-					            <th>Date</th>
-					            <th>Options</th>
-					        </tr>
-					    </thead>
-					    <tbody>
-					        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | itemsPerPage: 15" current-page="model.currentPage">
-					            <td><span ng-bind="row.ID"></span></td>
-					            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
-					            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
-					            <td><a ng-href="{{row.Item}}"></a></td>
-					            <td><span ng-bind="row.RaidName"></span></td>
-					            <td><span ng-bind="row.Date"></span></td>
-					            <td align="right">
-					                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
-					                    <span class="glyphicon glyphicon-remove"></span>
-					                </button>
-					            </td> 
-					        </tr>
-					    </tbody>
-					</table>
-        			<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot"></dir-pagination-controls>
-				</div>
+				<table id="tblEditLoot" class="table">
+				    <thead>
+				        <tr>
+				            <th>Row</th>
+				            <th>Name</th>
+				            <th>Class</th>
+				            <th>Item</th>
+				            <th>Raid</th>
+				            <th>Date</th>
+				            <th>Options</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | itemsPerPage: 15" current-page="model.currentPage">
+				            <td><span ng-bind="row.ID"></span></td>
+				            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
+				            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
+				            <td><a ng-href="{{row.Item}}"></a></td>
+				            <td><span ng-bind="row.RaidName"></span></td>
+				            <td><span ng-bind="row.Date"></span></td>
+				            <td align="right">
+				                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
+				                    <span class="glyphicon glyphicon-remove"></span>
+				                </button>
+				            </td> 
+				        </tr>
+				    </tbody>
+				</table>
 			</div>
+			<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot" class="pull-right"></dir-pagination-controls>
 		</div>
 		<div class="col-md-3">
 			<div class="panel panel-primary">

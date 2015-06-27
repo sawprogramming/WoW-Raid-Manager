@@ -38,53 +38,6 @@ class PlayerController {
 		die();
 	}
 
-	private function GetAll() {
-		global $wpdb;
-		$result = NULL;
-
-		try {
-			// get entities
-			if(($result = $this->service->GetAll()) === FALSE) {
-				throw new Exception("An error occurred while processing this database request. Please try again later.");
-			}
-		} catch (Exception $e) {
-			status_header(503);
-			echo($e->getMessage());
-			die();
-		}
-
-		// return entities
-		status_header(200);
-		echo(json_encode($result));
-		die();
-	}
-
-	private function Delete() {
-		global $wpdb;
-		$result = $id = NULL;
-
-		try {
-			// decode data
-			if(!isset($_REQUEST['id'])) {
-				throw new Exception("Could not find parameter with name 'id'.");
-			}
-			$id = intval($_REQUEST['id']);
-
-			// delete player
-			if(($result = $this->service->Delete($id)) === FALSE) {
-				throw new Exception($wpdb->last_error);
-			}
-		} catch (Exception $e) {
-			status_header(422);
-			echo($e->getMessage());
-			die();
-		}
-
-		// return success status
-		status_header(204);
-		die();
-	}
-
 	private function Add() {
 		global $wpdb;
 		$result = $data = NULL;
@@ -118,6 +71,53 @@ class PlayerController {
 		// return added entity
 		status_header(201);
 		echo(json_encode($this->service->Get($wpdb->insert_id)));
+		die();
+	}
+
+	private function Delete() {
+		$id = NULL;
+		global $wpdb;
+
+		try {
+			// decode data
+			if(!isset($_REQUEST['id'])) {
+				throw new Exception("Could not find parameter with name 'id'.");
+			}
+			$id = intval($_REQUEST['id']);
+
+			// delete player
+			if($this->service->Delete($id) === FALSE) {
+				throw new Exception($wpdb->last_error);
+			}
+		} catch (Exception $e) {
+			status_header(422);
+			echo($e->getMessage());
+			die();
+		}
+
+		// return success status
+		status_header(204);
+		die();
+	}
+	
+	private function GetAll() {
+		global $wpdb;
+		$result = NULL;
+
+		try {
+			// get entities
+			if(($result = $this->service->GetAll()) === FALSE) {
+				throw new Exception("An error occurred while processing this database request. Please try again later.");
+			}
+		} catch (Exception $e) {
+			status_header(503);
+			echo($e->getMessage());
+			die();
+		}
+
+		// return entities
+		status_header(200);
+		echo(json_encode($result));
 		die();
 	}
 

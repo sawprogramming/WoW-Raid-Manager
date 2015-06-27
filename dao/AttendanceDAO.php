@@ -3,6 +3,7 @@ include_once plugin_dir_path(__FILE__)."../entities/AttendanceEntity.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/Add.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeleteRow.php";
+include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/Get.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAll.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllById.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetChart.php";
@@ -12,6 +13,10 @@ include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/Update
 class AttendanceDAO {
 	public function Add(AttendanceEntity $entity) {
 		return Attendance\Add::Run($entity);
+	}
+
+	public function Get($id) {
+		return Attendance\Get::Run($id);
 	}
 
 	public function GetAll() {

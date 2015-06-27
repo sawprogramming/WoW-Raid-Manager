@@ -1,79 +1,50 @@
 app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerSvc) {
 	$scope.model = {
-		AttendanceEntities: [],
-		DailyEntities: [],
-		ActiveTab: 0,
-		DailyDate: new Date(),
-		dailyPage: 1,
-		editPage: 1
+		AttendanceEntities: []
 	};
 	var vm = $scope.model;
 
-	function RefreshDaily() {
-		PlayerSvc.GetPlayers().then(
-			function(response) {
-				vm.DailyEntities = [];
-				angular.forEach(response.data, function(value, key) {
-					vm.DailyEntities.push({
-						ID: value.ID,
-						Name: value.Name,
-						ClassID: value.ClassID,
-						ClassName: value.ClassName,
-						ClassStyle: ClassIdToCss(parseInt(value.ClassID)),
-						Date: new Date(),
-						Points: 1.00
-					});
-				});
-			}
-		);
-	}
-
-	function RefreshRecords() {
+	$scope.RefreshRecords = function() {
 		AttendanceSvc.GetAll().then(
 			function(response) {
 				vm.AttendanceEntities = response.data;
 
-				// transform ClassID to CSS class name
-				angular.forEach(vm.AttendanceEntities, function(value, key) {
-					value.ClassStyle = ClassIdToCss(parseInt(value.ClassID));
-				});
+				// transform ClassID to ClassStyle
+				for(var i = 0; i < vm.AttendanceEntities.length; ++i) {
+					vm.AttendanceEntities[i].ClassStyle = ClassIdToCss(parseInt(vm.AttendanceEntities[i].ClassID));
+				}
 			},
 			function(errmsg) {
 
 			}
 		);
 	}
-
-	$scope.populate = function() {
-		RefreshDaily();
-		RefreshRecords();
-	};
-	$scope.populate();
-
-	$scope.RemoveDaily = function(index) {
-		vm.DailyEntities.splice(index, 1);
-	};
-
-	$scope.SaveDaily = function() {
-		angular.forEach(vm.DailyEntities, function(value, key) {
-			value.Date = vm.DailyDate;
-		});
-
-		AttendanceSvc.SaveGroupAttnd(vm.DailyEntities).then(
-			function(response) {
-				RefreshDaily();
-				RefreshRecords();
-			},
-			function(errmsg) {
-
-			}
-		);
-	}
+	$scope.RefreshRecords();
 
 	$scope.AddRecord = function() {
 		var modalInstance = $modal.open({
 			templateUrl: 'addRowModal.html',
-			controller: 'AddAttndModalCtrl'
+			controller: 'AddAttndModalCtrl',
+			resolve: {
+				entities: function() {
+					return vm.AttendanceEntities;
+				}
+			}
+		});
+	};
+
+	$scope.DeleteRecord = function(record) { 
+		var modalInstance = $modal.open({
+			templateUrl: 'deleteRowModal.html',
+			controller: 'DeleteAttndModalCtrl',
+			resolve: {
+				entity: function() {
+					return record;
+				},
+				entities: function() {
+					return vm.AttendanceEntities;
+				}
+			}
 		});
 	};
 
@@ -89,28 +60,9 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 		});
 	};
 
-	$scope.DeleteRecord = function(record) { 
-		var modalInstance = $modal.open({
-			templateUrl: 'deleteRowModal.html',
-			controller: 'DeleteAttndModalCtrl',
-			resolve: {
-				entities: function() {
-					return record;
-				}
-			}
-		});
-	};
-
-	$scope.Refresh = function() {
-		if(vm.ActiveTab == 0) {
-			RefreshDaily();
-		} else RefreshRecords();
-	}
-
 	$scope.open = function($event) {
 		$event.preventDefault();
 		$event.stopPropagation();
-
 		$scope.opened = true;
 	};
 });
@@ -119,13 +71,13 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
-			PlayerID: entity.PlayerID,
 			Name: entity.Name,
-			ClassID: entity.ClassID,
-			ClassName: entity.ClassName,
-			ClassStyle: entity.ClassStyle,
 			Date: entity.Date,
-			Points: entity.Points
+			Points: entity.Points,
+			ClassID: entity.ClassID,
+			PlayerID: entity.PlayerID,
+			ClassName: entity.ClassName,
+			ClassStyle: entity.ClassStyle
 		};
 	};
 	$scope.reset();
@@ -133,14 +85,16 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 	$scope.save = function() {
 		AttendanceSvc.UpdateRecord($scope.row).then(
 			function(response) {
+				var data = response.data;
+
 				// update the row on success
-				entity.PlayerID = $scope.row.PlayerID;
-				entity.Name = $scope.row.Name;
-				entity.ClassID = $scope.row.ClassID;
-				entity.ClassName = $scope.row.ClassName;
-				entity.ClassStyle = $scope.row.ClassStyle;
-				entity.Date = $scope.row.Date;
-				entity.Points = $scope.row.Points;
+				entity.Name = data.Name;
+				entity.Date = data.Date;
+				entity.Points = data.Points;
+				entity.ClassID = data.ClassID;
+				entity.PlayerID = data.PlayerID;
+				entity.ClassName = data.ClassName;
+				entity.ClassStyle = ClassIdToCss(parseInt(data.ClassID));
 			},
 			function(errmsg) {
 
@@ -149,17 +103,25 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 		$scope.cancel();
 	};
 
+	$scope.open = function($event) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		$scope.opened = true;
+	};
+
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
 	}
 });
 
-app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, AttendanceSvc) {
-	$scope.row = record;
+app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, entities, AttendanceSvc) {
+	$scope.row = entity;
 
 	$scope.delete = function() {
 		AttendanceSvc.DeleteRecord($scope.row.ID).then(
 			function(response) {
+				// remove the record from the attendance array
+				entities.splice(entities.indexOf(entity), 1);
 			},
 			function(errmsg) {
 
@@ -173,18 +135,30 @@ app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, 
 	}
 });
 
-app.controller("AddAttndModalCtrl", function($scope, $modalInstance, AttendanceSvc) {
+app.controller("AddAttndModalCtrl", function($scope, $modalInstance, entities, AttendanceSvc) {
 	$scope.row = {
+		Points: null,
 		ClassID: null,
 		PlayerID: null,
-		Date: new Date(),
-		Points: null
+		Date: new Date()
 	};
 
 	$scope.save = function() {
 		AttendanceSvc.AddRecord($scope.row).then(
 			function(response) {
+				var data = response.data;
 
+				// add the record to the attendance array
+				entities.unshift({
+					ID: data.ID,
+					Name: data.Name,
+					Date: data.Date,
+					Points: data.Points,
+					ClassID: data.ClassID,
+					PlayerID: data.PlayerID,
+					ClassName: data.ClassName,
+					ClassStyle: ClassIdToCss(parseInt(data.ClassID))
+				});
 			},
 			function(errmsg) {
 
@@ -193,14 +167,13 @@ app.controller("AddAttndModalCtrl", function($scope, $modalInstance, AttendanceS
 		$scope.cancel();
 	};
 
-	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
-	}
-
 	$scope.open = function($event) {
 		$event.preventDefault();
 		$event.stopPropagation();
-
 		$scope.opened = true;
 	};
+
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	}
 });
