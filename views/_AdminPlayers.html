@@ -24,7 +24,7 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				        <tr dir-paginate="player in model.Players | itemsPerPage: 15">
+				        <tr dir-paginate="player in model.Players | filter:q | itemsPerPage: 15">
 				            <td><span ng-bind="player.ID"></span></td>
 				            <td><span ng-bind="player.Username"></span></td>
 				            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
@@ -40,8 +40,16 @@
 				        </tr>
 				    </tbody>
 				</table>
+				<div class="panel-footer clearfix">
+					<div class="form-inline col-xs-5">
+						<div class="form-group">
+							<label>Search:</label>
+							<input type="text" class="form-control" ng-model="q" placeholder="Filter text">
+						</div>
+					</div>
+					<dir-pagination-controls class="pull-right"></dir-pagination-controls>
+				</div>
 			</div>
-			<dir-pagination-controls class="pull-right"></dir-pagination-controls>
 		</div>
 
 		<div class="col-md-3">

@@ -55,3 +55,7 @@
   line-height: 1.42857143;
   border-radius: 4px;
 }
+
+.pagination {
+	margin: 0px 0 !important;
+}

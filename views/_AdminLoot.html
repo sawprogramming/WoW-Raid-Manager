@@ -23,7 +23,7 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | itemsPerPage: 15" current-page="model.currentPage">
+				        <tr dir-paginate="row in model.RaidLoot | filter:q | itemsPerPage: 15">
 				            <td><span ng-bind="row.ID"></span></td>
 				            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
 				            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
@@ -38,8 +38,16 @@
 				        </tr>
 				    </tbody>
 				</table>
+				<div class="panel-footer clearfix">
+					<div class="form-inline col-xs-5">
+						<div class="form-group">
+							<label>Search:</label>
+							<input type="text" class="form-control" ng-model="q" placeholder="Filter text">
+						</div>
+					</div>
+					<dir-pagination-controls on-page-change="RefreshLootLinks()" class="pull-right"></dir-pagination-controls>
+				</div>
 			</div>
-			<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot" class="pull-right"></dir-pagination-controls>
 		</div>
 		<div class="col-md-3">
 			<div class="panel panel-primary">

@@ -25,7 +25,7 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				    	<tr dir-paginate="record in model.AttendanceEntities | itemsPerPage: 15">
+				    	<tr dir-paginate="record in model.AttendanceEntities | filter:q | itemsPerPage: 15">
 				    		<td><span ng-bind="record.ID"></span></td>
 				    		<td><span ng-class="record.ClassStyle" ng-bind="record.Name"></span></td>
 				    		<td><span ng-class="record.ClassStyle" ng-bind="record.ClassName"></span></td>
@@ -42,8 +42,16 @@
 				    	</tr>
 				    </tbody>
 				</table>
+				<div class="panel-footer clearfix">
+					<div class="form-inline col-xs-5">
+						<div class="form-group">
+							<label>Search:</label>
+							<input type="text" class="form-control" ng-model="q" placeholder="Filter text">
+						</div>
+					</div>
+					<dir-pagination-controls class="pull-right"></dir-pagination-controls>
+				</div>
 			</div>
-			<dir-pagination-controls class="pull-right"></dir-pagination-controls>
 		</div>
 
 		<div class="col-md-3">
