@@ -14,11 +14,9 @@ class RaidLootTable {
 			    ID  int(10) NOT NULL AUTO_INCREMENT,
 			    PlayerID  smallint(5) NULL,
 			    Item tinytext NOT NULL,
-			    RaidID  tinyint(3) NULL,
 			    Date date NOT NULL,
 			    PRIMARY KEY  ID (ID),
-			    FOREIGN KEY (PlayerID) REFERENCES Player(ID),
-			    FOREIGN KEY (RaidID) REFERENCES Raid(ID)
+			    FOREIGN KEY (PlayerID) REFERENCES Player(ID)
             ) $charset_collate;"
         );
 	}

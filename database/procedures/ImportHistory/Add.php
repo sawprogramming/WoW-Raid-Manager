@@ -9,14 +9,10 @@ class Add {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO ImportHistory (PlayerID, LastImported)
-            	VALUES (%d, %d);
-        	", $obj->PlayerID, $obj->LastImported));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+			INSERT INTO ImportHistory (PlayerID, LastImported)
+        	VALUES (%d, %f);
+    	", $entity->PlayerID, $entity->LastImported));
 
 		return $result;
 	}

@@ -8,14 +8,10 @@ class Delete {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query("
-				DELETE FROM Player
-				WHERE ID = {$id};
-			");
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query("
+			DELETE FROM Player
+			WHERE ID = {$id};
+		");
 
 		return $result;
 	}

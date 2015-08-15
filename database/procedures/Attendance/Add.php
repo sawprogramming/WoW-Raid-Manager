@@ -9,14 +9,10 @@ class Add {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO Attendance (PlayerID, Date, Points)
-				VALUES (%d, %s, %f);
-			", $entity->PlayerID, $entity->Date, $entity->Points));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+			INSERT INTO Attendance (PlayerID, Date, Points)
+			VALUES (%d, %s, %f);
+		", $entity->PlayerID, $entity->Date, $entity->Points));
 
 		return $result;
 	}

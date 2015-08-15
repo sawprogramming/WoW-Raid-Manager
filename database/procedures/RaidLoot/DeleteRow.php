@@ -8,14 +8,10 @@ class DeleteRow {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-        	$result = $wpdb->query("
-        		DELETE FROM RaidLoot 
-        		WHERE ID = {$id};
-    		");
-        } catch (Exception $e) {
-
-        }
+    	$result = $wpdb->query("
+    		DELETE FROM RaidLoot 
+    		WHERE ID = {$id};
+		");
         
         return $result;
 	}

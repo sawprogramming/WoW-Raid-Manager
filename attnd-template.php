@@ -24,26 +24,24 @@
 		        <table class="table">
 			        <thead>
 			        	<tr>
-							<th>Row</th>
-							<th>Name</th>
+							<th>Player</th>
 							<th>Class</th>
 							<th>Item</th>
-							<th>Raid</th>
 							<th>Date</th>
 			        	</tr>
 			        </thead>
 				    <tbody>
-				        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | itemsPerPage: 10">
-				            <td><span ng-bind="row.ID"></span></td>
+				        <tr pagination-id="tblRaidLoot" dir-paginate="row in model.RaidLoot | orderBy:'-Date' | itemsPerPage: 10">
 				            <td><span ng-class="row.ClassID" ng-bind="row.PlayerName"></span></td>
 				            <td><span ng-class="row.ClassID" ng-bind="row.ClassName"></span></td>
 				            <td><a ng-href="{{row.Item}}"></a></td>
-				            <td><span ng-bind="row.RaidName"></span></td>
 				            <td><span ng-bind="row.Date"></span></td>
 				        </tr>
 				    </tbody>
 		        </table>
-		        <dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot" class="pull-right"></dir-pagination-controls>
+		        <div class="panel-footer clearfix">
+		        	<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot" class="pull-right"></dir-pagination-controls>
+	        	</div>
 	        </div>
 
 			<script type="text/ng-template" id="playerBreakdownModal.html">

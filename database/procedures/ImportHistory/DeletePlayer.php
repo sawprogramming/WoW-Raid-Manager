@@ -8,14 +8,10 @@ class DeletePlayer {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-				DELETE FROM ImportHistory
-				WHERE PlayerID = %d;
-			", $id));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+			DELETE FROM ImportHistory
+			WHERE PlayerID = %d;
+		", $id));
 
 		return $result;
 	}

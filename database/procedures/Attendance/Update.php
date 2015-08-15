@@ -9,15 +9,11 @@ class Update {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-				UPDATE Attendance
-				SET PlayerID = %d, Date = %s, Points = %f
-				WHERE ID = %d;
-			", $entity->PlayerID, $entity->Date, $entity->Points, $entity->ID));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+			UPDATE Attendance
+			SET PlayerID = %d, Date = %s, Points = %f
+			WHERE ID = %d;
+		", $entity->PlayerID, $entity->Date, $entity->Points, $entity->ID));
 
 		return $result;
 	}

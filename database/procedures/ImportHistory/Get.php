@@ -8,14 +8,10 @@ class Get {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->get_row($wpdb->prepare("
-				SELECT * FROM ImportHistory
-				WHERE PlayerID = %d;
-			", $id));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->get_row($wpdb->prepare("
+			SELECT * FROM ImportHistory
+			WHERE PlayerID = %d;
+		", $id));
 
 		return $result;
 	}

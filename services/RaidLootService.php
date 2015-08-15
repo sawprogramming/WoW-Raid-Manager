@@ -1,6 +1,5 @@
 <?php
 require_once(plugin_dir_path(__FILE__)."../dao/RaidLootDAO.php");
-require_once(plugin_dir_path(__FILE__)."../dao/ItemDAO.php");
 require_once(plugin_dir_path(__FILE__)."../dao/ImportHistoryDAO.php");
 require_once(plugin_dir_path(__FILE__)."../services/PlayerService.php");
 
@@ -29,7 +28,6 @@ class RaidLootService {
 
     public function FetchLoot() {
         $wowApi      = new WowApi();
-        $itemDAO     = new ItemDAO();
         $raidLootDAO = new RaidLootDAO();
         $playerSvc   = new PlayerService();
         $importDao   = new ImportHistoryDAO();
@@ -37,38 +35,39 @@ class RaidLootService {
         // fetch the news for each raider
         $raiders = $playerSvc->GetAll();
         foreach($raiders as $raider) {
-            $data = $ilvl = $lastImported = NULL;
+            $data = $lastImported = NULL;
             
             // only process process data we haven't read
             $data = $wowApi->GetCharFeed($raider->Name);
             $lastImported = $importDao->Get($raider->ID);
-            if(!($lastImported == NULL) && $data->lastModified < $lastImported) continue;
-            
+            if(!($lastImported == NULL) && $data->lastModified < $lastImported->LastImported) continue;
+
             // add relevant loot from feed to LootItem table
             foreach($data->feed as $event) {
-                if(!($lastImported == NULL) && $event->timestamp < $lastImported) break;
-                if($event->type != "LOOT") continue;
-                               
-                // check first context if it has one
-                if(isset($event->availableContexts) && $event->availableContexts != [""]) 
-                    $ilvl = $itemDAO->Get(new ItemEntity($event->itemId, $event->availableContexts[0], 0))->Level;
-                else
-                    $ilvl = $itemDAO->Get(new ItemEntity($event->itemId, NULL, 0))->Level;
-                
-                // cache it if it already isn't
-                if($ilvl == NULL) {
-                    // add the item to our database since it wasn't in there (saves API calls)
-                    $itemLevels = $wowApi->GetItemLevel($event->itemId);
-                    if($itemLevels == NULL) continue;
-                    foreach($itemLevels as $item) $itemDAO->Add($item);
+                if(!($lastImported == NULL) && $event->timestamp < $lastImported->LastImported) break;
+
+                // only add loot events from current expansion's raids
+                if($event->type == "LOOT" && $event->itemId > 113598 && strpos($event->context, "raid") !== false) {
+                    $entity = new RaidLootEntity(
+                        0, 
+                        $raider->ID, 
+                        $event->itemId, 
+                        date("Y-m-d", $event->timestamp / 1000)
+                    );
                     
-                    $ilvl = $itemLevels[0]->Level;
-                }
+                    // add bonuses if they exist
+                    if(!empty($event->bonusLists)) {
+                        $entity->Item .= "&bonus=";
+                        for($i = 0; $i < count($event->bonusLists); ++$i) {
+                            if($i != 0)  $entity->Item .= ":";
+
+                            $entity->Item .= $event->bonusLists[$i];
+                        }
+                    }
+
+                    $raidLootDAO->Add($entity);
+                }         
                 
-                // skip non relevant loot
-                if($ilvl < 655) continue;
-                
-                $raidLootDAO->Add(new RaidLootEntity(0, $raider->ID, $event->itemId, ($ilvl <= 655 ? 1 : 2), date("Y-m-d", $event->timestamp / 1000)));
             }
             
             // record that we read this data

@@ -8,15 +8,11 @@ class GetAll {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->get_results("
-				SELECT *
-            	FROM Class
-            	ORDER BY Name ASC;
-			");
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->get_results("
+			SELECT *
+        	FROM Class
+        	ORDER BY Name ASC;
+		");
 
 		return $result;
 	}

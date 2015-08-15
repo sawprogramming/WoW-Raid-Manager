@@ -9,14 +9,10 @@ class Add {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-    			INSERT INTO RaidLoot (PlayerID, Item, RaidID, Date)
-            	VALUES (%d, %s, %d, %s);
-        	", $entity->PlayerID, $entity->Item, $entity->RaidID, $entity->Date));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+			INSERT INTO RaidLoot (PlayerID, Item, Date)
+        	VALUES (%d, %s, %s);
+    	", $entity->PlayerID, $entity->Item, $entity->Date));
 
 		return $result;
 	}

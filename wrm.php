@@ -2,19 +2,17 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.1.3
+ * Version: 2.1.5
  * Author: Steven Williams
  * License: GPL2
  */
 require_once (plugin_dir_path(__FILE__).'libs/PageTemplater.php');
-require_once (plugin_dir_path(__FILE__).'display.php');
 require_once (plugin_dir_path(__FILE__)."./WowAPI.php");
 require_once (plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
 require_once (plugin_dir_path(__FILE__)."./services/RaidLootService.php");
 require_once (plugin_dir_path(__FILE__)."./api/AttendanceController.php");
 require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
 require_once (plugin_dir_path(__FILE__)."./api/RaidLootController.php");
-require_once (plugin_dir_path(__FILE__)."./api/RaidController.php");
 require_once (plugin_dir_path(__FILE__)."./api/UserController.php");
 require_once (plugin_dir_path(__FILE__)."./api/ClassController.php");
 require_once (plugin_dir_path(__FILE__)."./dashboard.php");
@@ -23,12 +21,14 @@ class WRO {
     // Installation functions
     public function Install() {
         Tables\DatabaseInstaller::Install();
+        wp_schedule_event(time(), 'daily', 'update_guild_loot');
     }
 
     public function Uninstall() {
         if(false) {
             Tables\DatabaseInstaller::Uninstall();
         }
+        wp_clear_scheduled_hook('update_guild_loot');
     }
 
     public function AdminEnqueueScriptsStyles($hook) {
@@ -96,11 +96,6 @@ class WRO {
         wp_enqueue_script('PlayerSvc');
         wp_enqueue_script('PlayerCtrl',  "$appUrl/scripts/app/controllers/PlayerCtrl.js");
 
-        // raid
-        wp_register_script('RaidSvc', "$appUrl/scripts/app/services/RaidSvc.js");
-        wp_localize_script('RaidSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
-        wp_enqueue_script('RaidSvc');
-
         // raidloot
         wp_register_script('RaidLootSvc', "$appUrl/scripts/app/services/RaidLootSvc.js");
         wp_localize_script('RaidLootSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
@@ -115,8 +110,8 @@ class WRO {
     }
 }
 register_activation_hook(__FILE__, array('WRO', 'Install'));
-register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));;
-add_action('wp_ajax_wro_updateguildloot', array('WRO', 'UpdateGuildLoot'));
+register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));
+add_action('update_guild_loot', array('WRO', 'UpdateGuildLoot'));
 add_action('wp_enqueue_scripts', array('WRO', 'EnqueueScriptsStyles'));
 add_action('admin_enqueue_scripts', array('WRO', 'AdminEnqueueScriptsStyles'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

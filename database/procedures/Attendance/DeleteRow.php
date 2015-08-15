@@ -8,14 +8,10 @@ class DeleteRow {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-        	$result = $wpdb->query($wpdb->prepare("
-        		DELETE FROM Attendance
-    			WHERE ID = %d;
-    		", $id));
-        } catch (Exception $e) {
-
-        }
+    	$result = $wpdb->query($wpdb->prepare("
+    		DELETE FROM Attendance
+			WHERE ID = %d;
+		", $id));
         
         return $result;
 	}

@@ -12,7 +12,7 @@ class ImportHistoryTable {
         \dbDelta("
             CREATE TABLE IF NOT EXISTS ImportHistory (
                 ID tinyint(2) NOT NULL AUTO_INCREMENT,
-			    PlayerID tinyint(2) NOT NULL,
+			    PlayerID smallint(5) NOT NULL,
 			    LastImported double NULL,
 			    PRIMARY KEY  ID (ID)
             ) $charset_collate;

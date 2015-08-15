@@ -8,14 +8,10 @@ class DeletePlayer {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query("
-				DELETE FROM RaidLoot 
-				WHERE PlayerID = {$id};
-			");
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query("
+			DELETE FROM RaidLoot 
+			WHERE PlayerID = {$id};
+		");
 
 		return $result;
 	}

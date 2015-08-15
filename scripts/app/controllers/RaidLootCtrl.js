@@ -1,15 +1,10 @@
-app.controller("RaidLootCtrl", function($scope, RaidLootSvc) {
+app.controller("RaidLootCtrl", function($scope, $modal, RaidLootSvc) {
 	$scope.model = {
 		RaidLoot: [],
 		currentPage: 1
 	};
 	var vm = $scope.model;
 
-    function RefreshLootLinks() {
-        setTimeout(function () {
-            $WowheadPower.refreshLinks();
-        }, 25);
-    }
     $scope.RefreshLootLinks = RefreshLootLinks;
 
 	function Refresh() {
@@ -38,14 +33,48 @@ app.controller("RaidLootCtrl", function($scope, RaidLootSvc) {
 	$scope.populate();
 
 	$scope.Remove = function(row) {
-		RaidLootSvc.Delete(row.ID).then(
-			function(response) {
-			},
-			function(errormsg) {
-
+		var modalInstance = $modal.open({
+			templateUrl: 'deleteRowModal.html',
+			controller: 'DeleteRaidLootModalCtrl',
+			resolve: {
+				entity: function() {
+					return row;
+				},
+				records: function() {
+					return vm.RaidLoot;
+				}
 			}
-		);
+		});
 	};
 
 	$scope.RefreshTable = Refresh;
 });
+
+app.controller("DeleteRaidLootModalCtrl", function($scope, $modalInstance, entity, records, RaidLootSvc) {
+	$scope.row = entity;
+	RefreshLootLinks();
+
+	$scope.delete = function() {
+		RaidLootSvc.Delete($scope.row.ID).then(
+			function(response) {
+				// remove the player from the players array
+				records.splice(records.indexOf(entity), 1);
+				RefreshLootLinks();
+			},
+			function(errmsg) {
+
+			}
+		);
+		$scope.cancel();
+	};
+
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	}
+});
+
+function RefreshLootLinks() {
+    setTimeout(function () {
+        $WowheadPower.refreshLinks();
+    }, 25);
+}

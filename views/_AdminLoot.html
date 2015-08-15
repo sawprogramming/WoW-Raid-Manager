@@ -17,7 +17,6 @@
 				            <th>Name</th>
 				            <th>Class</th>
 				            <th>Item</th>
-				            <th>Raid</th>
 				            <th>Date</th>
 				            <th>Options</th>
 				        </tr>
@@ -28,7 +27,6 @@
 				            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
 				            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
 				            <td><a ng-href="{{row.Item}}"></a></td>
-				            <td><span ng-bind="row.RaidName"></span></td>
 				            <td><span ng-bind="row.Date"></span></td>
 				            <td align="right">
 				                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
@@ -66,6 +64,45 @@
 				</div>
 			</div>
 		</div>
+
+		<script type="text/ng-template" id="deleteRowModal.html">
+			<div class="modal-header">
+  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
+  					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">Delete Record</h3>
+			</div>
+			<div class="modal-body form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-3">ID:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.ID"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Name:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Class:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.ClassName"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Item:</label>
+					<span class="col-xs-9 form-control-static"><a ng-href="{{row.Item}}"></a></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Date:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Date"></span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-warning" ng-click="cancel()">
+					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
+				</button>
+				<button class="btn btn-primary" ng-click="delete()">
+					Delete <small><i class="glyphicon glyphicon-trash" /></small>
+				</button>
+			</div>
+		</script>
 	</div>
 </div>
 <script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>

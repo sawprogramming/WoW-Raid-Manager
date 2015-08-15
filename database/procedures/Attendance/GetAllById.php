@@ -8,18 +8,14 @@ class GetAllById {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->get_results($wpdb->prepare("
-				SELECT at.ID, pl.ID as PlayerID, pl.Name, cl.ID as ClassID, cl.Name as ClassName, at.Points, at.Date
-				FROM Attendance as at
-					JOIN Player as pl ON at.PlayerID = pl.ID
-					JOIN Class as cl ON pl.ClassID = cl.ID
-				WHERE at.PlayerID = %d
-				ORDER BY at.Date DESC;
-			", $id));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->get_results($wpdb->prepare("
+			SELECT at.ID, pl.ID as PlayerID, pl.Name, cl.ID as ClassID, cl.Name as ClassName, at.Points, at.Date
+			FROM Attendance as at
+				JOIN Player as pl ON at.PlayerID = pl.ID
+				JOIN Class as cl ON pl.ClassID = cl.ID
+			WHERE at.PlayerID = %d
+			ORDER BY at.Date DESC;
+		", $id));
 
 		return $result;
 	}

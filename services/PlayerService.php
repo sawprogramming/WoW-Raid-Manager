@@ -2,6 +2,7 @@
 include_once (plugin_dir_path(__FILE__)."../dao/PlayerDAO.php");
 include_once (plugin_dir_path(__FILE__)."../dao/AttendanceDAO.php");
 include_once (plugin_dir_path(__FILE__)."../dao/RaidLootDAO.php");
+include_once (plugin_dir_path(__FILE__)."../dao/ImportHistoryDAO.php");
 include_once (plugin_dir_path(__FILE__)."../entities/PlayerEntity.php");
 include_once (plugin_dir_path(__FILE__)."../WowAPI.php");
 
@@ -22,9 +23,12 @@ class PlayerService {
     public function Delete($id) {
         $raidLootDAO = new RaidLootDAO();
         $attendanceDAO = new AttendanceDAO();
+        $importHistoryDAO = new ImportHistoryDAO();
 
         $raidLootDAO->DeletePlayer($id);
         $attendanceDAO->DeletePlayer($id);
+        $importHistoryDAO->DeletePlayer($id);
+        
         return $this->dao->Delete($id);
     }
     

@@ -5,19 +5,15 @@ include_once plugin_dir_path(__FILE__)."../../../entities/ImportHistoryEntity.ph
 class Update {
 	private function __construct() {}
 
-	public static function Run(PlayerEntity $entity) {
+	public static function Run(\ImportHistoryEntity $entity) {
 		global $wpdb;
 		$result = NULL;
 
-		try {
-			$result = $wpdb->query($wpdb->prepare("
-	            UPDATE ImportHistory
-	            SET LastImported = %d
-	            WHERE PlayerID = %d
-            ", $obj->LastImported, $obj->PlayerID));
-		} catch (Exception $e) {
-
-		}
+		$result = $wpdb->query($wpdb->prepare("
+            UPDATE ImportHistory
+            SET LastImported = %f
+            WHERE PlayerID = %d
+        ", $entity->LastImported, $entity->PlayerID));
 
 		return $result;
 	}
