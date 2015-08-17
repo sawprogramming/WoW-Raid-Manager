@@ -12,10 +12,19 @@ class DatabaseSeeder {
 		global $wpdb;
 
 		$wpdb->query("
-			INSERT INTO Class (Name)
-			VALUES ('Druid'),  ('Hunter'), ('Mage'), ('Paladin'), ('Priest'),
-			       ('Rogue'), ('Shaman'), ('Warlock'), ('Warrior'), ('Death Knight'),
-			       ('Monk');
+			INSERT IGNORE INTO Class (ID, Name)
+			VALUES (1, 'Druid'),
+				   (2, 'Hunter'),
+				   (3, 'Mage'),
+				   (4, 'Paladin'),
+				   (5, 'Priest'),
+			       (6, 'Rogue'),
+			       (7, 'Shaman'),
+			       (8, 'Warlock'),
+			       (9, 'Warrior'),
+			       (10, 'Death Knight'),
+			       (11, 'Monk'),
+			       (12, 'Demon Hunter');
 		");
 	}
 }

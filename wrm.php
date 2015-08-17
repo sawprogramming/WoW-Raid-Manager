@@ -9,6 +9,7 @@
 require_once (plugin_dir_path(__FILE__).'libs/PageTemplater.php');
 require_once (plugin_dir_path(__FILE__)."./WowAPI.php");
 require_once (plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
+require_once (plugin_dir_path(__FILE__)."./database/DatabaseSeeder.php");
 require_once (plugin_dir_path(__FILE__)."./services/RaidLootService.php");
 require_once (plugin_dir_path(__FILE__)."./api/AttendanceController.php");
 require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
@@ -21,6 +22,7 @@ class WRO {
     // Installation functions
     public function Install() {
         Tables\DatabaseInstaller::Install();
+        Tables\DatabaseSeeder::Seed();
         wp_schedule_event(time(), 'daily', 'update_guild_loot');
     }
 

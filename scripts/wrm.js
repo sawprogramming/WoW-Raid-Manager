@@ -12,6 +12,7 @@ function ClassIdToName(id) {
 		case 9: return "Warrior";
 		case 10: return "Death Knight";
 		case 11: return "Monk";
+		case 12: return "Demon Hunter";
 	}
 }
 function ClassIdToCss(id) {
