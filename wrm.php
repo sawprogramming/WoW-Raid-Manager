@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.1.5
+ * Version: 2.1.7
  * Author: Steven Williams
  * License: GPL2
  */
@@ -51,10 +51,13 @@ class WRO {
         $appUrl = plugins_url()."/WoWRaidOrganizer";
         
         // add scripts
-        wp_enqueue_script('blah',       "$appUrl/libs/js/jquery-2.1.3.min.js");
-        wp_enqueue_script('angular',    "$appUrl/libs/js/angular.min.js");
-        wp_enqueue_script('panything',  "$appUrl/libs/js/dirPagination.js");
-        wp_enqueue_script('angularui',  "$appUrl/libs/js/ui-bootstrap-tpls-0.13.0.min.js");
+        wp_enqueue_script('blah',        "$appUrl/libs/js/jquery-2.1.3.min.js");
+        wp_enqueue_script('angular',     "$appUrl/libs/js/angular.js");
+        wp_enqueue_script('angularmsgs', "$appUrl/libs/js/angular-messages.js");
+        wp_enqueue_script('xregexp',     "$appUrl/libs/js/xregexp-min.js");
+        wp_enqueue_script('ucb',         "$appUrl/libs/js/unicode-base.js");
+        wp_enqueue_script('panything',   "$appUrl/libs/js/dirPagination.js");
+        wp_enqueue_script('angularui',   "$appUrl/libs/js/ui-bootstrap-tpls-0.13.0.min.js");
         self::AddAngularScripts($appUrl);
         wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
         

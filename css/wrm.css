@@ -60,3 +60,9 @@
 .pagination {
 	margin: 0px 0 !important;
 }
+
+.ng-touched.ng-invalid-required { border-color: #a94442; }
+.ng-dirty.ng-invalid { border-color: #a94442; }
+.ng-untouched.ng-invalid { border-color: #ccc; }
+.ng-submitted input.ng-invalid{ border-color: #a94442; }
+.error-text { color: #a94442; }

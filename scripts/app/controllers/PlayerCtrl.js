@@ -90,25 +90,29 @@ app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, players, P
 		ClassID: null
 	};
 
-	$scope.add = function() {
-		PlayerSvc.AddPlayer($scope.NewPlayer).then(
-			function(response) {
-				// add new player to the players array
-				players.push({
-					ID: response.data.ID,
-					Name: response.data.Name,
-					UserID: response.data.UserID,
-					ClassID: response.data.ClassID,
-					Username: response.data.Username,
-					ClassName: response.data.ClassName,
-					ClassStyle: ClassIdToCss(parseInt(response.data.ClassID))
-				});
-			},
-			function(errmsg) {
+	$scope.add = function(form) {
+		if(!form.$invalid) {
+			$scope.NewPlayer.Name = $scope.NewPlayer.Name.charAt(0).toUpperCase() + $scope.NewPlayer.Name.slice(1).toLowerCase();
+			
+			PlayerSvc.AddPlayer($scope.NewPlayer).then(
+				function(response) {
+					// add new player to the players array
+					players.push({
+						ID: response.data.ID,
+						Name: response.data.Name,
+						UserID: response.data.UserID,
+						ClassID: response.data.ClassID,
+						Username: response.data.Username,
+						ClassName: response.data.ClassName,
+						ClassStyle: ClassIdToCss(parseInt(response.data.ClassID))
+					});
+				},
+				function(errmsg) {
 
-			}
-		);
-		$scope.cancel();
+				}
+			);
+			$scope.cancel();
+		}
 	};
 
 	$scope.cancel = function() {
@@ -130,22 +134,26 @@ app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, entity, P
 	};
 	$scope.reset();
 
-	$scope.save = function() {
-		PlayerSvc.EditPlayer($scope.row).then(
-			function(response) {
-				// update entity with new data
-				entity.Name = response.data.Name;
-				entity.UserID = response.data.UserID;
-				entity.ClassID = response.data.ClassID;
-				entity.Username = response.data.Username;
-				entity.ClassName = response.data.ClassName;
-				entity.ClassStyle = ClassIdToCss(parseInt(response.data.ClassID));
-			},
-			function(errmsg) {
+	$scope.save = function(form) {
+		if(!form.$invalid) {
+			$scope.row.Name = $scope.row.Name.charAt(0).toUpperCase() + $scope.row.Name.slice(1).toLowerCase();
 
-			}
-		);
-		$scope.cancel();
+			PlayerSvc.EditPlayer($scope.row).then(
+				function(response) {
+					// update entity with new data
+					entity.Name = response.data.Name;
+					entity.UserID = response.data.UserID;
+					entity.ClassID = response.data.ClassID;
+					entity.Username = response.data.Username;
+					entity.ClassName = response.data.ClassName;
+					entity.ClassStyle = ClassIdToCss(parseInt(response.data.ClassID));
+				},
+				function(errmsg) {
+
+				}
+			);
+			$scope.cancel();
+		}
 	};
 
 	$scope.$watch('HasUserID', function(value) {

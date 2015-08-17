@@ -1,1 +1,1 @@
-var app = angular.module("WRO", ['ui.bootstrap', 'angularUtils.directives.dirPagination']);
+var app = angular.module("WRO", ['ui.bootstrap', 'angularUtils.directives.dirPagination', 'ngMessages']);

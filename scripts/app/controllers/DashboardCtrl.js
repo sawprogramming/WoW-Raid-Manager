@@ -35,19 +35,21 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, PlayerSv
 		vm.DailyEntities.splice(vm.DailyEntities.indexOf(player), 1);
 	};
 
-	$scope.SaveDaily = function() {
-		for(var i = 0; i < vm.DailyEntities.length; ++i) {
-			vm.DailyEntities[i].Date = vm.DailyDate;
-		}
-
-		AttendanceSvc.SaveGroupAttnd(vm.DailyEntities).then(
-			function(response) {
-				$scope.RefreshDaily();
-			},
-			function(errmsg) {
-
+	$scope.SaveDaily = function(form) {
+		if(!form.$invalid) {
+			for(var i = 0; i < vm.DailyEntities.length; ++i) {
+				vm.DailyEntities[i].Date = vm.DailyDate;
 			}
-		);
+
+			AttendanceSvc.SaveGroupAttnd(vm.DailyEntities).then(
+				function(response) {
+					$scope.RefreshDaily();
+				},
+				function(errmsg) {
+
+				}
+			);
+		}
 	}
 
 	$scope.open = function($event) {
@@ -56,4 +58,3 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, PlayerSv
 		$scope.opened = true;
 	};
 });
-

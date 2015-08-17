@@ -79,28 +79,35 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 			ClassName: entity.ClassName,
 			ClassStyle: entity.ClassStyle
 		};
+
+		// fix for date being one off on edit
+		var d = new Date($scope.row.Date);
+		d.setMinutes( d.getMinutes() + d.getTimezoneOffset());
+		$scope.row.Date = d;
 	};
 	$scope.reset();
 
-	$scope.save = function() {
-		AttendanceSvc.UpdateRecord($scope.row).then(
-			function(response) {
-				var data = response.data;
+	$scope.save = function(form) {
+		if(!form.$invalid) {
+			AttendanceSvc.UpdateRecord($scope.row).then(
+				function(response) {
+					var data = response.data;
 
-				// update the row on success
-				entity.Name = data.Name;
-				entity.Date = data.Date;
-				entity.Points = data.Points;
-				entity.ClassID = data.ClassID;
-				entity.PlayerID = data.PlayerID;
-				entity.ClassName = data.ClassName;
-				entity.ClassStyle = ClassIdToCss(parseInt(data.ClassID));
-			},
-			function(errmsg) {
+					// update the row on success
+					entity.Name = data.Name;
+					entity.Date = data.Date;
+					entity.Points = data.Points;
+					entity.ClassID = data.ClassID;
+					entity.PlayerID = data.PlayerID;
+					entity.ClassName = data.ClassName;
+					entity.ClassStyle = ClassIdToCss(parseInt(data.ClassID));
+				},
+				function(errmsg) {
 
-			}
-		);
-		$scope.cancel();
+				}
+			);
+			$scope.cancel();
+		}
 	};
 
 	$scope.open = function($event) {
@@ -143,28 +150,30 @@ app.controller("AddAttndModalCtrl", function($scope, $modalInstance, entities, A
 		Date: new Date()
 	};
 
-	$scope.save = function() {
-		AttendanceSvc.AddRecord($scope.row).then(
-			function(response) {
-				var data = response.data;
+	$scope.save = function(form) {
+		if(!form.$invalid && $scope.row.Points != null) {
+			AttendanceSvc.AddRecord($scope.row).then(
+				function(response) {
+					var data = response.data;
 
-				// add the record to the attendance array
-				entities.unshift({
-					ID: data.ID,
-					Name: data.Name,
-					Date: data.Date,
-					Points: data.Points,
-					ClassID: data.ClassID,
-					PlayerID: data.PlayerID,
-					ClassName: data.ClassName,
-					ClassStyle: ClassIdToCss(parseInt(data.ClassID))
-				});
-			},
-			function(errmsg) {
+					// add the record to the attendance array
+					entities.unshift({
+						ID: data.ID,
+						Name: data.Name,
+						Date: data.Date,
+						Points: data.Points,
+						ClassID: data.ClassID,
+						PlayerID: data.PlayerID,
+						ClassName: data.ClassName,
+						ClassStyle: ClassIdToCss(parseInt(data.ClassID))
+					});
+				},
+				function(errmsg) {
 
-			}
-		);
-		$scope.cancel();
+				}
+			);
+			$scope.cancel();
+		}
 	};
 
 	$scope.open = function($event) {
