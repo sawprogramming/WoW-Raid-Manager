@@ -208,7 +208,7 @@ class AttendanceController {
 		}
 
 		// return result
-		status_header(201);
+		status_header(200);
 		echo(json_encode($this->service->Get($entity->ID)));
 		die();
 	}

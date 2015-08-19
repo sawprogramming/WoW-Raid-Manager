@@ -50,19 +50,23 @@ app.controller("RaidLootCtrl", function($scope, $modal, RaidLootSvc) {
 	$scope.RefreshTable = Refresh;
 });
 
-app.controller("DeleteRaidLootModalCtrl", function($scope, $modalInstance, entity, records, RaidLootSvc) {
+app.controller("DeleteRaidLootModalCtrl", function($scope, $modalInstance, toastr, entity, records, RaidLootSvc) {
 	$scope.row = entity;
 	RefreshLootLinks();
 
 	$scope.delete = function() {
 		RaidLootSvc.Delete($scope.row.ID).then(
 			function(response) {
-				// remove the player from the players array
+				toastr.success("Record deleted!");
 				records.splice(records.indexOf(entity), 1);
 				RefreshLootLinks();
 			},
 			function(errmsg) {
-
+				toastr.error(errmsg.data, errmsg.statusText, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
 			}
 		);
 		$scope.cancel();

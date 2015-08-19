@@ -2,15 +2,27 @@
 	<div class="row" ng-app="WRO" ng-controller="DashboardCtrl">
 		<div class="col-md-8">
 			<div class="panel panel-primary sublime">
-				<div class="panel-heading">
-					<span class="glyphicon glyphicon-user"></span> Admin Dashboard
+				<div class="panel-heading clearfix">
+					<div class="col-xs-3">
+						<span class="glyphicon glyphicon-user"></span> Admin Dashboard
+					</div>
+					<div class="col-xs-3 col-xs-offset-2">
+						<button class="btn btn-xs btn-default" ng-class="{ 'active': model.Tab == 0 }" ng-click="model.Tab = 0" title="Daily Attendance">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</button>
+						<button class="btn btn-xs btn-default" ng-class="{ 'active': model.Tab == 1 }" ng-click="model.Tab = 1" title="Disputes">
+							<span class="glyphicon glyphicon-exclamation-sign"></span>
+							<span class="badge" ng-bind="model.DisputeEntities.length"></span>
+						</button>
+					</div>
 					<div class="btn-group pull-right">
 						<button type="button" class="btn btn-info btn-xs" ng-click="RefreshDaily()">
 						    Refresh <span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
 				</div>
-				<table class="table">
+
+				<table class="table" ng-if="model.Tab == 0">
 				    <thead>
 				        <tr>
 				            <th>Name</th>
@@ -40,7 +52,40 @@
 				        </tr>
 				    </tbody>
 				</table>
-				<div class="panel-footer">
+
+				<table class="table" ng-if="model.Tab == 1">
+				    <thead>
+				        <tr>
+				        	<th>Date</th>
+				            <th>Name</th>
+				            <th>Class</th>
+				            <th class="thick-right-border">Points</th>
+				            <th>Disputed Points</th>
+				            <th>Comment</th>
+				            <th>Options</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr dir-paginate="dispute in model.DisputeEntities | itemsPerPage: 15">
+				        	<td ng-bind="dispute.Date"></td>
+				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.Name"></span></td>
+				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.ClassName"></span></td>
+				            <td class="thick-right-border" ng-bind="dispute.Points"></td>
+				            <td ng-bind="dispute.DisputePoints"></td>
+				            <td ng-bind="dispute.Comment"></td>
+				            <td align="right">
+				                <button type="button" class="btn btn-xs btn-success" ng-click="ApproveDispute(dispute)" title="Approve">
+				                    <span class="glyphicon glyphicon-ok"></span>
+				                </button>
+				                <button type="button" class="btn btn-xs btn-danger" ng-click="RejectDispute(dispute)" title="Reject">
+				                    <span class="glyphicon glyphicon-remove"></span>
+				                </button>
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
+
+				<div class="panel-footer" ng-if="model.Tab == 0">
 					<form name="formSaveDailyAttnd" novalidate>
 						<label class="control-label col-xs-2">Date:</label>
 						<div align="center" class="col-xs-4 col-xs-offset-2">
@@ -66,6 +111,7 @@
 			<dir-pagination-controls class="pull-right"></dir-pagination-controls>
 		</div>
 
+
 		<div class="col-md-3">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
@@ -83,5 +129,83 @@
 				</div>
 			</div>
 		</div>
+
+		<script type="text/ng-template" id="rejectDisputeModal.html">
+			<div class="modal-header">
+  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
+  					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">Reject Dispute</h3>
+			</div>
+			<div class="modal-body form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-3">Date:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Date"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Name:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Points:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Points"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Disputed Points:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.DisputePoints"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Comment:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Comment"></span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-warning" ng-click="cancel()">
+					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
+				</button>
+				<button class="btn btn-primary" ng-click="reject()">
+					Reject <small><i class="glyphicon glyphicon-trash" /></small>
+				</button>
+			</div>
+		</script>
+
+		<script type="text/ng-template" id="approveDisputeModal.html">
+			<div class="modal-header">
+  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
+  					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">Approve Dispute</h3>
+			</div>
+			<div class="modal-body form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-xs-3">Date:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Date"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Name:</label>
+					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Points:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Points"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Disputed Points:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.DisputePoints"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">Comment:</label>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Comment"></span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-warning" ng-click="cancel()">
+					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
+				</button>
+				<button class="btn btn-primary" ng-click="approve()">
+					Approve <small><i class="glyphicon glyphicon-ok" /></small>
+				</button>
+			</div>
+		</script>
 	</div>
 </div>

@@ -90,17 +90,44 @@
 			        	<tr>
 			        		<th>Date</th>
 			        		<th>Points</th>
+			        		<th>Options</th>
 			        	</tr>
 					</thead>
 					<tbody>
 				        <tr dir-paginate="entity in model.AttendanceEntities | itemsPerPage: 5">
 				            <td><span ng-bind="entity.Date"></span></td>
 				            <td><span ng-bind="entity.Points"></span></td>
+				            <td>
+			    				<div class="btn-sm btn-danger pull-right" popover-template="'disputeTemplate.html'" popover-placement="left" ng-click="Dispute(entity)">
+				    				Dispute &ne;
+				    			</div>
+			    			</td>
 				        </tr>
 			        </tbody>
 			    </table>
 			    <dir-pagination-controls class="pull-right"></dir-pagination-controls><br /><br /><br />
-			</script>		
+			</script>
+			<script type="text/ng-template" id="disputeTemplate.html">
+				<form style="width: 350px;" name="formDispute">
+					<label class="control-label">Arrival Time:</label>
+					<div class="btn-group btn-group-sm">
+		                <label class="btn btn-danger"  ng-model="entity.Dispute.Points" btn-radio="0.00">Absent</label>
+		                <label class="btn btn-default" ng-model="entity.Dispute.Points" btn-radio="0.25">10:00+</label>
+		                <label class="btn btn-warning" ng-model="entity.Dispute.Points" btn-radio="0.50">9:00+</label>
+		                <label class="btn btn-primary" ng-model="entity.Dispute.Points" btn-radio="0.75">7:40+</label>
+		                <label class="btn btn-success" ng-model="entity.Dispute.Points" btn-radio="1.00">Present</label>
+					</div>
+					<div class="help-block error-text" ng-if="formDispute.$submitted && entity.Dispute.Points == null">
+						Please indicate when you arrived.
+					</div><br /><br />
+
+					<div class="form-group">
+						<label class="control-label">Comment:</label>
+						<textarea rows="5" class="form-control" ng-model="entity.Dispute.Comment" maxlength="255"></textarea>
+					</div>
+					<button class="btn-sm btn-primary pull-right" ng-click="SubmitDispute(formDispute, entity)">Submit</button>
+				</form>
+			</script>	
 		</div>
 	</div>
 </div>

@@ -44,6 +44,7 @@ app.controller("UserUICtrl", function($scope, $modal, AttendanceSvc, RaidLootSvc
 
 			}
 		);
+
 	};
 	$scope.populate();
 
@@ -61,7 +62,7 @@ app.controller("UserUICtrl", function($scope, $modal, AttendanceSvc, RaidLootSvc
 	};
 });
 
-app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, entity, AttendanceSvc) {
+app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toastr, entity, AttendanceSvc, DisputeSvc) {
 	$scope.model = {
 		BreakdownEntity: entity,
 		AttendanceEntities: null,
@@ -75,6 +76,13 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, enti
 		AttendanceSvc.GetAllById(entity.ID).then(
 			function(response) {
 				vm.AttendanceEntities = response.data;
+
+				for(var i = 0; i < vm.AttendanceEntities.length; ++i) {
+					vm.AttendanceEntities[i].Dispute = {
+						Points: null,
+						Comment: null
+					}
+				}
 			},
 			function(errmsg) {
 
@@ -125,7 +133,36 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, enti
 	};
 	$scope.populate();
 
+	$scope.SubmitDispute = function(form, entity) {
+		var disputeEntity = {
+			AttendanceID: entity.ID,
+			Points: entity.Dispute.Points,
+			Comment: entity.Dispute.Comment
+		};
+
+		if(!form.$invalid && entity.Dispute.Points != null) {
+			DisputeSvc.AddRecord(disputeEntity).then(
+				function(response) {
+					entity.Dispute = {
+						Points: null,
+						Comment: null
+					};
+
+					form.$setPristine();
+					toastr.success("Dispute submitted!");
+				},
+				function(errmsg) {
+					toastr.error(errmsg.data, errmsg.statusText, { 
+						closeButton: true,
+						progressBar: true,
+						timeOut: 30000,
+				 	});
+				}
+			);
+		}
+	};
+
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
-	}
+	};
 });

@@ -67,7 +67,7 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	};
 });
 
-app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, AttendanceSvc) {
+app.controller("EditAttndModalCtrl", function($scope, $modalInstance, toastr, entity, AttendanceSvc) {
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
@@ -101,9 +101,15 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 					entity.PlayerID = data.PlayerID;
 					entity.ClassName = data.ClassName;
 					entity.ClassStyle = ClassIdToCss(parseInt(data.ClassID));
+
+					toastr.success("Record updated!");
 				},
 				function(errmsg) {
-
+					toastr.error(errmsg.data, errmsg.statusText, { 
+						closeButton: true,
+						progressBar: true,
+						timeOut: 30000,
+				 	});
 				}
 			);
 			$scope.cancel();
@@ -121,17 +127,21 @@ app.controller("EditAttndModalCtrl", function($scope, $modalInstance, entity, At
 	}
 });
 
-app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, entities, AttendanceSvc) {
+app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, toastr, entity, entities, AttendanceSvc) {
 	$scope.row = entity;
 
 	$scope.delete = function() {
 		AttendanceSvc.DeleteRecord($scope.row.ID).then(
 			function(response) {
-				// remove the record from the attendance array
+				toastr.success("Record deleted!");
 				entities.splice(entities.indexOf(entity), 1);
 			},
 			function(errmsg) {
-
+				toastr.error(errmsg.data, errmsg.statusText, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
 			}
 		);
 		$scope.cancel();
@@ -142,7 +152,7 @@ app.controller("DeleteAttndModalCtrl", function($scope, $modalInstance, entity, 
 	}
 });
 
-app.controller("AddAttndModalCtrl", function($scope, $modalInstance, entities, AttendanceSvc) {
+app.controller("AddAttndModalCtrl", function($scope, $modalInstance, toastr, entities, AttendanceSvc) {
 	$scope.row = {
 		Points: null,
 		ClassID: null,
@@ -167,9 +177,15 @@ app.controller("AddAttndModalCtrl", function($scope, $modalInstance, entities, A
 						ClassName: data.ClassName,
 						ClassStyle: ClassIdToCss(parseInt(data.ClassID))
 					});
+
+					toastr.success("Record added!");
 				},
 				function(errmsg) {
-
+					toastr.error(errmsg.data, errmsg.statusText, { 
+						closeButton: true,
+						progressBar: true,
+						timeOut: 30000,
+				 	});
 				}
 			);
 			$scope.cancel();

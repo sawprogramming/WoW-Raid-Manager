@@ -9,6 +9,7 @@ include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAll
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetChart.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBreakdown.php";
 include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/Update.php";
+include_once plugin_dir_path(__FILE__)."../database/procedures/Attendance/UpdatePoints.php";
 
 class AttendanceDAO {
 	public function Add(AttendanceEntity $entity) {
@@ -37,6 +38,10 @@ class AttendanceDAO {
 
 	public function Update(AttendanceEntity $entity) {
 		return Attendance\Update::Run($entity);
+	}
+
+	public function UpdatePoints(AttendanceEntity $entity) {
+		return Attendance\UpdatePoints::Run($entity);
 	}
 
 	public function DeleteRow($id) {

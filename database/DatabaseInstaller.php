@@ -4,6 +4,7 @@ require_once (plugin_dir_path(__FILE__)."./tables/Attendance.php");
 require_once (plugin_dir_path(__FILE__)."./tables/ImportHistory.php");
 require_once (plugin_dir_path(__FILE__)."./tables/Player.php");
 require_once (plugin_dir_path(__FILE__)."./tables/RaidLoot.php");
+require_once (plugin_dir_path(__FILE__)."./tables/Dispute.php");
 require_once (plugin_dir_path(__FILE__)."./tables/Class.php");
 
 class DatabaseInstaller {
@@ -14,11 +15,13 @@ class DatabaseInstaller {
 		PlayerTable::CreateTable();
 		AttendanceTable::CreateTable();
 		RaidLootTable::CreateTable();
+		DisputeTable::CreateTable();
 		ImportHistoryTable::CreateTable();
 	}
 
 	public static function Uninstall() {
 		ImportHistoryTable::DropTable();
+		DisputeTable::DropTable();
 		RaidLootTable::DropTable();
 		AttendanceTable::DropTable();
 		PlayerTable::DropTable();

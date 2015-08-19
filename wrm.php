@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.1.7
+ * Version: 2.2.0
  * Author: Steven Williams
  * License: GPL2
  */
@@ -16,6 +16,7 @@ require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
 require_once (plugin_dir_path(__FILE__)."./api/RaidLootController.php");
 require_once (plugin_dir_path(__FILE__)."./api/UserController.php");
 require_once (plugin_dir_path(__FILE__)."./api/ClassController.php");
+require_once (plugin_dir_path(__FILE__)."./api/DisputeController.php");
 require_once (plugin_dir_path(__FILE__)."./dashboard.php");
 
 class WRO {
@@ -58,11 +59,13 @@ class WRO {
         wp_enqueue_script('ucb',         "$appUrl/libs/js/unicode-base.js");
         wp_enqueue_script('panything',   "$appUrl/libs/js/dirPagination.js");
         wp_enqueue_script('angularui',   "$appUrl/libs/js/ui-bootstrap-tpls-0.13.0.min.js");
+        wp_enqueue_script('toastr',      "$appUrl/libs/js/angular-toastr.tpls.min.js");
         self::AddAngularScripts($appUrl);
         wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
         
         // add styles
         wp_enqueue_style('bootstrap',  "$appUrl/libs/css/bootstrap.min.css");
+        wp_enqueue_style('toastr',     "$appUrl/libs/css/angular-toastr.min.css");
         wp_enqueue_style('wrm',        "$appUrl/css/wrm.css");
     }
 
@@ -88,6 +91,11 @@ class WRO {
         wp_register_script('ClassSvc', "$appUrl/scripts/app/services/ClassSvc.js");
         wp_localize_script('ClassSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
         wp_enqueue_script('ClassSvc');
+
+        // dispute
+        wp_register_script('DisputeSvc', "$appUrl/scripts/app/services/DisputeSvc.js");
+        wp_localize_script('DisputeSvc', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script('DisputeSvc');
 
         // attendance
         wp_register_script('AttendanceSvc', "$appUrl/scripts/app/services/AttendanceSvc.js");

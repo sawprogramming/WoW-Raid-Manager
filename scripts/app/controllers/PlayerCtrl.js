@@ -62,17 +62,21 @@ app.controller('PlayerCtrl', function($scope, $modal, PlayerSvc) {
 });
 
 
-app.controller("DeletePlayerModalCtrl", function($scope, $modalInstance, entity, players, PlayerSvc) {
+app.controller("DeletePlayerModalCtrl", function($scope, $modalInstance, toastr, entity, players, PlayerSvc) {
 	$scope.row = entity;
 
 	$scope.delete = function() {
 		PlayerSvc.DeletePlayer($scope.row.ID).then(
 			function(response) {
-				// remove the player from the players array
+				toastr.success("Player deleted!");
 				players.splice(players.indexOf(entity), 1);
 			},
 			function(errmsg) {
-
+				toastr.error(errmsg.data, errmsg.statusText, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
 			}
 		);
 		$scope.cancel();
@@ -83,7 +87,7 @@ app.controller("DeletePlayerModalCtrl", function($scope, $modalInstance, entity,
 	}
 });
 
-app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, players, PlayerSvc) {
+app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, toastr, players, PlayerSvc) {
 	$scope.NewPlayer = {
 		Name: null,
 		UserID: null,
@@ -96,7 +100,6 @@ app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, players, P
 			
 			PlayerSvc.AddPlayer($scope.NewPlayer).then(
 				function(response) {
-					// add new player to the players array
 					players.push({
 						ID: response.data.ID,
 						Name: response.data.Name,
@@ -106,9 +109,15 @@ app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, players, P
 						ClassName: response.data.ClassName,
 						ClassStyle: ClassIdToCss(parseInt(response.data.ClassID))
 					});
+
+					toastr.success("Player added!");
 				},
 				function(errmsg) {
-
+					toastr.error(errmsg.data, errmsg.statusText, { 
+						closeButton: true,
+						progressBar: true,
+						timeOut: 30000,
+				 	});
 				}
 			);
 			$scope.cancel();
@@ -120,7 +129,7 @@ app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, players, P
 	};
 });
 
-app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, entity, PlayerSvc) {
+app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, toastr, entity, PlayerSvc) {
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
@@ -140,16 +149,21 @@ app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, entity, P
 
 			PlayerSvc.EditPlayer($scope.row).then(
 				function(response) {
-					// update entity with new data
 					entity.Name = response.data.Name;
 					entity.UserID = response.data.UserID;
 					entity.ClassID = response.data.ClassID;
 					entity.Username = response.data.Username;
 					entity.ClassName = response.data.ClassName;
 					entity.ClassStyle = ClassIdToCss(parseInt(response.data.ClassID));
+
+					toastr.success("Player updated!");
 				},
 				function(errmsg) {
-
+					toastr.error(errmsg.data, errmsg.statusText, { 
+						closeButton: true,
+						progressBar: true,
+						timeOut: 30000,
+				 	});
 				}
 			);
 			$scope.cancel();
