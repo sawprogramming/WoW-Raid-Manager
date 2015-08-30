@@ -35,6 +35,10 @@
 	color: #FFFFFF;
 }
 
+.form-control-feedback {
+	color: #000000;
+}
+
 .sublime > .panel-footer {
 	color: #000000;
 }

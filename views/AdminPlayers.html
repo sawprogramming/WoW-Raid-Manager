@@ -13,6 +13,26 @@
 						</button>
 					</div>
 				</div>
+				<div class="panel-body">
+				    <div class="col-xs-6 form-inline">
+				    	Show&nbsp;
+				    	<select class="form-control input-sm" ng-model="r" ng-init="r = '15'">
+					    	<option value="5">5</option>
+					    	<option value="15">15</option>
+					    	<option value="25">25</option>
+					    	<option value="50">50</option>
+					    	<option value="100">100</option>
+				    	</select>
+				    	&nbsp;entries
+				    </div>
+				    <div class="col-xs-6 form-inline">
+						<div class="form-group has-feedback pull-right">
+							<label class="control-label">Search:</label>
+							<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
+							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+						</div>
+					</div>
+				</div>
 				<table id="tblEditPlayers" class="table">
 				    <thead>
 				        <tr>
@@ -24,7 +44,7 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				        <tr dir-paginate="player in model.Players | filter:q | itemsPerPage: 15">
+				        <tr dir-paginate="player in model.Players | filter:q | itemsPerPage: r">
 				            <td><span ng-bind="player.ID"></span></td>
 				            <td><span ng-bind="player.Username"></span></td>
 				            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
@@ -41,13 +61,7 @@
 				    </tbody>
 				</table>
 				<div class="panel-footer clearfix">
-					<div class="form-inline col-xs-5">
-						<div class="form-group">
-							<label>Search:</label>
-							<input type="text" class="form-control" ng-model="q" placeholder="Filter text">
-						</div>
-					</div>
-					<dir-pagination-controls class="pull-right"></dir-pagination-controls>
+					<dir-pagination-controls></dir-pagination-controls>
 				</div>
 			</div>
 		</div>

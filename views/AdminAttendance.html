@@ -13,6 +13,26 @@
 						</button>
 					</div>
 				</div>
+				<div class="panel-body">
+				    <div class="col-xs-6 form-inline">
+				    	Show&nbsp;
+				    	<select class="form-control input-sm" ng-model="r" ng-init="r = '15'">
+					    	<option value="5">5</option>
+					    	<option value="15">15</option>
+					    	<option value="25">25</option>
+					    	<option value="50">50</option>
+					    	<option value="100">100</option>
+				    	</select>
+				    	&nbsp;entries
+				    </div>
+				    <div class="col-xs-6 form-inline">
+						<div class="form-group has-feedback pull-right">
+							<label class="control-label">Search:</label>
+							<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
+							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+						</div>
+					</div>
+				</div>
 				<table class="table">
 				    <thead>
 				        <tr>
@@ -25,12 +45,12 @@
 				        </tr>
 				    </thead>
 				    <tbody>
-				    	<tr dir-paginate="record in model.AttendanceEntities | filter:q | itemsPerPage: 15">
+				    	<tr dir-paginate="record in model.AttendanceEntities | filter:q | itemsPerPage: r">
 				    		<td><span ng-bind="record.ID"></span></td>
 				    		<td><span ng-class="record.ClassStyle" ng-bind="record.Name"></span></td>
 				    		<td><span ng-class="record.ClassStyle" ng-bind="record.ClassName"></span></td>
 				    		<td><span ng-bind="record.Points"></span></td>
-				    		<td><span ng-bind="record.Date"></span></td>
+				    		<td><span ng-bind="record.Date | date: 'MM/dd/yyyy'"></span></td>
 				    		<td align="right">
 				    			<button type="button" class="btn-xs btn-info" ng-click="EditRecord(record)">
 				    				<span class="glyphicon glyphicon-edit"></span>
@@ -43,17 +63,10 @@
 				    </tbody>
 				</table>
 				<div class="panel-footer clearfix">
-					<div class="form-inline col-xs-5">
-						<div class="form-group">
-							<label>Search:</label>
-							<input type="text" class="form-control" ng-model="q" placeholder="Filter text">
-						</div>
-					</div>
-					<dir-pagination-controls class="pull-right"></dir-pagination-controls>
+					<dir-pagination-controls></dir-pagination-controls>
 				</div>
 			</div>
 		</div>
-
 		<div class="col-md-3">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
@@ -214,7 +227,7 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label col-xs-2">Date:</label>
-					<span class="col-xs-10 form-control-static" ng-bind="row.Date"></span>
+					<span class="col-xs-10 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-xs-2">Points:</label>

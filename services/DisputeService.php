@@ -46,6 +46,15 @@ class DisputeService {
     }
 
     public function Add(DisputeEntity $entity) {
+        $disputes = $this->dao->GetUnresolved();
+
+        // if there is a pending dispute, don't let another one be created
+        for($i = 0; $i < count($disputes); ++$i) {
+            if($disputes[$i]->AttendanceID == $entity->AttendanceID) {
+                throw new Exception("This record already has a pending dispute!");
+            }
+        }
+
         return $this->dao->Add($entity);
     }
 

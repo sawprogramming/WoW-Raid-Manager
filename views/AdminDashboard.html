@@ -67,7 +67,7 @@
 				    </thead>
 				    <tbody>
 				        <tr dir-paginate="dispute in model.DisputeEntities | itemsPerPage: 15">
-				        	<td ng-bind="dispute.Date"></td>
+				        	<td ng-bind="dispute.Date | date: 'MM/dd/yyyy'"></td>
 				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.Name"></span></td>
 				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.ClassName"></span></td>
 				            <td class="thick-right-border" ng-bind="dispute.Points"></td>
@@ -108,7 +108,7 @@
 					</form>
 				</div>
 			</div>
-			<dir-pagination-controls class="pull-right"></dir-pagination-controls>
+			<dir-pagination-controls></dir-pagination-controls>
 		</div>
 
 
@@ -140,7 +140,7 @@
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
 					<label class="control-label col-xs-3">Date:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Date"></span>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-xs-3">Name:</label>
@@ -179,7 +179,7 @@
 			<div class="modal-body form-horizontal">
 				<div class="form-group">
 					<label class="control-label col-xs-3">Date:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Date"></span>
+					<span class="col-xs-9 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-xs-3">Name:</label>

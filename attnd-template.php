@@ -35,15 +35,14 @@
 				            <td><span ng-class="row.ClassID" ng-bind="row.PlayerName"></span></td>
 				            <td><span ng-class="row.ClassID" ng-bind="row.ClassName"></span></td>
 				            <td><a ng-href="{{row.Item}}"></a></td>
-				            <td><span ng-bind="row.Date"></span></td>
+				            <td><span ng-bind="row.Date | date: 'MM/dd/yyyy'"></span></td>
 				        </tr>
 				    </tbody>
 		        </table>
 		        <div class="panel-footer clearfix">
-		        	<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot" class="pull-right"></dir-pagination-controls>
+		        	<dir-pagination-controls on-page-change="RefreshLootLinks()" pagination-id="tblRaidLoot"></dir-pagination-controls>
 	        	</div>
 	        </div>
-
 			<script type="text/ng-template" id="playerBreakdownModal.html">
 				<div class="modal-body">
 					<button type="button" class="close" aria-label="Close" ng-click="cancel()">
@@ -85,6 +84,25 @@
 			    		</div>
 			    	</div>
 			    </div>
+			    <hr />
+			    <div class="col-xs-6 form-inline">
+			    	Show&nbsp;
+			    	<select class="form-control input-sm" ng-model="r" ng-init="r = '5'">
+				    	<option value="5">5</option>
+				    	<option value="10">10</option>
+				    	<option value="25">25</option>
+				    	<option value="50">50</option>
+				    	<option value="100">100</option>
+			    	</select>
+			    	&nbsp;entries
+			    </div>
+			    <div class="col-xs-6 form-inline">
+					<div class="form-group has-feedback pull-right">
+						Search: &nbsp;
+						<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
+						<span class="glyphicon glyphicon-search form-control-feedback"></span>
+					</div>
+				</div>
 			    <table class="table table-striped">
 			        <thead>
 			        	<tr>
@@ -94,8 +112,8 @@
 			        	</tr>
 					</thead>
 					<tbody>
-				        <tr dir-paginate="entity in model.AttendanceEntities | itemsPerPage: 5">
-				            <td><span ng-bind="entity.Date"></span></td>
+				        <tr dir-paginate="entity in model.AttendanceEntities | filter:q | itemsPerPage: r">
+				            <td><span ng-bind="entity.Date | date: 'MM/dd/yyyy'"></span></td>
 				            <td><span ng-bind="entity.Points"></span></td>
 				            <td>
 			    				<div class="btn-sm btn-danger pull-right" popover-template="'disputeTemplate.html'" popover-placement="left" ng-click="Dispute(entity)">
@@ -105,7 +123,7 @@
 				        </tr>
 			        </tbody>
 			    </table>
-			    <dir-pagination-controls class="pull-right"></dir-pagination-controls><br /><br /><br />
+			    <dir-pagination-controls></dir-pagination-controls><br /><br /><br />
 			</script>
 			<script type="text/ng-template" id="disputeTemplate.html">
 				<form style="width: 350px;" name="formDispute">

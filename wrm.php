@@ -77,7 +77,9 @@ class WRO {
     }
 
     private static function AddAngularScripts($appUrl) {
-        wp_enqueue_script('app',  "$appUrl/scripts/app.js");
+        wp_register_script('app',  "$appUrl/scripts/app.js");
+        wp_localize_script('app', 'plugin_url', array('libs' => $appUrl."/libs"));
+        wp_enqueue_script('app');
         wp_enqueue_script('playerSelect', "$appUrl/scripts/app/directives/playerSelect.js");
         wp_enqueue_script('userSelect', "$appUrl/scripts/app/directives/userSelect.js");
         wp_enqueue_script('classSelect', "$appUrl/scripts/app/directives/classSelect.js");
