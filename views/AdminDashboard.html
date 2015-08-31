@@ -22,70 +22,74 @@
 					</div>
 				</div>
 
-				<table class="table" ng-if="model.Tab == 0">
-				    <thead>
-				        <tr>
-				            <th>Name</th>
-				            <th>Class</th>
-				            <th>Points</th>
-				            <th>Options</th>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr dir-paginate="player in model.DailyEntities | itemsPerPage: 15">
-				            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
-				            <td><span ng-class="player.ClassStyle" ng-bind="player.ClassName"></span></td>
-				            <td>
-				                <div class="btn-group">
-				                    <label class="btn btn-danger"  ng-model="player.Points" btn-radio="0.00">Absent</label>
-				                    <label class="btn btn-default" ng-model="player.Points" btn-radio="0.25">10:00+</label>
-				                    <label class="btn btn-warning" ng-model="player.Points" btn-radio="0.50">9:00+</label>
-				                    <label class="btn btn-primary" ng-model="player.Points" btn-radio="0.75">7:40+</label>
-				                    <label class="btn btn-success" ng-model="player.Points" btn-radio="1.00">Present</label>
-				                </div>
-				            </td>
-				            <td align="right">
-				                <button type="button" class="btn btn-danger" ng-click="RemoveDaily(player)">
-				                    <span class="glyphicon glyphicon-remove"></span>
-				                </button>
-				            </td>
-				        </tr>
-				    </tbody>
-				</table>
+				<ajax-content status="model.AjaxContent.Daily" src="model.DailyEntities" ng-if="model.Tab == 0">
+					<table class="table">
+					    <thead>
+					        <tr>
+					            <th>Name</th>
+					            <th>Class</th>
+					            <th>Points</th>
+					            <th>Options</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr dir-paginate="player in model.DailyEntities | itemsPerPage: 15">
+					            <td><span ng-class="player.ClassStyle" ng-bind="player.Name"></span></td>
+					            <td><span ng-class="player.ClassStyle" ng-bind="player.ClassName"></span></td>
+					            <td>
+					                <div class="btn-group">
+					                    <label class="btn btn-danger"  ng-model="player.Points" btn-radio="0.00">Absent</label>
+					                    <label class="btn btn-default" ng-model="player.Points" btn-radio="0.25">10:00+</label>
+					                    <label class="btn btn-warning" ng-model="player.Points" btn-radio="0.50">9:00+</label>
+					                    <label class="btn btn-primary" ng-model="player.Points" btn-radio="0.75">7:40+</label>
+					                    <label class="btn btn-success" ng-model="player.Points" btn-radio="1.00">Present</label>
+					                </div>
+					            </td>
+					            <td align="right">
+					                <button type="button" class="btn btn-danger" ng-click="RemoveDaily(player)">
+					                    <span class="glyphicon glyphicon-remove"></span>
+					                </button>
+					            </td>
+					        </tr>
+					    </tbody>
+					</table>
+				</ajax-content>
 
-				<table class="table" ng-if="model.Tab == 1">
-				    <thead>
-				        <tr>
-				        	<th>Date</th>
-				            <th>Name</th>
-				            <th>Class</th>
-				            <th class="thick-right-border">Points</th>
-				            <th>Disputed Points</th>
-				            <th>Comment</th>
-				            <th>Options</th>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr dir-paginate="dispute in model.DisputeEntities | itemsPerPage: 15">
-				        	<td ng-bind="dispute.Date | date: 'MM/dd/yyyy'"></td>
-				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.Name"></span></td>
-				            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.ClassName"></span></td>
-				            <td class="thick-right-border" ng-bind="dispute.Points"></td>
-				            <td ng-bind="dispute.DisputePoints"></td>
-				            <td ng-bind="dispute.Comment"></td>
-				            <td align="right">
-				                <button type="button" class="btn btn-xs btn-success" ng-click="ApproveDispute(dispute)" title="Approve">
-				                    <span class="glyphicon glyphicon-ok"></span>
-				                </button>
-				                <button type="button" class="btn btn-xs btn-danger" ng-click="RejectDispute(dispute)" title="Reject">
-				                    <span class="glyphicon glyphicon-remove"></span>
-				                </button>
-				            </td>
-				        </tr>
-				    </tbody>
-				</table>
+				<ajax-content status="model.AjaxContent.Dispute" src="model.DisputeEntities" ng-if="model.Tab == 1">
+					<table class="table">
+					    <thead>
+					        <tr>
+					        	<th>Date</th>
+					            <th>Name</th>
+					            <th>Class</th>
+					            <th class="thick-right-border">Points</th>
+					            <th>Disputed Points</th>
+					            <th>Comment</th>
+					            <th>Options</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr dir-paginate="dispute in model.DisputeEntities | itemsPerPage: 15">
+					        	<td ng-bind="dispute.Date | date: 'MM/dd/yyyy'"></td>
+					            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.Name"></span></td>
+					            <td><span ng-class="dispute.ClassStyle" ng-bind="dispute.ClassName"></span></td>
+					            <td class="thick-right-border" ng-bind="dispute.Points"></td>
+					            <td ng-bind="dispute.DisputePoints"></td>
+					            <td ng-bind="dispute.Comment"></td>
+					            <td align="right">
+					                <button type="button" class="btn btn-xs btn-success" ng-click="ApproveDispute(dispute)" title="Approve">
+					                    <span class="glyphicon glyphicon-ok"></span>
+					                </button>
+					                <button type="button" class="btn btn-xs btn-danger" ng-click="RejectDispute(dispute)" title="Reject">
+					                    <span class="glyphicon glyphicon-remove"></span>
+					                </button>
+					            </td>
+					        </tr>
+					    </tbody>
+					</table>
+				</ajax-content>
 
-				<div class="panel-footer" ng-if="model.Tab == 0">
+				<div class="panel-footer" ng-if="model.Tab == 0 && model.AjaxContent.Daily.status == 'success'">
 					<form name="formSaveDailyAttnd" novalidate>
 						<label class="control-label col-xs-2">Date:</label>
 						<div align="center" class="col-xs-4 col-xs-offset-2">
@@ -129,83 +133,5 @@
 				</div>
 			</div>
 		</div>
-
-		<script type="text/ng-template" id="rejectDisputeModal.html">
-			<div class="modal-header">
-  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
-  					<span aria-hidden="true">&times;</span>
-				</button>
-				<h3 class="modal-title">Reject Dispute</h3>
-			</div>
-			<div class="modal-body form-horizontal">
-				<div class="form-group">
-					<label class="control-label col-xs-3">Date:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Name:</label>
-					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Points:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Points"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Disputed Points:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.DisputePoints"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Comment:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Comment"></span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-warning" ng-click="cancel()">
-					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
-				</button>
-				<button class="btn btn-primary" ng-click="reject()">
-					Reject <small><i class="glyphicon glyphicon-trash" /></small>
-				</button>
-			</div>
-		</script>
-
-		<script type="text/ng-template" id="approveDisputeModal.html">
-			<div class="modal-header">
-  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
-  					<span aria-hidden="true">&times;</span>
-				</button>
-				<h3 class="modal-title">Approve Dispute</h3>
-			</div>
-			<div class="modal-body form-horizontal">
-				<div class="form-group">
-					<label class="control-label col-xs-3">Date:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Name:</label>
-					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.Name"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Points:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Points"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Disputed Points:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.DisputePoints"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Comment:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Comment"></span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-warning" ng-click="cancel()">
-					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
-				</button>
-				<button class="btn btn-primary" ng-click="approve()">
-					Approve <small><i class="glyphicon glyphicon-ok" /></small>
-				</button>
-			</div>
-		</script>
 	</div>
 </div>

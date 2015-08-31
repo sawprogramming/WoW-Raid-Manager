@@ -50,7 +50,7 @@ class DisputeController {
 				$data->Points,
 				isset($data->Comment) ? $data->Comment : NULL
 			);
-
+			
 			// a user can only dispute their own records
 			if(!$this->service->Authorized($entity)) {
 				status_header(403);

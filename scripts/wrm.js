@@ -22,3 +22,9 @@ function ClassIdToCss(id) {
 function BuildLootURL(item) {
 	return "http://www.wowhead.com/item=" + item;
 }
+
+function RefreshLootLinks() {
+    setTimeout(function () {
+        $WowheadPower.refreshLinks();
+    }, 25);
+}

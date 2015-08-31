@@ -1,7 +1,11 @@
 app.controller("UserUICtrl", function($scope, $modal, AttendanceSvc, RaidLootSvc) {
 	$scope.model = {
 		BreakdownEntities: [],
-		RaidLoot: []
+		RaidLoot: [],
+		AjaxContent: {
+			Breakdown: { status: 'loading', message: '' },
+			RaidLoot:  { status: 'loading', message: '' }
+		}
 	};
 	var vm = $scope.model;
 
@@ -13,23 +17,25 @@ app.controller("UserUICtrl", function($scope, $modal, AttendanceSvc, RaidLootSvc
     $scope.RefreshLootLinks = RefreshLootLinks;
 
 	$scope.populate = function() {
-		AttendanceSvc.GetBreakdown().then(
-			function(response) {
-				vm.BreakdownEntities = response.data;
+		AttendanceSvc.GetBreakdown()
+			.success(function(data) {
+				vm.BreakdownEntities = data;
 
 				// transform ClassID to CSS class name
 				angular.forEach(vm.BreakdownEntities, function(value, key) {
 					value.ClassID = ClassIdToCss(parseInt(value.ClassID));
 				});
-			},
-			function(errmsg) {
 
-			}
-		);
+				vm.AjaxContent.Breakdown.status = 'success';
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.Breakdown.status = 'error';
+				vm.AjaxContent.Breakdown.message = errmsg;
+			});
 
-		RaidLootSvc.GetAll().then(
-			function(response) {
-				vm.RaidLoot = response.data;
+		RaidLootSvc.GetAll()
+			.success(function(data) {
+				vm.RaidLoot = data;
 
 				// transform data into proper stuff for view
 				angular.forEach(vm.RaidLoot, function(value, key) {
@@ -37,20 +43,19 @@ app.controller("UserUICtrl", function($scope, $modal, AttendanceSvc, RaidLootSvc
 					value.Item = BuildLootURL(value.Item);
 				});
 
-
-			   RefreshLootLinks();
-			},
-			function(errmsg) {
-
-			}
-		);
-
+				vm.AjaxContent.RaidLoot.status = 'success';
+			    RefreshLootLinks();
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.RaidLoot.status = 'error';
+				vm.AjaxContent.RaidLoot.message = errmsg;
+			});
 	};
 	$scope.populate();
 
 	$scope.ShowDetails = function(item) {
 		var modalInstance = $modal.open({
-			templateUrl: 'playerBreakdownModal.html',
+			templateUrl: plugin_url.app + '/user-ui/templates/playerBreakdownModal.html',
 			controller: 'PlayerBreakdownModalCtrl',
 			size: 'lg',
 			resolve: {
@@ -66,16 +71,23 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toas
 	$scope.model = {
 		BreakdownEntity: entity,
 		AttendanceEntities: null,
-		ChartData: null
+		ChartData: null,
+		AjaxContent: {
+			Attendance: { status: 'loading', message: '' },
+			Chart:      { status: 'loading', message: '' }
+		},
+		AjaxForm: {
+			Dispute: 'ready'
+		}
 	};
 	var vm = $scope.model;
 
 	$scope.populate = function() {
 		var chart, chartOptions; 
 
-		AttendanceSvc.GetAllById(entity.ID).then(
-			function(response) {
-				vm.AttendanceEntities = response.data;
+		AttendanceSvc.GetAllById(entity.ID)
+			.success(function(data) {
+				vm.AttendanceEntities = data;
 
 				for(var i = 0; i < vm.AttendanceEntities.length; ++i) {
 					vm.AttendanceEntities[i].Dispute = {
@@ -83,16 +95,18 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toas
 						Comment: null
 					}
 				}
-			},
-			function(errmsg) {
 
-			}
-		);
+				vm.AjaxContent.Attendance.status = 'success';
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.Attendance.status = 'error';
+				vm.AjaxContent.Attendance.message = errmsg;
+			});
 
-		AttendanceSvc.GetChart(entity.ID).then(
-			function(response) {
+		AttendanceSvc.GetChart(entity.ID)
+			.success(function(data) {
 				var sqlDate;
-				var temp = response.data;
+				var temp = data;
 
 				// setup chart data
 				vm.ChartData = new google.visualization.DataTable();
@@ -108,28 +122,32 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toas
 				});
 
 				// draw chart
-				chart = new google.charts.Line(document.getElementById('calendar_basic'));
-				chartOptions = {
-					width: '100%',
-					height: 255,
-					legend: {
-						position: 'none'
-					},
-					vAxis: { 
-						viewWindowMode: 'explicit',
-						viewWindow: {
-							max: 100,
-							min: 0
-						}
-					},
-					axisTitlesPosition: 'none'
-				};
-				chart.draw(vm.ChartData, chartOptions);
-			},
-			function(errmsg) {
+			    setTimeout(function () {
+					chart = new google.charts.Line(document.getElementById('calendar_basic'));
+					chartOptions = {
+						width: '100%',
+						height: 255,
+						legend: {
+							position: 'none'
+						},
+						vAxis: { 
+							viewWindowMode: 'explicit',
+							viewWindow: {
+								max: 100,
+								min: 0
+							}
+						},
+						axisTitlesPosition: 'none'
+					};
+					chart.draw(vm.ChartData, chartOptions);
+    			}, 100);
 
-			}
-		);
+				vm.AjaxContent.Chart.status = 'success';
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.Chart.status = 'error';
+				vm.AjaxContent.Chart.message = errmsg;
+			});
 	};
 	$scope.populate();
 
@@ -141,8 +159,10 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toas
 		};
 
 		if(!form.$invalid && entity.Dispute.Points != null) {
-			DisputeSvc.AddRecord(disputeEntity).then(
-				function(response) {
+			vm.AjaxForm.Dispute = 'processing';
+
+			DisputeSvc.AddRecord(disputeEntity)
+				.success(function(data) {
 					entity.Dispute = {
 						Points: null,
 						Comment: null
@@ -150,15 +170,17 @@ app.controller("PlayerBreakdownModalCtrl", function($scope, $modalInstance, toas
 
 					form.$setPristine();
 					toastr.success("Dispute submitted!");
-				},
-				function(errmsg) {
-					toastr.error(errmsg.data, errmsg.statusText, { 
+				})
+				.error(function(errmsg, errstatus) {
+					toastr.error(errmsg, errstatus, { 
 						closeButton: true,
 						progressBar: true,
 						timeOut: 30000,
 				 	});
-				}
-			);
+				})
+				.finally(function() {
+					vm.AjaxForm.Dispute = 'ready';
+				})
 		}
 	};
 

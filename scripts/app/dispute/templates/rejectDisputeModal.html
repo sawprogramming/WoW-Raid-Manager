@@ -1,0 +1,30 @@
+<div class="modal-header bg-primary">
+		<button type="button" class="close" aria-label="Close" ng-click="cancel()">
+			<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title">Reject Dispute</h4>
+</div>
+<div class="modal-body form-horizontal">
+	<ajax-form status="AjaxForm">
+		<div class="text-center">
+			<h4>
+				Are you sure you want to reject
+				<span ng-class="row.ClassStyle" ng-bind="row.Name"></span>'s 
+				dispute to change the points received from
+				<span ng-bind="row.Points"></span> to <span ng-bind="row.DisputePoints"></span>
+				on <span ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>?
+			</h4>
+			<h5>
+				Dispute reason:<br />
+				<span ng-bind="row.Comment"></span>
+			</h5>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-primary pull-right" ng-click="reject()">
+					Reject <small><i class="glyphicon glyphicon-trash" /></small>
+				</button>
+			</div>
+		</div>
+	</ajax-form>
+</div>

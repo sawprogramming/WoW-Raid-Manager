@@ -12,6 +12,20 @@
 .warlock     { color: #9482C9; }
 .warrior     { color: #C79C6E; }
 
+.absolute-center {
+	top: 0; 
+	left: 0; 
+	right: 0;
+	bottom: 0; 
+	margin: auto;
+	position: absolute;
+}
+
+.form-processing {
+	opacity: 0.5;
+	background: #e0e0e0;
+}
+
 .player-columns {
 	-moz-column-count: 6;
 	-moz-column-gap: 1em;
@@ -78,3 +92,6 @@
 .thick-right-border {
 	border-right: 5px solid;
 }
+
+.text-red   { color: red; }
+.text-black { color: black; }

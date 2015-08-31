@@ -3,17 +3,22 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 		Tab: 0,
 		DailyEntities: [],
 		DisputeEntities: [],
-		DailyDate: new Date()
+		DailyDate: new Date(),
+		AjaxContent: {
+			Daily:   { status: 'loading', message: '' },
+			Dispute: { status: 'loading', message: '' }
+		}
 	};
 	var vm = $scope.model;
 
 	$scope.RefreshDaily = function() {
-		PlayerSvc.GetPlayers().then(
-			function(response) {
-				var data = response.data;
+		vm.AjaxContent.Daily.status   = 'loading';
+		vm.AjaxContent.Dispute.status = 'loading';
 
-				// add players to daily entities
+		PlayerSvc.GetPlayers()
+			.success(function(data) {
 				vm.DailyEntities = [];
+
 				for(var i = 0; i < data.length; ++i) {
 					vm.DailyEntities.push({
 						Points: 1.00,
@@ -25,17 +30,18 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 						ClassStyle: ClassIdToCss(parseInt(data[i].ClassID))
 					});
 				}
-			},
-			function(errmsg) {
 
-			}
-		);
+				vm.AjaxContent.Daily.status = 'success';
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.Daily.status = 'error';
+				vm.AjaxContent.Daily.message = errmsg;
+			});
 
-		DisputeSvc.GetUnresolved().then(
-			function(response) {
-				var data = response.data;
-
+		DisputeSvc.GetUnresolved()
+			.success(function(data) {
 				vm.DisputeEntities = [];
+
 				for(var i = 0; i < data.length; ++i) {
 					vm.DisputeEntities.push({
 						Points: data[i].Points,
@@ -50,17 +56,19 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 						ClassStyle: ClassIdToCss(parseInt(data[i].ClassID))
 					});
 				}
-			},
-			function(errmsg) {
 
-			}
-		);
+				vm.AjaxContent.Dispute.status = 'success';
+			})
+			.error(function(errmsg) {
+				vm.AjaxContent.Dispute.status = 'error';
+				vm.AjaxContent.Dispute.message = errmsg;
+			});
 	}
 	$scope.RefreshDaily();
 
 	$scope.ApproveDispute = function(entity) {
 		var modalInstance = $modal.open({
-			templateUrl: 'approveDisputeModal.html',
+			templateUrl: plugin_url.app + '/dispute/templates/approveDisputeModal.html',
 			controller: 'ApproveDisputeModalCtrl',
 			resolve: {
 				entity: function() {
@@ -75,7 +83,7 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 
 	$scope.RejectDispute = function(entity) {
 		var modalInstance = $modal.open({
-			templateUrl: 'rejectDisputeModal.html',
+			templateUrl: plugin_url.app + '/dispute/templates/rejectDisputeModal.html',
 			controller: 'RejectDisputeModalCtrl',
 			resolve: {
 				entity: function() {
@@ -112,73 +120,11 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 				}
 			);
 		}
-	}
+	};
 
 	$scope.open = function($event) {
 		$event.preventDefault();
 		$event.stopPropagation();
 		$scope.opened = true;
 	};
-});
-
-app.controller("RejectDisputeModalCtrl", function($scope, $modalInstance, entity, disputes, DisputeSvc, toastr) {
-	var rejectEntity = {
-		ID: entity.ID,
-		Verdict: false,
-		Points: entity.Points,
-		AttendanceID: entity.AttendanceID
-	};
-	$scope.row = entity;
-
-	$scope.reject = function() {
-		DisputeSvc.UpdateRecord(rejectEntity).then(
-			function(response) {
-				disputes.splice(disputes.indexOf(entity), 1);
-				toastr.success("Dispute rejected!");
-			},
-			function(errmsg) {
-				toastr.error(errmsg.data, errmsg.statusText, { 
-					closeButton: true,
-					progressBar: true,
-					timeOut: 30000,
-			 	});
-			}
-		);
-		$scope.cancel();
-	};
-
-	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
-	}
-});
-
-app.controller("ApproveDisputeModalCtrl", function($scope, $modalInstance, entity, disputes, DisputeSvc, toastr) {
-	var approveEntity = {
-		ID: entity.ID,
-		Verdict: true,
-		Points: entity.DisputePoints,
-		AttendanceID: entity.AttendanceID
-	};
-	$scope.row = entity;
-
-	$scope.approve = function() {
-		DisputeSvc.UpdateRecord(approveEntity).then(
-			function(response) {
-				disputes.splice(disputes.indexOf(entity), 1);
-				toastr.success("Dispute approved!");
-			},
-			function(errmsg) {
-				toastr.error(errmsg.data, errmsg.statusText, { 
-					closeButton: true,
-					progressBar: true,
-					timeOut: 30000,
-			 	});
-			}
-		);
-		$scope.cancel();
-	};
-
-	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
-	}
 });

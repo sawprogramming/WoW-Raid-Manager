@@ -10,57 +10,60 @@
 						</button>
 					</div>
 				</div>
-				<div class="panel-body">
-				    <div class="col-xs-6 form-inline">
-				    	Show&nbsp;
-				    	<select class="form-control input-sm" ng-model="r" ng-init="r = '15'">
-					    	<option value="5">5</option>
-					    	<option value="15">15</option>
-					    	<option value="25">25</option>
-					    	<option value="50">50</option>
-					    	<option value="100">100</option>
-				    	</select>
-				    	&nbsp;entries
-				    </div>
-				    <div class="col-xs-6 form-inline">
-						<div class="form-group has-feedback pull-right">
-							<label class="control-label">Search:</label>
-							<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
-							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+				<ajax-content status="model.AjaxContent.RaidLoot" src="model.RaidLoot">
+					<div class="panel-body">
+					    <div class="col-xs-6 form-inline">
+					    	Show&nbsp;
+					    	<select class="form-control input-sm" ng-model="r" ng-init="r = '15'">
+						    	<option value="5">5</option>
+						    	<option value="15">15</option>
+						    	<option value="25">25</option>
+						    	<option value="50">50</option>
+						    	<option value="100">100</option>
+					    	</select>
+					    	&nbsp;entries
+					    </div>
+					    <div class="col-xs-6 form-inline">
+							<div class="form-group has-feedback pull-right">
+								<label class="control-label">Search:</label>
+								<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
+								<span class="glyphicon glyphicon-search form-control-feedback"></span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<table id="tblEditLoot" class="table">
-				    <thead>
-				        <tr>
-				            <th>Row</th>
-				            <th>Name</th>
-				            <th>Class</th>
-				            <th>Item</th>
-				            <th>Date</th>
-				            <th>Options</th>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr dir-paginate="row in model.RaidLoot | filter:q | itemsPerPage: r">
-				            <td><span ng-bind="row.ID"></span></td>
-				            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
-				            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
-				            <td><a ng-href="{{row.Item}}"></a></td>
-				            <td><span ng-bind="row.Date | date: 'MM/dd/yyyy'"></span></td>
-				            <td align="right">
-				                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
-				                    <span class="glyphicon glyphicon-remove"></span>
-				                </button>
-				            </td> 
-				        </tr>
-				    </tbody>
-				</table>
-				<div class="panel-footer clearfix">
-					<dir-pagination-controls on-page-change="RefreshLootLinks()"></dir-pagination-controls>
-				</div>
+					<table id="tblEditLoot" class="table">
+					    <thead>
+					        <tr>
+					            <th>Row</th>
+					            <th>Name</th>
+					            <th>Class</th>
+					            <th>Item</th>
+					            <th>Date</th>
+					            <th>Options</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr dir-paginate="row in model.RaidLoot | filter:q | itemsPerPage: r">
+					            <td><span ng-bind="row.ID"></span></td>
+					            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
+					            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
+					            <td><a ng-href="{{row.Item}}"></a></td>
+					            <td><span ng-bind="row.Date | date: 'MM/dd/yyyy'"></span></td>
+					            <td align="right">
+					                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
+					                    <span class="glyphicon glyphicon-remove"></span>
+					                </button>
+					            </td> 
+					        </tr>
+					    </tbody>
+					</table>
+					<div class="panel-footer clearfix">
+						<dir-pagination-controls on-page-change="RefreshLootLinks()"></dir-pagination-controls>
+					</div>
+				</ajax-content>
 			</div>
 		</div>
+
 		<div class="col-md-3">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
@@ -78,45 +81,6 @@
 				</div>
 			</div>
 		</div>
-
-		<script type="text/ng-template" id="deleteRowModal.html">
-			<div class="modal-header">
-  				<button type="button" class="close" aria-label="Close" ng-click="cancel()">
-  					<span aria-hidden="true">&times;</span>
-				</button>
-				<h3 class="modal-title">Delete Record</h3>
-			</div>
-			<div class="modal-body form-horizontal">
-				<div class="form-group">
-					<label class="control-label col-xs-3">ID:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.ID"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Name:</label>
-					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Class:</label>
-					<span class="col-xs-9 form-control-static" ng-class="row.ClassStyle" ng-bind="row.ClassName"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Item:</label>
-					<span class="col-xs-9 form-control-static"><a ng-href="{{row.Item}}"></a></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Date:</label>
-					<span class="col-xs-9 form-control-static" ng-bind="row.Date | date: 'MM/dd/yyyy'"></span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-warning" ng-click="cancel()">
-					Cancel <small><i class="glyphicon glyphicon-remove" /></small>
-				</button>
-				<button class="btn btn-primary" ng-click="delete()">
-					Delete <small><i class="glyphicon glyphicon-trash" /></small>
-				</button>
-			</div>
-		</script>
 	</div>
 </div>
 <script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
