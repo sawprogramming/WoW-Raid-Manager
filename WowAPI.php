@@ -1,4 +1,6 @@
 <?php
+namespace WRO;
+use Exception;
 
 class WowApi {
     function __construct() {
@@ -33,5 +35,4 @@ class WowApi {
     // members
     private $region;
     private $realm;
-}
-?>
+};

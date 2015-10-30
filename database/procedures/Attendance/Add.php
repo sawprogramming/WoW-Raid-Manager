@@ -1,19 +1,20 @@
 <?php
-namespace Attendance;
-include_once plugin_dir_path(__FILE__)."../../../entities/AttendanceEntity.php";
+namespace WRO\Database\Procedures\Attendance;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/AttendanceTable.php");
+require_once(plugin_dir_path(__FILE__)."../../../entities/AttendanceEntity.php");
+use WRO\Entities            as Entities;
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class Add {
-	private function __construct() {}
-	
-	public function Run(\AttendanceEntity $entity) {
+class Add extends Procedures\StoredProcedure {	
+	public static function Run(Entities\AttendanceEntity $entity) {
 		global $wpdb;
-		$result = NULL;
+		$attendanceTable = new Tables\AttendanceTable();
 
-		$result = $wpdb->query($wpdb->prepare("
-			INSERT INTO Attendance (PlayerID, Date, Points)
-			VALUES (%d, %s, %f);
+		return $wpdb->query($wpdb->prepare("
+			INSERT INTO " . $attendanceTable->GetName() . " (PlayerID, Date, Points)
+			VALUES (%u, %s, %f);
 		", $entity->PlayerID, $entity->Date, $entity->Points));
-
-		return $result;
 	}
-}
+};

@@ -1,4 +1,6 @@
 <?php
+namespace WRO\Entities;
+
 class DisputeEntity {
 	public function __construct($id = NULL, $attendanceId = NULL, $points = NULL, $comment = NULL, $verdict = NULL) {
 		$this->ID = $id;

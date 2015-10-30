@@ -1,19 +1,20 @@
 <?php
-namespace ImportHistory;
-include_once plugin_dir_path(__FILE__)."../../../entities/ImportHistoryEntity.php";
+namespace WRO\Database\Procedures\ImportHistory;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/ImportHistoryTable.php");
+require_once(plugin_dir_path(__FILE__)."../../../entities/ImportHistoryEntity.php");
+use WRO\Entities            as Entities;
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class Add {
-	private function __construct() {}
-
-	public static function Run(\ImportHistoryEntity $entity) {
+class Add extends Procedures\StoredProcedure {
+	public static function Run(Entities\ImportHistoryEntity $entity) {
 		global $wpdb;
-		$result = NULL;
+		$importHistoryTable = new Tables\ImportHistoryTable();
 
-		$result = $wpdb->query($wpdb->prepare("
-			INSERT INTO ImportHistory (PlayerID, LastImported)
-        	VALUES (%d, %f);
+		return $wpdb->query($wpdb->prepare("
+			INSERT INTO " . $importHistoryTable->GetName() . " (PlayerID, LastImported)
+        	VALUES (%u, %f);
     	", $entity->PlayerID, $entity->LastImported));
-
-		return $result;
 	}
-}
+};

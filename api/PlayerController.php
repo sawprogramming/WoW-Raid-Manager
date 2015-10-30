@@ -1,9 +1,13 @@
 <?php
+namespace WRO\API;
 require_once(plugin_dir_path(__FILE__)."../services/PlayerService.php");
+use Exception;
+use WRO\Entities as Entities;
+use WRO\Services as Services;
 
 class PlayerController {
 	public function __construct() {
-		$this->service = new PlayerService();
+		$this->service = new Services\PlayerService();
 	}
 
 	public function Reroute () {
@@ -41,7 +45,7 @@ class PlayerController {
 	private function Add() {
 		global $wpdb;
 		$result = $data = NULL;
-		$entity = new PlayerEntity();
+		$entity = new Entities\PlayerEntity();
 
 		try {
 			// decode data
@@ -124,7 +128,7 @@ class PlayerController {
 	private function Update() {
 		global $wpdb;
 		$result = $data = NULL;
-		$entity = new PlayerEntity();
+		$entity = new Entities\PlayerEntity();
 
 		try {
 			// decode data
@@ -159,6 +163,6 @@ class PlayerController {
 	}
 
 	private $service;
-}
+};
 add_action('wp_ajax_wro_player', array(new PlayerController(), 'Reroute'));
 add_action('wp_ajax_nopriv_wro_player', array(new PlayerController(), 'Reroute'));

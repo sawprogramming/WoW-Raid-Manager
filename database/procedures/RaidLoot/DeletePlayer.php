@@ -1,18 +1,18 @@
 <?php
-namespace RaidLoot;
+namespace WRO\Database\Procedures\RaidLoot;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/RaidLootTable.php");
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class DeletePlayer {
-	private function __construct() {}
-
-	public function Run($id) {
+class DeletePlayer extends Procedures\StoredProcedure {
+	public static function Run($id) {
 		global $wpdb;
-		$result = NULL;
+		$raidLootTable = new Tables\RaidLootTable();
 
-		$result = $wpdb->query("
-			DELETE FROM RaidLoot 
-			WHERE PlayerID = {$id};
-		");
-
-		return $result;
+		return $wpdb->query($wpdb->prepare("
+			DELETE FROM " . $raidLootTable->GetName() . " 
+			WHERE PlayerID = %u;
+		", $id));
 	}
-}
+};

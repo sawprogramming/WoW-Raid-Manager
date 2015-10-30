@@ -1,18 +1,18 @@
 <?php
-namespace ImportHistory;
+namespace WRO\Database\Procedures\ImportHistory;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/ImportHistoryTable.php");
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class GetAll {
-	private function __construct() {}
-
+class GetAll extends Procedures\StoredProcedure {
 	public static function Run() {
 		global $wpdb;
-		$result = NULL;
+		$importHistoryTable = new Tables\ImportHistoryTable();
 
-		$result = $wpdb->get_results("
+		return $wpdb->get_results("
 			SELECT *
-			FROM ImportHistory;
+			FROM " . $importHistoryTable->GetName() . ";
 		");
-
-		return $result;
 	}
-}
+};

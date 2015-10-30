@@ -1,18 +1,16 @@
 <?php
-namespace User;
+namespace WRO\Database\Procedures\User;
+require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+use WRO\Database\Procedures as Procedures;
 
-class GetAll {
-	private function __construct() {}
-
+class GetAll extends Procedures\StoredProcedure {
 	public static function Run() {
 		global $wpdb;
-		$result = NULL;
 
-		$result = $wpdb->get_results("
+		return $wpdb->get_results("
 			SELECT ID, user_login as Username, user_nicename, display_name
-        	FROM ".$wpdb->prefix."users;
+        	FROM " . $wpdb->prefix . "users;
 		");
-
-		return $result;
 	}
-}
+};

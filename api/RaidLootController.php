@@ -1,9 +1,12 @@
 <?php
+namespace WRO\API;
 require_once(plugin_dir_path(__FILE__)."../services/RaidLootService.php");
+use Exception;
+use WRO\Services as Services;
 
 class RaidLootController {
 	public function __construct() {
-		$this->service = new RaidLootService();
+		$this->service_ = new Services\RaidLootService();
 	}
 
 	public function Reroute () {
@@ -32,16 +35,16 @@ class RaidLootController {
 
 		}
 
-		echo(json_encode($this->service->DeleteRow($id)));
+		echo(json_encode($this->service_->DeleteRow($id)));
 		die();
 	}
 
 	private function GetAll() {
-		echo(json_encode($this->service->GetAll()));
+		echo(json_encode($this->service_->GetAll()));
 		die();
 	}
 
-	private $service;
-}
+	private $service_;
+};
 add_action('wp_ajax_wro_raidloot', array(new RaidLootController(), 'Reroute'));
 add_action('wp_ajax_nopriv_wro_raidloot', array(new RaidLootController(), 'Reroute'));

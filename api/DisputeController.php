@@ -1,9 +1,13 @@
 <?php
+namespace WRO\API;
 require_once(plugin_dir_path(__FILE__)."../services/DisputeService.php");
+use Exception;
+use WRO\Entities as Entities;
+use WRO\Services as Services;
 
 class DisputeController {
 	public function __construct() {
-		$this->service = new DisputeService();
+		$this->service_ = new Services\DisputeService();
 	}
 
 	public function Reroute () {
@@ -44,7 +48,7 @@ class DisputeController {
 				throw new Exception("Missing expected properties for the Dispute Entity.");
 			}
 
-			$entity = new DisputeEntity(
+			$entity = new Entities\DisputeEntity(
 				NULL,
 				$data->AttendanceID,
 				$data->Points,
@@ -52,13 +56,13 @@ class DisputeController {
 			);
 			
 			// a user can only dispute their own records
-			if(!$this->service->Authorized($entity)) {
+			if(!$this->service_->Authorized($entity)) {
 				status_header(403);
 				echo("You can only dispute records that belong to you.");
 				die();
 			}
 
-			if($this->service->Add($entity) === FALSE) {
+			if($this->service_->Add($entity) === FALSE) {
 				throw new Exception($wpdb->last_error);
 			}
 
@@ -84,13 +88,13 @@ class DisputeController {
 			}
 			switch(strtolower($_REQUEST['func'])) {
 				case 'all': 
-					$result = $this->service->GetAll();
+					$result = $this->service_->GetAll();
 					break;
 				case 'resolved':
-					$result = $this->service->GetResolved();
+					$result = $this->service_->GetResolved();
 					break;
 				case 'unresolved':
-					$result = $this->service->GetUnresolved();
+					$result = $this->service_->GetUnresolved();
 					break;
 				default:
 					status_header(400);
@@ -116,7 +120,7 @@ class DisputeController {
 	private function Update() {
 		global $wpdb;
 		$result = $data = NULL;
-		$entity = new DisputeEntity();
+		$entity = new Entities\DisputeEntity();
 
 		try {
 			// decode request
@@ -136,11 +140,11 @@ class DisputeController {
 
 			// update record
 			if($entity->Verdict == true) {
-				if(($result = $this->service->Approve($entity)) === FALSE) {
+				if(($result = $this->service_->Approve($entity)) === FALSE) {
 					throw new Exception($wpdb->last_error);
 				}
 			} else {
-				if(($result = $this->service->Reject($entity)) === FALSE) {
+				if(($result = $this->service_->Reject($entity)) === FALSE) {
 					throw new Exception($wpdb->last_error);
 				}
 			}
@@ -155,7 +159,7 @@ class DisputeController {
 		die();
 	}
 
-	private $service;
-}
+	private $service_;
+};
 add_action('wp_ajax_wro_dispute', array(new DisputeController(), 'Reroute'));
 add_action('wp_ajax_nopriv_wro_dispute', array(new DisputeController(), 'Reroute'));

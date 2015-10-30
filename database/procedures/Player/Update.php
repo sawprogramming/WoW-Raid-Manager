@@ -1,28 +1,32 @@
 <?php
-namespace Player;
-include_once plugin_dir_path(__FILE__)."../../../entities/PlayerEntity.php";
+namespace WRO\Database\Procedures\Player;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/PlayerTable.php");
+require_once(plugin_dir_path(__FILE__)."../../../entities/PlayerEntity.php");
+use WRO\Entities            as Entities;
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class Update {
-	private function __construct() {}
-
-	public static function Run(\PlayerEntity $entity) {
+class Update extends Procedures\StoredProcedure {
+	public static function Run(Entities\PlayerEntity $entity) {
 		global $wpdb;
 		$result = NULL;
+		$playerTable = new Tables\PlayerTable();
 
 		if($entity->UserID === NULL) {
 			$result = $wpdb->query($wpdb->prepare("
-				UPDATE Player
+				UPDATE " . $playerTable->GetName() . "
 				SET UserID = NULL,
-					ClassID = %d, 
+					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s
 				WHERE ID = %d;
 			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
-				UPDATE Player
-				SET UserID = %d,
-					ClassID = %d, 
+				UPDATE " . $playerTable->GetName() . "
+				SET UserID = %u,
+					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s
 				WHERE ID = %d;
@@ -31,4 +35,4 @@ class Update {
 
 		return $result;
 	}
-}
+};

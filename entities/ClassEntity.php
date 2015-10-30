@@ -1,4 +1,6 @@
 <?php
+namespace WRO\Entities;
+
 class ClassEntity {
     function __construct($id = NULL, $name = NULL) {
         $this->ID   = $id;

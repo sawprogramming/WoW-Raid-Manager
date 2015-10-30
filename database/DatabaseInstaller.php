@@ -1,30 +1,36 @@
 <?php
-namespace Tables;
-require_once (plugin_dir_path(__FILE__)."./tables/Attendance.php");
-require_once (plugin_dir_path(__FILE__)."./tables/ImportHistory.php");
-require_once (plugin_dir_path(__FILE__)."./tables/Player.php");
-require_once (plugin_dir_path(__FILE__)."./tables/RaidLoot.php");
-require_once (plugin_dir_path(__FILE__)."./tables/Dispute.php");
-require_once (plugin_dir_path(__FILE__)."./tables/Class.php");
+namespace WRO\Database;
+require_once(plugin_dir_path(__FILE__)."tables/ClassTable.php");
+require_once(plugin_dir_path(__FILE__)."tables/PlayerTable.php");
+require_once(plugin_dir_path(__FILE__)."tables/DisputeTable.php");
+require_once(plugin_dir_path(__FILE__)."tables/RaidLootTable.php");
+require_once(plugin_dir_path(__FILE__)."tables/AttendanceTable.php");
+require_once(plugin_dir_path(__FILE__)."tables/ImportHistoryTable.php");
 
 class DatabaseInstaller {
-	private function __construct() {}
-
-	public static function Install() {
-		ClassTable::CreateTable();
-		PlayerTable::CreateTable();
-		AttendanceTable::CreateTable();
-		RaidLootTable::CreateTable();
-		DisputeTable::CreateTable();
-		ImportHistoryTable::CreateTable();
+	public function __construct() {
+		// *** ORDER IS IMPORTANT HERE ***
+		$this->_tables = array(
+			new Tables\ClassTable(),
+			new Tables\PlayerTable(),
+			new Tables\AttendanceTable(),
+			new Tables\RaidLootTable(),
+			new Tables\DisputeTable(),
+			new Tables\ImportHistoryTable()
+		);
 	}
 
-	public static function Uninstall() {
-		ImportHistoryTable::DropTable();
-		DisputeTable::DropTable();
-		RaidLootTable::DropTable();
-		AttendanceTable::DropTable();
-		PlayerTable::DropTable();
-		ClassTable::DropTable();
+	public function Install() {
+		for($i = 0; $i < count($this->_tables); ++$i) {	
+			$this->_tables[$i]->CreateTable();
+		}
 	}
-}
+
+	public function Uninstall() {
+		for($i = count($this->_tables) - 1; $i >= 0; --$i) {	
+			$this->_tables[$i]->DropTable();
+		}
+	}
+
+	private $_tables;
+};

@@ -1,35 +1,39 @@
 <?php
+namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.2.2
+ * Version: 2.2.3
  * Author: Steven Williams
  * License: GPL2
  */
-require_once (plugin_dir_path(__FILE__).'libs/PageTemplater.php');
-require_once (plugin_dir_path(__FILE__)."./WowAPI.php");
-require_once (plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
-require_once (plugin_dir_path(__FILE__)."./database/DatabaseSeeder.php");
-require_once (plugin_dir_path(__FILE__)."./services/RaidLootService.php");
-require_once (plugin_dir_path(__FILE__)."./api/AttendanceController.php");
-require_once (plugin_dir_path(__FILE__)."./api/PlayerController.php");
-require_once (plugin_dir_path(__FILE__)."./api/RaidLootController.php");
-require_once (plugin_dir_path(__FILE__)."./api/UserController.php");
-require_once (plugin_dir_path(__FILE__)."./api/ClassController.php");
-require_once (plugin_dir_path(__FILE__)."./api/DisputeController.php");
-require_once (plugin_dir_path(__FILE__)."./dashboard.php");
+require_once(plugin_dir_path(__FILE__).'libs/PageTemplater.php');
+require_once(plugin_dir_path(__FILE__)."./WowAPI.php");
+require_once(plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
+require_once(plugin_dir_path(__FILE__)."./database/DatabaseSeeder.php");
+require_once(plugin_dir_path(__FILE__)."./services/RaidLootService.php");
+require_once(plugin_dir_path(__FILE__)."./api/AttendanceController.php");
+require_once(plugin_dir_path(__FILE__)."./api/PlayerController.php");
+require_once(plugin_dir_path(__FILE__)."./api/RaidLootController.php");
+require_once(plugin_dir_path(__FILE__)."./api/UserController.php");
+require_once(plugin_dir_path(__FILE__)."./api/ClassController.php");
+require_once(plugin_dir_path(__FILE__)."./api/DisputeController.php");
+require_once(plugin_dir_path(__FILE__)."./dashboard.php");
 
 class WRO {
     // Installation functions
     public function Install() {
-        Tables\DatabaseInstaller::Install();
-        Tables\DatabaseSeeder::Seed();
+        $dbInstaller = new Database\DatabaseInstaller();
+        $dbInstaller->Install();
+        Database\DatabaseSeeder::Seed();
         wp_schedule_event(time(), 'daily', 'update_guild_loot');
     }
 
     public function Uninstall() {
+        $dbInstaller = new Database\DatabaseInstaller();
+
         if(false) {
-            Tables\DatabaseInstaller::Uninstall();
+            $dbInstaller->Uninstall();
         }
         wp_clear_scheduled_hook('update_guild_loot');
     }
@@ -53,7 +57,7 @@ class WRO {
         
         // add scripts
         wp_enqueue_script('blah',        "$appUrl/libs/js/jquery-2.1.3.min.js");
-        wp_enqueue_script('angular',     "$appUrl/libs/js/angular.js");
+        wp_enqueue_script('angular',     "$appUrl/libs/js/angular.min.js");
         wp_enqueue_script('angularmsgs', "$appUrl/libs/js/angular-messages.js");
         wp_enqueue_script('xregexp',     "$appUrl/libs/js/xregexp-min.js");
         wp_enqueue_script('ucb',         "$appUrl/libs/js/unicode-base.js");
@@ -71,7 +75,7 @@ class WRO {
 
     // AJAX functions   
     public function UpdateGuildLoot() { 
-        $raidLootSvc = new RaidLootService();
+        $raidLootSvc = new Services\RaidLootService();
 
         $raidLootSvc->FetchLoot();
     }
@@ -150,10 +154,10 @@ class WRO {
         wp_enqueue_script('ApproveDisputeModalCtrl',   "$appUrl/scripts/app/dispute/controllers/ApproveDisputeModalCtrl.js");
         wp_enqueue_script('RejectDisputeModalCtrl',    "$appUrl/scripts/app/dispute/controllers/RejectDisputeModalCtrl.js");
     }
-}
-register_activation_hook(__FILE__, array('WRO', 'Install'));
-register_deactivation_hook(__FILE__, array('WRO', 'Uninstall'));
-add_action('update_guild_loot', array('WRO', 'UpdateGuildLoot'));
-add_action('wp_enqueue_scripts', array('WRO', 'EnqueueScriptsStyles'));
-add_action('admin_enqueue_scripts', array('WRO', 'AdminEnqueueScriptsStyles'));
+};
+register_activation_hook(__FILE__, array('WRO\WRO', 'Install'));
+register_deactivation_hook(__FILE__, array('WRO\WRO', 'Uninstall'));
+add_action('update_guild_loot', array('WRO\WRO', 'UpdateGuildLoot'));
+add_action('wp_enqueue_scripts', array('WRO\WRO', 'EnqueueScriptsStyles'));
+add_action('admin_enqueue_scripts', array('WRO\WRO', 'AdminEnqueueScriptsStyles'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

@@ -1,4 +1,6 @@
 <?php
+namespace WRO\Entities;
+
 class AttendanceEntity {
 	public function __construct($id = NULL, $playerId = NULL, $date = NULL, $points = NULL) {
 		$this->ID = $id;

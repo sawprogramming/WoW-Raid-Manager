@@ -1,4 +1,6 @@
 <?php
+namespace WRO\Entities;
+
 class RaidLootEntity {
 	public function __construct($id = NULL, $playerId = NULL, $item = NULL, $date = NULL) {
 		$this->ID = $id;

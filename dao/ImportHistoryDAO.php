@@ -1,29 +1,32 @@
 <?php
-include_once plugin_dir_path(__FILE__)."../entities/ImportHistoryEntity.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Add.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/DeletePlayer.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Get.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/GetAll.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Update.php";
+namespace WRO\DAO;
+require_once(plugin_dir_path(__FILE__)."../entities/ImportHistoryEntity.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Add.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Get.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/GetAll.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/Update.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/ImportHistory/DeletePlayer.php");
+use WRO\Entities                          as Entities;
+use WRO\Database\Procedures\ImportHistory as Procedures;
 
 class ImportHistoryDAO {
-    public function Add(ImportHistoryEntity $entity) {
-        return ImportHistory\Add::Run($entity);
+    public function Add(Entities\ImportHistoryEntity $entity) {
+        return Procedures\Add::Run($entity);
     }
 
     public function Get($playerId) {
-        return ImportHistory\Get::Run($playerId);
+        return Procedures\Get::Run($playerId);
     }
 
     public function GetAll() {        
-        return ImportHistory\GetAll::Run();
+        return Procedures\GetAll::Run();
     }
 
     public function DeletePlayer($id) {
-        return ImportHistory\DeletePlayer::Run($id);
+        return Procedures\DeletePlayer::Run($id);
     }
 
-    public function Update(ImportHistoryEntity $entity) {
-        return ImportHistory\Update::Run($entity);
+    public function Update(Entities\ImportHistoryEntity $entity) {
+        return Procedures\Update::Run($entity);
     }
-}
+};

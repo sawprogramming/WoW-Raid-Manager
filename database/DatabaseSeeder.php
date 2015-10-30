@@ -1,5 +1,6 @@
 <?php
-namespace Tables;
+namespace WRO\Database;
+include_once plugin_dir_path(__FILE__)."tables/ClassTable.php";
 
 class DatabaseSeeder {
 	private function __construct() {}
@@ -10,9 +11,10 @@ class DatabaseSeeder {
 
 	private static function SeedClassTable() {
 		global $wpdb;
-
+		$classTable = new Tables\ClassTable();
+		
 		$wpdb->query("
-			INSERT IGNORE INTO Class (ID, Name)
+			INSERT IGNORE INTO " . $classTable->GetName() . " (ID, Name)
 			VALUES (1, 'Druid'),
 				   (2, 'Hunter'),
 				   (3, 'Mage'),
@@ -27,4 +29,4 @@ class DatabaseSeeder {
 			       (12, 'Demon Hunter');
 		");
 	}
-}
+};

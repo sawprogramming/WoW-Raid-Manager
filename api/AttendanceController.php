@@ -1,9 +1,13 @@
 <?php
+namespace WRO\API;
 require_once(plugin_dir_path(__FILE__)."../services/AttendanceService.php");
+use Exception;
+use WRO\Entities as Entities;
+use WRO\Services as Services;
 
 class AttendanceController {
 	public function __construct() {
-		$this->service = new AttendanceService();
+		$this->service = new Services\AttendanceService();
 	}
 
 	public function Reroute () {
@@ -57,7 +61,7 @@ class AttendanceController {
 						throw new Exception("Missing expected properties for Daily Attendance Entity.");
 					}
 
-					array_push($entities, new AttendanceEntity(
+					array_push($entities, new Entities\AttendanceEntity(
 						NULL,
 						$entity->ID,
 						$entity->Date,
@@ -78,7 +82,7 @@ class AttendanceController {
 					throw new Exception("Missing expected properties for the Attendance Entity.");
 				}
 
-				$entity = new AttendanceEntity(
+				$entity = new Entities\AttendanceEntity(
 					NULL,
 					$data->PlayerID,
 					$data->Date,
@@ -179,7 +183,7 @@ class AttendanceController {
 	private function Update() {
 		global $wpdb;
 		$result = $data = NULL;
-		$entity = new AttendanceEntity();
+		$entity = new Entities\AttendanceEntity();
 
 		try {
 			// decode request
@@ -214,6 +218,6 @@ class AttendanceController {
 	}
 
 	private $service;
-}
+};
 add_action('wp_ajax_wro_attendance', array(new AttendanceController(), 'Reroute'));
 add_action('wp_ajax_nopriv_wro_attendance', array(new AttendanceController(), 'Reroute'));

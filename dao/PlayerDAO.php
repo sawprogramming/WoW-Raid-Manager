@@ -1,29 +1,32 @@
 <?php
-include_once plugin_dir_path(__FILE__)."../entities/PlayerEntity.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/Player/Add.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/Player/Delete.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/Player/Get.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/Player/GetAll.php";
-include_once plugin_dir_path(__FILE__)."../database/procedures/Player/Update.php";
+namespace WRO\DAO;
+require_once(plugin_dir_path(__FILE__)."../entities/PlayerEntity.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Player/Add.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Player/Get.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Player/GetAll.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Player/Delete.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Player/Update.php");
+use WRO\Entities                   as Entities;
+use WRO\Database\Procedures\Player as Procedures;
 
 class PlayerDAO  {   
-    public function Add(PlayerEntity $entity) {
-        return Player\Add::Run($entity);
+    public function Add(Entities\PlayerEntity $entity) {
+        return Procedures\Add::Run($entity);
     }
 
     public function Get($id) {
-        return Player\Get::Run($id);   
+        return Procedures\Get::Run($id);   
     }
 
     public function GetAll() {
-        return Player\GetAll::Run();
+        return Procedures\GetAll::Run();
     }
 
     public function Delete($id) {
-        return Player\Delete::Run($id);
+        return Procedures\Delete::Run($id);
     }
 
-    public function Update(PlayerEntity $entity) {
-        return Player\Update::Run($entity);
+    public function Update(Entities\PlayerEntity $entity) {
+        return Procedures\Update::Run($entity);
     }
-}
+};

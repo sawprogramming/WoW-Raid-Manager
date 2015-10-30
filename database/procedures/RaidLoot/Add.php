@@ -1,19 +1,20 @@
 <?php
-namespace RaidLoot;
-include_once plugin_dir_path(__FILE__)."../../../entities/RaidLootEntity.php";
+namespace WRO\Database\Procedures\RaidLoot;
+require_once(plugin_dir_path(__FILE__)."../StoredProcedure.php");
+require_once(plugin_dir_path(__FILE__)."../../tables/RaidLootTable.php");
+require_once(plugin_dir_path(__FILE__)."../../../entities/RaidLootEntity.php");
+use WRO\Entities            as Entities;
+use WRO\Database\Tables     as Tables;
+use WRO\Database\Procedures as Procedures;
 
-class Add {
-	private function __construct() {}
-
-	public static function Run(\RaidLootEntity $entity) {
+class Add extends Procedures\StoredProcedure {
+	public static function Run(Entities\RaidLootEntity $entity) {
 		global $wpdb;
-		$result = NULL;
+		$raidLootTable = new Tables\RaidLootTable();
 
-		$result = $wpdb->query($wpdb->prepare("
-			INSERT INTO RaidLoot (PlayerID, Item, Date)
-        	VALUES (%d, %s, %s);
+		return $wpdb->query($wpdb->prepare("
+			INSERT INTO " . $raidLootTable->GetName() . " (PlayerID, Item, Date)
+        	VALUES (%u, %s, %s);
     	", $entity->PlayerID, $entity->Item, $entity->Date));
-
-		return $result;
 	}
-}
+};

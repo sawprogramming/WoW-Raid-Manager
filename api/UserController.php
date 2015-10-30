@@ -1,9 +1,11 @@
 <?php
+namespace WRO\API;
 require_once(plugin_dir_path(__FILE__)."../services/UserService.php");
+use WRO\Services as Services;
 
 class UserController {
 	public function __construct() {
-		$this->service = new UserService();
+		$this->service = new Services\UserService();
 	}
 
 	public function Reroute() {
@@ -25,5 +27,5 @@ class UserController {
 	}
 
 	private $service;
-}
+};
 add_action('wp_ajax_wro_user', array(new UserController(), 'Reroute'));
