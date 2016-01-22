@@ -4,6 +4,10 @@ app.controller("UserUICtrl", function($scope, $uibModal, AttendanceSvc, RaidLoot
 		RaidLoot: [],
 		Range: {},
 		OrderMode: 'Name',
+		Settings: {
+			ShowInactivePlayers:    true,
+			ShowAbsoluteAttendance: false
+		},
 		AjaxContent: {
 			Breakdown: { status: 'loading', message: '' },
 			RaidLoot:  { status: 'loading', message: '' }
@@ -18,17 +22,19 @@ app.controller("UserUICtrl", function($scope, $uibModal, AttendanceSvc, RaidLoot
     }
     $scope.RefreshLootLinks = RefreshLootLinks;
 
-    $scope.ChangeSortMode = function(newMode) {
-    	if(vm.SortMode == newMode) return;
-
-
+    $scope.ok = function(entity) { 
+    	if(entity.Active == false) return vm.Settings.ShowInactivePlayers;
+    	else                       return true;
     }
 
-    $scope.ChangeRange = function() {
-		vm.AjaxContent.RaidLoot.status  = 'loading';
+    $scope.ChangeAbsolute = function() {
+    	var promise;
 		vm.AjaxContent.Breakdown.status = 'loading';
 
-    	AttendanceSvc.GetAveragesInRange(vm.Range.StartDate, vm.Range.EndDate)
+		if(vm.Settings.ShowAbsoluteAttendance == true) promise = AttendanceSvc.GetAbsoluteAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
+		else                                           promise = AttendanceSvc.GetAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
+		
+    	promise
     		.success(function(data) {
 				vm.BreakdownEntities = data;
 
@@ -43,6 +49,12 @@ app.controller("UserUICtrl", function($scope, $uibModal, AttendanceSvc, RaidLoot
 				vm.AjaxContent.Breakdown.status = 'error';
 				vm.AjaxContent.Breakdown.message = errmsg;
     		});
+    }
+
+    $scope.ChangeRange = function() {
+		vm.AjaxContent.RaidLoot.status  = 'loading';
+
+		$scope.ChangeAbsolute();
 
 		RaidLootSvc.GetInRange(vm.Range.StartDate, vm.Range.EndDate)
 			.success(function(data) {

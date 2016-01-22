@@ -155,13 +155,15 @@ class AttendanceController {
 					if(!isset($_REQUEST['id']))	throw new Exception("Missing the required 'id' parameter for this function.");
 					else                        $result = $this->service->GetChart($_REQUEST['id']);
 					break;
+				case 'absolute':
 				case 'range':
 					$startDate = $endDate = null;
 
 					if(isset($_REQUEST['startDate'])) $startDate = (new \DateTime($_REQUEST['startDate']))->format('Y-m-d');
 					if(isset($_REQUEST['endDate']))   $endDate   = (new \DateTime($_REQUEST['endDate']))->format('Y-m-d');
 
-					$result = $this->service->GetAveragesInRange($startDate, $endDate);
+					if($_REQUEST['func'] == 'absolute') $result = $this->service->GetAbsoluteAveragesInRange($startDate, $endDate);
+					else                                $result = $this->service->GetAveragesInRange($startDate, $endDate);
 					break;
 				default:
 					status_header(400);

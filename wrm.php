@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.1
+ * Version: 2.3.2
  * Author: Steven Williams
  * License: GPL2
  */
@@ -165,13 +165,14 @@ class WRO {
 
         // enqueue scripts
         wp_enqueue_script('app');
-        wp_enqueue_script('DateSvc',        "$appUrl/scripts/app/common/services/DateSvc.js");
-        wp_enqueue_script('TimeSvc',        "$appUrl/scripts/app/common/services/TimeSvc.js");
-        wp_enqueue_script('rangeSelect',    "$appUrl/scripts/app/common/directives/rangeSelect.js");
-        wp_enqueue_script('userSelect',     "$appUrl/scripts/app/common/directives/userSelect.js");
-        wp_enqueue_script('classSelect',    "$appUrl/scripts/app/common/directives/classSelect.js");
-        wp_enqueue_script('realmSelect',    "$appUrl/scripts/app/common/directives/realmSelect.js");
-        wp_enqueue_script('playerSelect',   "$appUrl/scripts/app/player/directives/playerSelect.js");
+        wp_enqueue_script('InactivePlayers',  "$appUrl/scripts/app/user-ui/inactivePlayers.filter.js");
+        wp_enqueue_script('DateSvc',          "$appUrl/scripts/app/common/services/DateSvc.js");
+        wp_enqueue_script('TimeSvc',          "$appUrl/scripts/app/common/services/TimeSvc.js");
+        wp_enqueue_script('rangeSelect',      "$appUrl/scripts/app/common/directives/rangeSelect.js");
+        wp_enqueue_script('userSelect',       "$appUrl/scripts/app/common/directives/userSelect.js");
+        wp_enqueue_script('classSelect',      "$appUrl/scripts/app/common/directives/classSelect.js");
+        wp_enqueue_script('realmSelect',      "$appUrl/scripts/app/common/directives/realmSelect.js");
+        wp_enqueue_script('playerSelect',     "$appUrl/scripts/app/player/directives/playerSelect.js");
         wp_enqueue_script('ajaxContent');
         wp_enqueue_script('ajaxForm');
         wp_enqueue_script('UserSvc');

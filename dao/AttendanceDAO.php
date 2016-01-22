@@ -12,6 +12,7 @@ require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBre
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/UpdatePoints.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAveragesInRange.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAbsoluteAveragesInRange.php");
 use WRO\Entities                       as Entities;
 use WRO\Database\Procedures\Attendance as Procedures;
 
@@ -22,6 +23,10 @@ class AttendanceDAO {
 
 	public function Get($id) {
 		return Procedures\Get::Run($id);
+	}
+
+	public function GetAbsoluteAveragesInRange($startRange, $endRange) {
+		return Procedures\GetAbsoluteAveragesInRange::Run($startRange, $endRange);
 	}
 
 	public function GetAll() {

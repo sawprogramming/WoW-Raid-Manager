@@ -44,9 +44,28 @@
 			    <div class="panel panel-primary panel-dark">
 			    	<div class="panel-heading">
 						<span class="glyphicon glyphicon-book"></span> Attendance
+					    <div class="btn-group pull-right" uib-dropdown style="margin-left: 5px;">
+					    	<button type="button" class="btn btn-xs btn-default" uib-dropdown-toggle>
+					    		<span class="glyphicon glyphicon-cog text-black"></span>
+					    	</button>
+					      	<ul class="uib-dropdown-menu" style="width: 18em">
+					        	<li>
+					        		<a href="javascript:void(0)">
+					        			Show Inactive Players
+					        			<input type="checkbox" class="pull-right" ng-model="model.Settings.ShowInactivePlayers">
+			        				</a>
+				        		</li>
+					        	<li>
+					        		<a href="javascript:void(0)">
+					        			Show Absolute Attendance
+					        			<input type="checkbox" class="pull-right" ng-model="model.Settings.ShowAbsoluteAttendance" ng-change="ChangeAbsolute()">
+				        			</a>
+					        	</li>
+					     	</ul>
+					    </div>
 					    <div class="btn-group pull-right" uib-dropdown>
 					    	<button type="button" class="btn btn-xs btn-default" uib-dropdown-toggle>
-					    		<span ng-switch="model.OrderMode" style="color: black;">
+					    		<span ng-switch="model.OrderMode" class="text-black">
 					    			<span ng-switch-when="Name" class="glyphicon glyphicon-sort-by-alphabet"></span>
 					    			<span ng-switch-when="-Name" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
 					    			<span ng-switch-when="Average" class="glyphicon glyphicon-sort-by-order"></span>
@@ -65,7 +84,7 @@
 			    	<div class="panel-body sublime">
 			    		<ajax-content status="model.AjaxContent.Breakdown" src="model.BreakdownEntities">
 					        <ul class="player-columns">
-					        	<li ng-repeat="entity in model.BreakdownEntities | orderBy: model.OrderMode" ng-class="{ inactive: entity.Active == false }">
+					        	<li ng-repeat="entity in model.BreakdownEntities | inactivePlayers: model.Settings.ShowInactivePlayers | orderBy: model.OrderMode" ng-class="{ inactive: entity.Active == false }">
 					        		<span class="pull-right"><span ng-bind="entity.Average"></span>%</span>
 					        		<span ng-class="entity.ClassID" ng-bind="entity.Name" ng-click="ShowDetails(entity)"></span>
 					        	</li>

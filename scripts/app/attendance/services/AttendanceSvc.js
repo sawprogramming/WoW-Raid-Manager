@@ -41,6 +41,18 @@ app.factory("AttendanceSvc", function($http) {
 				}
 			});
 		},
+		GetAbsoluteAveragesInRange: function(startDate, endDate) {
+			return $http({
+				method: 'GET',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_attendance',
+					'func': 'absolute',
+					'startDate': startDate,
+					'endDate': endDate
+				}
+			});
+		},
 		GetAveragesInRange: function(startDate, endDate) {
 			return $http({
 				method: 'GET',

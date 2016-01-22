@@ -40,6 +40,15 @@ class AttendanceService {
     }
 
     // Parameters:
+    //   Date startDate - Starting date of the range to retreive the average attendance percentage for.
+    //   Date endDate   - Ending date of the range to retrieve the average attendance percentage for.
+    //
+    // Returns the absolute average attendance percentage for each Player that was active during the supplied range.
+    public function GetAbsoluteAveragesInRange($startDate, $endDate) {
+        return $this->dao_->GetAbsoluteAveragesInRange($startDate, $endDate);
+    }
+
+    // Parameters:
     //   unsigned long id - PlayerID to retrieve the Attendance records for.
     //
     // Returns all of the AttendanceEntity objects from the database belonging to the passed in PlayerID.
