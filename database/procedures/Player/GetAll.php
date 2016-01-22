@@ -12,12 +12,19 @@ class GetAll extends Procedures\StoredProcedure {
 		$classTable  = new Tables\ClassTable();
 		$playerTable = new Tables\PlayerTable();
 
-		return $wpdb->get_results("
-			SELECT pl.ID, pl.UserID, wp.user_login as Username, pl.ClassID, cl.Name as ClassName, pl.Name
+		$result = $wpdb->get_results("
+			SELECT pl.ID, pl.UserID, wp.user_login as Username, pl.ClassID, cl.Name as ClassName, pl.Name, pl.Active
 			FROM " .    $playerTable->GetName() .  " as pl
 				JOIN " . $classTable->GetName() .  " as cl ON pl.ClassID = cl.ID
 				LEFT JOIN " . $wpdb->prefix . "users as wp ON pl.UserID = wp.ID
 			ORDER BY pl.ID ASC;
 		");
+
+		// set types
+		foreach($result as $player) {
+			$player->Active = (bool)$player->Active;
+		}
+
+		return $result;
 	}
 };

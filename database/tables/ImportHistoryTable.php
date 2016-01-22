@@ -8,11 +8,11 @@ class ImportHistoryTable extends Table {
 		$charset_collate = $wpdb->get_charset_collate();
         
         \dbDelta("
-            CREATE TABLE IF NOT EXISTS " . $this->GetName() . " (
+            CREATE TABLE " . $this->GetName() . " (
                 ID             bigint(20)   unsigned   NOT NULL   AUTO_INCREMENT,
 			    PlayerID       bigint(20)   unsigned   NOT NULL,
 			    LastImported   double       unsigned   NULL,
-			    PRIMARY KEY  ID (ID)
+			    PRIMARY KEY  (ID)
             ) " . $charset_collate . ";
         ");
 	}

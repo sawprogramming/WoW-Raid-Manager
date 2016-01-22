@@ -19,18 +19,20 @@ class Update extends Procedures\StoredProcedure {
 				SET UserID = NULL,
 					ClassID = %u, 
 				    Name = %s,
-				    Icon = %s
+				    Icon = %s,
+				    Active = %d
 				WHERE ID = %u;
-			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->ID));
+			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $playerTable->GetName() . "
 				SET UserID = %u,
 					ClassID = %u, 
 				    Name = %s,
-				    Icon = %s
+				    Icon = %s,
+				    Active = %d
 				WHERE ID = %u;
-			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->ID));
+			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->ID));
 		}
 
 		return $result;

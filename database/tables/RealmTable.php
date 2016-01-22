@@ -8,11 +8,11 @@ class RealmTable extends Table {
 		$charset_collate = $wpdb->get_charset_collate();
         
         \dbDelta("
-            CREATE TABLE IF NOT EXISTS " . $this->GetName() . " (
+            CREATE TABLE " . $this->GetName() . " (
                 Slug     varchar(32)   NOT NULL,
 			    Name     tinytext      NOT NULL,
 			    Region   varchar(2)    NOT NULL,
-			    PRIMARY KEY  (Slug, Region)
+			    PRIMARY KEY  (Slug,Region)
             ) " . $charset_collate . ";
         ");
 	}

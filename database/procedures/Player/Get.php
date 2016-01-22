@@ -12,7 +12,7 @@ class Get extends Procedures\StoredProcedure {
 		$playerTable = new Tables\PlayerTable();
 
 		return $wpdb->get_row($wpdb->prepare("
-			SELECT pl.ID, pl.UserID, wp.user_login as Username, pl.ClassID, cl.Name as ClassName, pl.Name
+			SELECT pl.ID, pl.UserID, wp.user_login as Username, pl.ClassID, cl.Name as ClassName, pl.Name, pl.Active
 			FROM " .    $playerTable->GetName() .  " as pl
 				JOIN " . $classTable->GetName() .  " as cl ON pl.ClassID = cl.ID
 				LEFT JOIN " . $wpdb->prefix . "users as wp ON pl.UserID = wp.ID

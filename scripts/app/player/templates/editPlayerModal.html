@@ -9,7 +9,13 @@
 		<form name="formEditPlayer" novalidate>
 			<div class="form-group">
 				<label class="control-label col-xs-3">ID:</label>
-				<span class="col-xs-9 form-control-static" ng-bind="row.ID"></span>
+				<span class="col-xs-3 form-control-static" ng-bind="row.ID"></span>
+				<div class="col-xs-6">
+		            <div class="btn-group pull-right" role="group">
+		                <label class="btn btn-danger"  ng-model="row.Active" uib-btn-radio="false">Inactive</label>
+		                <label class="btn btn-success" ng-model="row.Active" uib-btn-radio="true">Active</label>
+	            </div>
+	            </div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-3">User Name:</label>

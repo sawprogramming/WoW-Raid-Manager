@@ -145,6 +145,7 @@ class PlayerController {
 			$entity->UserID = $data->UserID;
 			$entity->ClassID = $data->ClassID;
 			$entity->Name = $data->Name;
+			$entity->Active = $data->Active;
 
 			// update record
 			if(($result = $this->service->Update($entity)) === FALSE) {

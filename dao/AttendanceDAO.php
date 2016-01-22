@@ -8,7 +8,6 @@ require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/Update
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetChart.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeleteRow.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllById.php");
-require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllByTier.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBreakdown.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/UpdatePoints.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php");

@@ -65,7 +65,7 @@
 			    	<div class="panel-body sublime">
 			    		<ajax-content status="model.AjaxContent.Breakdown" src="model.BreakdownEntities">
 					        <ul class="player-columns">
-					        	<li ng-repeat="entity in model.BreakdownEntities | orderBy: model.OrderMode">
+					        	<li ng-repeat="entity in model.BreakdownEntities | orderBy: model.OrderMode" ng-class="{ inactive: entity.Active == false }">
 					        		<span class="pull-right"><span ng-bind="entity.Average"></span>%</span>
 					        		<span ng-class="entity.ClassID" ng-bind="entity.Name" ng-click="ShowDetails(entity)"></span>
 					        	</li>

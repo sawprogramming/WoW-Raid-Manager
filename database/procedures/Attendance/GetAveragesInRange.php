@@ -16,7 +16,7 @@ class GetAveragesInRange extends Procedures\StoredProcedure {
 		// ugly solution because we have to go through WordPress
 		if($startDate === NULL && $endDate === NULL) {
 			$result = $wpdb->get_results("
-				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average
+				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average, pl.Active
 				FROM " . $attendanceTable->GetName() . " as at
 					JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 					JOIN " . $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
@@ -24,7 +24,7 @@ class GetAveragesInRange extends Procedures\StoredProcedure {
 			");
 		} else if ($startDate === NULL && $endDate !== NULL) {
 			$result = $wpdb->get_results($wpdb->prepare("
-				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average
+				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average, pl.Active
 				FROM " . $attendanceTable->GetName() . " as at
 					JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 					JOIN " . $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
@@ -33,7 +33,7 @@ class GetAveragesInRange extends Procedures\StoredProcedure {
 			", $endDate));
 		} else if ($startDate !== NULL && $endDate === NULL) {
 			$result = $wpdb->get_results($wpdb->prepare("
-				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average
+				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average, pl.Active
 				FROM " . $attendanceTable->GetName() . " as at
 					JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 					JOIN " . $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
@@ -42,7 +42,7 @@ class GetAveragesInRange extends Procedures\StoredProcedure {
 			", $startDate));
 		} else {
 			$result = $wpdb->get_results($wpdb->prepare("
-				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average
+				SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, FLOOR((SUM(Points) / COUNT(Points)) * 100) as Average, pl.Active
 				FROM " . $attendanceTable->GetName() . " as at
 					JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 					JOIN " . $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
@@ -53,6 +53,7 @@ class GetAveragesInRange extends Procedures\StoredProcedure {
 
 		// set types
 		foreach($result as $player) {
+			$player->Active  = (bool)$player->Active;
 			$player->Average = (int)$player->Average;
 		}
 

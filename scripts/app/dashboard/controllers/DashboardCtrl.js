@@ -28,15 +28,17 @@ app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toast
 				vm.DailyEntities = [];
 
 				for(var i = 0; i < data.length; ++i) {
-					vm.DailyEntities.push({
-						Points: 1.00,
-						ID: data[i].ID,
-						Date: new Date(),
-						Name: data[i].Name,
-						ClassID: data[i].ClassID,
-						ClassName: data[i].ClassName,
-						ClassStyle: ClassIdToCss(parseInt(data[i].ClassID))
-					});
+					if(data[i].Active) {
+						vm.DailyEntities.push({
+							Points: 1.00,
+							ID: data[i].ID,
+							Date: new Date(),
+							Name: data[i].Name,
+							ClassID: data[i].ClassID,
+							ClassName: data[i].ClassName,
+							ClassStyle: ClassIdToCss(parseInt(data[i].ClassID))
+						});
+					}
 				}
 
 				vm.AjaxContent.Daily.status = 'success';

@@ -142,3 +142,4 @@
 .text-red   { color: red; }
 .text-black { color: black; }
 .bottom-buffer { margin-bottom: 10px; }
+.inactive { opacity: 0.5; }

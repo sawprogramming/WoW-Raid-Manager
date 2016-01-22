@@ -8,10 +8,10 @@ class ClassTable extends Table {
 		$charset_collate = $wpdb->get_charset_collate();
         
         \dbDelta("
-            CREATE TABLE IF NOT EXISTS " . $this->GetName() . " (
+            CREATE TABLE " . $this->GetName() . " (
                 ID     tinyint(2)   unsigned   NOT NULL   AUTO_INCREMENT,
 			    Name   tinytext                NOT NULL,
-			    PRIMARY KEY  ID (ID)
+			    PRIMARY KEY  (ID)
             ) " . $charset_collate . ";
         ");
 	}

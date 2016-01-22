@@ -9,16 +9,18 @@ class PlayerTable extends Table {
 		$charset_collate = $wpdb->get_charset_collate();
         
         \dbDelta("
-			CREATE TABLE IF NOT EXISTS " . $this->GetName() . " (
+			CREATE TABLE " . $this->GetName() . " (
 			    ID        bigint(20)   unsigned   NOT NULL   AUTO_INCREMENT,
 			    UserID    bigint(20)   unsigned   NULL,
 			    ClassID   tinyint(2)   unsigned   NOT NULL,
 			    Name      tinytext                NOT NULL,
 			    Icon      text                    NULL,
-			    PRIMARY KEY  ID (ID),
-			    FOREIGN KEY (ClassID) REFERENCES " . $classTable->GetName() . "(ID),
-			    FOREIGN KEY (UserID)  REFERENCES " . $wpdb->prefix .          "users(ID)
+			    Active    bool                    NOT NULL   DEFAULT 1,
+			    PRIMARY KEY  (ID)
             ) ". $charset_collate . ";
         ");
+
+ 		$wpdb->query("ALTER TABLE " . $this->GetName() . " ADD FOREIGN KEY (ClassID) REFERENCES " . $classTable->GetName() . "(ID);");
+ 		$wpdb->query("ALTER TABLE " . $this->GetName() . " ADD FOREIGN KEY (UserID) REFERENCES " . $wpdb->prefix . "users(ID);");
 	}
 };

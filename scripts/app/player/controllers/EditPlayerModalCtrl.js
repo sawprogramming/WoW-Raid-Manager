@@ -3,6 +3,7 @@ app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr
 		$scope.row = {
 			ID: entity.ID,
 			Name: entity.Name,
+			Active: entity.Active,
 			UserID: entity.UserID,
 			ClassID: entity.ClassID,
 			ClassName: entity.ClassName,
@@ -21,6 +22,7 @@ app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr
 			PlayerSvc.EditPlayer($scope.row)
 				.success(function(data) {
 					entity.Name = data.Name;
+					entity.Active = data.Active;
 					entity.UserID = data.UserID;
 					entity.ClassID = data.ClassID;
 					entity.Username = data.Username;
