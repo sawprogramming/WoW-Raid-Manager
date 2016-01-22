@@ -64,7 +64,7 @@ class AttendanceController {
 					array_push($entities, new Entities\AttendanceEntity(
 						NULL,
 						$entity->ID,
-						$entity->Date,
+						(new \DateTime($entity->Date))->format('Y-m-d'),
 						$entity->Points
 					));
 				}
@@ -85,7 +85,7 @@ class AttendanceController {
 				$entity = new Entities\AttendanceEntity(
 					NULL,
 					$data->PlayerID,
-					$data->Date,
+					(new \DateTime($data->Date))->format('Y-m-d'),
 					$data->Points
 				);
 
@@ -144,20 +144,24 @@ class AttendanceController {
 			}
 			switch(strtolower($_REQUEST['func'])) {
 				case 'all': 
-					if(isset($_REQUEST['id'])) {
-						$result = $this->service->GetAllById($_REQUEST['id']);
-					} else {
-						$result = $this->service->GetAll();
-					}
+					if(isset($_REQUEST['id'])) $result = $this->service->GetAllById($_REQUEST['id']);
+					else  					   $result = $this->service->GetAll();
 					break;
 				case 'breakdown':
-					$result = $this->service->GetBreakdown();
+					if(!isset($_REQUEST['id'])) throw new Exception("Missing the required 'id' parameter for this function.");
+					else                        $result = $this->service->GetBreakdown($_REQUEST['id']);
 					break;
 				case 'chart':
-					if(!isset($_REQUEST['id'])) {
-						throw new Exception("Could not find parameter with name 'id'.");
-					}
-					$result = $this->service->GetChart($_REQUEST['id']);
+					if(!isset($_REQUEST['id']))	throw new Exception("Missing the required 'id' parameter for this function.");
+					else                        $result = $this->service->GetChart($_REQUEST['id']);
+					break;
+				case 'range':
+					$startDate = $endDate = null;
+
+					if(isset($_REQUEST['startDate'])) $startDate = (new \DateTime($_REQUEST['startDate']))->format('Y-m-d');
+					if(isset($_REQUEST['endDate']))   $endDate   = (new \DateTime($_REQUEST['endDate']))->format('Y-m-d');
+
+					$result = $this->service->GetAveragesInRange($startDate, $endDate);
 					break;
 				default:
 					status_header(400);
@@ -197,7 +201,7 @@ class AttendanceController {
 				throw new Exception("The entity object was missing required fields.");
 			}
 			$entity->ID = $data->ID;
-			$entity->Date = $data->Date;
+			$entity->Date = (new \DateTime($data->Date))->format('Y-m-d');
 			$entity->Points = $data->Points;
 			$entity->PlayerID = $data->PlayerID;
 

@@ -20,7 +20,7 @@ class Update extends Procedures\StoredProcedure {
 					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s
-				WHERE ID = %d;
+				WHERE ID = %u;
 			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
@@ -29,7 +29,7 @@ class Update extends Procedures\StoredProcedure {
 					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s
-				WHERE ID = %d;
+				WHERE ID = %u;
 			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->ID));
 		}
 

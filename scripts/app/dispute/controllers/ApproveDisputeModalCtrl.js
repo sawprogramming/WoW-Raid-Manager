@@ -1,4 +1,4 @@
-app.controller("ApproveDisputeModalCtrl", function($scope, $modalInstance, entity, disputes, DisputeSvc, toastr) {
+app.controller("ApproveDisputeModalCtrl", function($scope, $uibModalInstance, entity, disputes, DisputeSvc, toastr) {
 	var approveEntity = {
 		ID: entity.ID,
 		Verdict: true,
@@ -30,6 +30,6 @@ app.controller("ApproveDisputeModalCtrl", function($scope, $modalInstance, entit
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

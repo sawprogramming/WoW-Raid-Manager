@@ -1,4 +1,4 @@
-app.controller("DeleteAttendanceModalCtrl", function($scope, $modalInstance, toastr, entity, entities, AttendanceSvc) {
+app.controller("DeleteAttendanceModalCtrl", function($scope, $uibModalInstance, toastr, entity, entities, AttendanceSvc) {
 	$scope.row = entity;
 	$scope.AjaxForm = 'ready';
 
@@ -24,6 +24,6 @@ app.controller("DeleteAttendanceModalCtrl", function($scope, $modalInstance, toa
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

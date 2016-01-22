@@ -1,4 +1,4 @@
-app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, toastr, entity, PlayerSvc) {
+app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr, entity, PlayerSvc) {
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
@@ -50,6 +50,6 @@ app.controller("EditPlayerModalCtrl", function($scope, $modalInstance, toastr, e
 	});
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

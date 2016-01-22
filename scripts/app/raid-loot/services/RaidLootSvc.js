@@ -6,6 +6,19 @@ app.factory('RaidLootSvc', function($http) {
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_raidloot',
+					'func': 'all'
+				}
+			});
+		},
+		GetInRange: function(startDate, endDate) {
+			return $http({
+				method: 'GET',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_raidloot',
+					'func': 'range',
+					'startDate': startDate,
+					'endDate': endDate
 				}
 			});
 		},

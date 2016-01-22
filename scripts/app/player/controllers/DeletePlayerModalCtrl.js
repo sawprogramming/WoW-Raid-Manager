@@ -1,4 +1,4 @@
-app.controller("DeletePlayerModalCtrl", function($scope, $modalInstance, toastr, entity, players, PlayerSvc) {
+app.controller("DeletePlayerModalCtrl", function($scope, $uibModalInstance, toastr, entity, players, PlayerSvc) {
 	$scope.row = entity;
 	$scope.AjaxForm = 'ready';
 
@@ -24,6 +24,6 @@ app.controller("DeletePlayerModalCtrl", function($scope, $modalInstance, toastr,
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

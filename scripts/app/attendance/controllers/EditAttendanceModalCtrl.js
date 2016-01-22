@@ -1,4 +1,4 @@
-app.controller("EditAttendanceModalCtrl", function($scope, $modalInstance, toastr, entity, AttendanceSvc) {
+app.controller("EditAttendanceModalCtrl", function($scope, $uibModalInstance, toastr, entity, AttendanceSvc) {
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
@@ -56,6 +56,6 @@ app.controller("EditAttendanceModalCtrl", function($scope, $modalInstance, toast
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

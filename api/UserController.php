@@ -16,9 +16,15 @@ class UserController {
 				}
 				break;
 			default:
+				// return bad request error
+				status_header(400);
 				die();
 				break;
 		}
+		
+		// return permissions error
+		status_header(403);
+		die();
 	}
 
 	private function GetAll() {

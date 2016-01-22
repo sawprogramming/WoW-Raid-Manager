@@ -32,6 +32,12 @@
 					<span ng-bind="model.BreakdownEntity.AllTime"></span>%
 				</span>
 			</p>
+			<p class="half-margin">
+				<b>This Tier:</b>
+				<span class="pull-right">
+					<span ng-bind="model.BreakdownEntity.Tier"></span>%
+				</span>
+			</p>
 		</div>
 		<div class="col-md-8">
 			<ajax-content status="model.AjaxContent.Chart" src="model.ChartData">
@@ -75,7 +81,7 @@
 	            <td><span ng-bind="entity.Date | date: 'MM/dd/yyyy'"></span></td>
 	            <td><span ng-bind="entity.Points"></span></td>
 	            <td>
-					<div class="btn-sm btn-danger pull-right" popover-template="'disputeTemplate.html'" popover-placement="left" ng-click="Dispute(entity)">
+					<div class="btn-sm btn-danger pull-right" uib-popover-template="'disputeTemplate.html'" popover-placement="left" ng-click="Dispute(entity)">
 	    				Dispute &ne;
 	    			</div>
 				</td>
@@ -90,11 +96,11 @@
 		<form style="width: 350px;" name="formDispute">
 			<label class="control-label">Arrival Time:</label>
 			<div class="btn-group btn-group-sm">
-	            <label class="btn btn-danger"  ng-model="entity.Dispute.Points" btn-radio="0.00">Absent</label>
-	            <label class="btn btn-default" ng-model="entity.Dispute.Points" btn-radio="0.25">10:00+</label>
-	            <label class="btn btn-warning" ng-model="entity.Dispute.Points" btn-radio="0.50">9:00+</label>
-	            <label class="btn btn-primary" ng-model="entity.Dispute.Points" btn-radio="0.75">7:40+</label>
-	            <label class="btn btn-success" ng-model="entity.Dispute.Points" btn-radio="1.00">Present</label>
+	            <label class="btn btn-danger"  ng-model="entity.Dispute.Points" uib-btn-radio="0.00">Absent</label>
+	            <label class="btn btn-default" ng-model="entity.Dispute.Points" uib-btn-radio="0.25">10:00+</label>
+	            <label class="btn btn-warning" ng-model="entity.Dispute.Points" uib-btn-radio="0.50">9:00+</label>
+	            <label class="btn btn-primary" ng-model="entity.Dispute.Points" uib-btn-radio="0.75">7:40+</label>
+	            <label class="btn btn-success" ng-model="entity.Dispute.Points" uib-btn-radio="1.00">Present</label>
 			</div>
 			<div class="help-block error-text" ng-if="formDispute.$submitted && entity.Dispute.Points == null">
 				Please indicate when you arrived.

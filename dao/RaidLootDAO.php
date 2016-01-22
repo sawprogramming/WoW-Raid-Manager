@@ -4,6 +4,7 @@ require_once(plugin_dir_path(__FILE__)."../entities/RaidLootEntity.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/RaidLoot/Add.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/RaidLoot/GetAll.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/RaidLoot/DeleteRow.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/RaidLoot/GetInRange.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/RaidLoot/DeletePlayer.php");
 use WRO\Entities                     as Entities;
 use WRO\Database\Procedures\RaidLoot as Procedures;
@@ -23,5 +24,9 @@ class RaidLootDAO {
 
 	public function GetAll() {
 		return Procedures\GetAll::Run();
+	}
+
+	public function GetInRange($startDate, $endDate) {
+		return Procedures\GetInRange::Run($startDate, $endDate);
 	}
 };

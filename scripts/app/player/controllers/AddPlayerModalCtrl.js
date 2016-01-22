@@ -1,4 +1,4 @@
-app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, toastr, players, PlayerSvc) {
+app.controller("AddPlayerModalCtrl", function($scope, $uibModalInstance, toastr, players, PlayerSvc) {
 	$scope.NewPlayer = {
 		Name: null,
 		UserID: null,
@@ -40,6 +40,6 @@ app.controller("AddPlayerModalCtrl", function($scope, $modalInstance, toastr, pl
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

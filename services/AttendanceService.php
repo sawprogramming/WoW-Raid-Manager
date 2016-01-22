@@ -17,14 +17,18 @@ class AttendanceService {
         return $this->dao_->GetAll();
     }
 
+    // Parameters:
+    //   unsigned long id - ID of the Player to retrieve the BreakdownEntity for.
+    //
     // Returns: 
     //   Object[]
     //     TwoWeek  - Attendance percentage for the previous two weeks for this Player.
     //     Monthly  - Attendance percentage for the previous thirty days for this Player.
     //     AllTime  - Attendance percentage for all Attendance records for this Player.
+    //     Tier     - Attendance percentage for the most recent tier for this Player.
     //     PlayerID - The Player these statistics are for.
-    public function GetBreakdown() {
-        return $this->dao_->GetBreakdown();
+    public function GetBreakdown($id) {
+        return $this->dao_->GetBreakdown($id);
     }
 
     // Parameters:
@@ -41,6 +45,15 @@ class AttendanceService {
     // Returns all of the AttendanceEntity objects from the database belonging to the passed in PlayerID.
     public function GetAllById($id) {
         return $this->dao_->GetAllById($id);
+    }
+
+    // Parameters:
+    //   Date startDate - Starting date of the range to retreive the average attendance percentage for.
+    //   Date endDate   - Ending date of the range to retrieve the average attendance percentage for.
+    //
+    // Returns the average attendance percentage for each Player that was active during the supplied range.
+    public function GetAveragesInRange($startDate, $endDate) {
+        return $this->dao_->GetAveragesInRange($startDate, $endDate);
     }
 
 

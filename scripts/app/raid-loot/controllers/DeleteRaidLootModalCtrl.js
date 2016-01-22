@@ -1,4 +1,4 @@
-app.controller("DeleteRaidLootModalCtrl", function($scope, $modalInstance, toastr, entity, records, RaidLootSvc) {
+app.controller("DeleteRaidLootModalCtrl", function($scope, $uibModalInstance, toastr, entity, records, RaidLootSvc) {
 	$scope.row = entity;
 	$scope.AjaxForm = 'ready';
 	RefreshLootLinks();
@@ -26,6 +26,6 @@ app.controller("DeleteRaidLootModalCtrl", function($scope, $modalInstance, toast
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

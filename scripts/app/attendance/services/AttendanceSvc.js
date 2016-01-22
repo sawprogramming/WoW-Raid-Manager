@@ -41,13 +41,26 @@ app.factory("AttendanceSvc", function($http) {
 				}
 			});
 		},
-		GetBreakdown: function() {
+		GetAveragesInRange: function(startDate, endDate) {
 			return $http({
 				method: 'GET',
 				url: ajax_object.ajax_url,
 				params: {
 					'action': 'wro_attendance',
-					'func': 'breakdown'
+					'func': 'range',
+					'startDate': startDate,
+					'endDate': endDate
+				}
+			});
+		},
+		GetBreakdown: function(id) {
+			return $http({
+				method: 'GET',
+				url: ajax_object.ajax_url,
+				params: {
+					'action': 'wro_attendance',
+					'func': 'breakdown',
+					'id': id
 				}
 			});
 		},

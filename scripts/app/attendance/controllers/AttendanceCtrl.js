@@ -1,4 +1,4 @@
-app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerSvc) {
+app.controller("AttendanceCtrl", function($scope, $uibModal, AttendanceSvc, PlayerSvc) {
 	$scope.model = {
 		AttendanceEntities: [],
 		AjaxContent: {
@@ -29,7 +29,7 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	$scope.RefreshRecords();
 
 	$scope.AddRecord = function() {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/attendance/templates/addAttendanceModal.html',
 			controller: 'AddAttendanceModalCtrl',
 			resolve: {
@@ -41,7 +41,7 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	};
 
 	$scope.DeleteRecord = function(record) { 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/attendance/templates/deleteAttendanceModal.html',
 			controller: 'DeleteAttendanceModalCtrl',
 			resolve: {
@@ -56,7 +56,7 @@ app.controller("AttendanceCtrl", function($scope, $modal, AttendanceSvc, PlayerS
 	};
 
 	$scope.EditRecord = function(record) { 
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/attendance/templates/editAttendanceModal.html',
 			controller: 'EditAttendanceModalCtrl',
 			resolve: {

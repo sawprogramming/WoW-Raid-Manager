@@ -3,6 +3,8 @@ namespace WRO\Services;
 require_once(plugin_dir_path(__FILE__)."PlayerService.php");
 require_once(plugin_dir_path(__FILE__)."../dao/RaidLootDAO.php");
 require_once(plugin_dir_path(__FILE__)."ImportHistoryService.php");
+use Exception;
+use WRO\Logger   as Logger;
 use WRO\DAO      as DAO;
 use WRO\Entities as Entities;
 
@@ -15,6 +17,15 @@ class RaidLootService {
     // Returns all of the RaidLootEntity objects from the database.
     public function GetAll() {
         return $this->dao_->GetAll();
+    }
+
+    // Parameters:
+    //   Date startDate - Starting date of the range to retreive the average attendance percentage for.
+    //   Date endDate   - Ending date of the range to retrieve the average attendance percentage for.
+    //
+    // Returns the RaidLootEntities between the given dates.
+    public function GetInRange($startDate, $endDate) {
+        return $this->dao_->GetInRange($startDate, $endDate);
     }
 
     // Deletes the RaidLoot records that belong to the PlayerID passed in.
@@ -68,8 +79,14 @@ class RaidLootService {
         foreach($raiders as $raider) {
             $data = $lastImported = NULL;
             
+            try {
+                $data = $wowApi->GetCharFeed($raider->Name);
+            } catch (Exception $e) {
+                Logger::Write("Failed to fetch loot for '" . $raider->Name . "': character not found.");
+                continue;
+            }
+
             // only process process data we haven't read
-            $data = $wowApi->GetCharFeed($raider->Name);
             $lastImported = $importSvc->Get($raider->ID);
             if(!($lastImported == NULL) && $data->lastModified < $lastImported->LastImported) continue;
 
@@ -98,7 +115,6 @@ class RaidLootService {
 
                     $this->Add($entity);
                 }         
-                
             }
             
             // record that we read this data

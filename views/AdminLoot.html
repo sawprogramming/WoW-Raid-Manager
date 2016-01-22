@@ -65,21 +65,40 @@
 		</div>
 
 		<div class="col-md-3">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<span class="glyphicon glyphicon-cog"></span> Table Settings
+			<ajax-form status="AjaxForm">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<span class="glyphicon glyphicon-cog"></span> Table Settings
+					</div>
+					<div class="panel-body">
+						<h4>Check for New Loot</h4>
+						<hr />
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-md-4"><span class="glyphicon glyphicon-calendar pull-left"></span>Frequency:</label>
+								<div class="select-fix col-md-8">
+									<select class="form-control" ng-model="model.Options.wro_loot_frequency">
+										<option value="hourly">Hourly</option>
+										<option value="twicedaily">Twice Daily</option>
+										<option value="daily">Daily</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="kappa" class="control-label col-md-4"><span class="glyphicon glyphicon-time pull-left"></span>Time:</label>
+								<div class="col-md-8">
+									<uib-timepicker id="kappa" ng-model="model.Options.wro_loot_time"></uib-timepicker>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="panel-footer" align="right">
+						<button class="btn btn-primary" ng-click="SaveSettings()">
+							Save <small><span class="glyphicon glyphicon-floppy-disk"></span></small>
+						</button>
+					</div>
 				</div>
-				<div class="panel-body">
-					<form class="form-horizontal" role="form">
-						Coming soon!
-					</form>
-				</div>
-				<div class="panel-footer" align="right">
-					<button class="btn btn-primary">
-						Save <small><span class="glyphicon glyphicon-floppy-disk"></span></small>
-					</button>
-				</div>
-			</div>
+			</ajax-form>
 		</div>
 	</div>
 </div>

@@ -1,4 +1,4 @@
-app.controller("AddAttendanceModalCtrl", function($scope, $modalInstance, toastr, entities, AttendanceSvc) {
+app.controller("AddAttendanceModalCtrl", function($scope, $uibModalInstance, toastr, entities, AttendanceSvc) {
 	$scope.row = {
 		Points: null,
 		ClassID: null,
@@ -47,6 +47,6 @@ app.controller("AddAttendanceModalCtrl", function($scope, $modalInstance, toastr
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 });

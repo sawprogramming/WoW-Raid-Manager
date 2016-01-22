@@ -1,19 +1,27 @@
-app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, PlayerSvc, DisputeSvc) {
+app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toastr, PlayerSvc, DisputeSvc, OptionSvc, TimeSvc) {
 	$scope.model = {
 		Tab: 0,
 		DailyEntities: [],
 		DisputeEntities: [],
 		DailyDate: new Date(),
+		Options: {},
 		AjaxContent: {
 			Daily:   { status: 'loading', message: '' },
 			Dispute: { status: 'loading', message: '' }
 		}
 	};
+	$scope.AjaxForm = 'ready';
 	var vm = $scope.model;
 
 	$scope.RefreshDaily = function() {
 		vm.AjaxContent.Daily.status   = 'loading';
 		vm.AjaxContent.Dispute.status = 'loading';
+
+		OptionSvc.GetOptions()
+			.success(function(data) {
+				vm.Options = data;
+				vm.Options.wro_realm_time = TimeSvc.toJavaScriptTime(vm.Options.wro_realm_time);
+			});
 
 		PlayerSvc.GetPlayers()
 			.success(function(data) {
@@ -67,7 +75,7 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 	$scope.RefreshDaily();
 
 	$scope.ApproveDispute = function(entity) {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/dispute/templates/approveDisputeModal.html',
 			controller: 'ApproveDisputeModalCtrl',
 			resolve: {
@@ -82,7 +90,7 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 	};
 
 	$scope.RejectDispute = function(entity) {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/dispute/templates/rejectDisputeModal.html',
 			controller: 'RejectDisputeModalCtrl',
 			resolve: {
@@ -126,5 +134,28 @@ app.controller("DashboardCtrl", function($scope, $modal, AttendanceSvc, toastr, 
 		$event.preventDefault();
 		$event.stopPropagation();
 		$scope.opened = true;
+	};
+
+	$scope.SaveSettings = function() {
+		var usedOptions = [
+			{ "key": "wro_realm_time",      "value": TimeSvc.toPhpTime(vm.Options.wro_realm_time) },
+			{ "key": "wro_realm_frequency", "value": vm.Options.wro_realm_frequency }
+		];
+
+		$scope.AjaxForm = "processing";
+		OptionSvc.UpdateOptions(usedOptions)
+			.success(function(data) {
+				toastr.success("Preferences updated!");
+			})
+			.error(function(message, status) {
+				toastr.error(message, status, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
+			})
+			.finally(function() {
+				$scope.AjaxForm = 'ready';
+			});
 	};
 });

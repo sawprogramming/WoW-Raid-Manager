@@ -8,9 +8,11 @@ require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/Update
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetChart.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeleteRow.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllById.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllByTier.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBreakdown.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/UpdatePoints.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAveragesInRange.php");
 use WRO\Entities                       as Entities;
 use WRO\Database\Procedures\Attendance as Procedures;
 
@@ -31,8 +33,12 @@ class AttendanceDAO {
 		return Procedures\GetAllById::Run($id);
 	}
 
-	public function GetBreakdown() {
-		return Procedures\GetBreakdown::Run();
+	public function GetAveragesInRange($startRange, $endRange) {
+		return Procedures\GetAveragesInRange::Run($startRange, $endRange);
+	}
+	
+	public function GetBreakdown($id) {
+		return Procedures\GetBreakdown::Run($id);
 	}
 
 	public function GetChart($id) {

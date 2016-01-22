@@ -21,9 +21,8 @@
 				<label class="control-label col-xs-2">Date:</label>
 				<div class="col-xs-10">
 					<div class="input-group">
-						<input type="text" name="editRecordDate" class="form-control" placeholder="mm/dd/yyyy" maxlength="10"
-							ng-model="row.Date" datepicker-popup="MM/dd/yyyy" is-open="opened" show-weeks="false"
-							ng-required="true">
+						<input type="text" class="form-control" placeholder="mm/dd/yyyy" maxlength="10"
+							ng-model="row.Date" uib-datepicker-popup is-open="opened" ng-required="true">
 						<span class="input-group-btn">
 							<button class="btn btn-default" ng-click="open($event)">
 								<i class="glyphicon glyphicon-calendar"></i>
@@ -40,11 +39,11 @@
 			<div class="form-group">
 				<label class="control-label col-xs-2">Points:</label>
 	            <div class="btn-group col-xs-10" role="group">
-	                <label class="btn btn-danger"  ng-model="row.Points" btn-radio="0.00">Absent</label>
-	                <label class="btn btn-default" ng-model="row.Points" btn-radio="0.25">10:00+</label>
-	                <label class="btn btn-warning" ng-model="row.Points" btn-radio="0.50">9:00+</label>
-	                <label class="btn btn-primary" ng-model="row.Points" btn-radio="0.75">7:40+</label>
-	                <label class="btn btn-success" ng-model="row.Points" btn-radio="1.00">Present</label>
+	                <label class="btn btn-danger"  ng-model="row.Points" uib-btn-radio="0.00">Absent</label>
+	                <label class="btn btn-default" ng-model="row.Points" uib-btn-radio="0.25">10:00+</label>
+	                <label class="btn btn-warning" ng-model="row.Points" uib-btn-radio="0.50">9:00+</label>
+	                <label class="btn btn-primary" ng-model="row.Points" uib-btn-radio="0.75">7:40+</label>
+	                <label class="btn btn-success" ng-model="row.Points" uib-btn-radio="1.00">Present</label>
 	            </div>
 			</div>
 			<div class="row">

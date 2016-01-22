@@ -1,16 +1,23 @@
-app.controller("RaidLootCtrl", function($scope, $modal, RaidLootSvc) {
+app.controller("RaidLootCtrl", function($scope, $uibModal, toastr, RaidLootSvc, OptionSvc, TimeSvc) {
 	$scope.model = {
+		Options: {},
 		RaidLoot: [],
 		AjaxContent: {
 			RaidLoot: { status: 'loading', message: '' }
 		}
 	};
+	$scope.AjaxForm = 'ready';
 	var vm = $scope.model;
-
     $scope.RefreshLootLinks = RefreshLootLinks;
 
 	function Refresh() {
 		vm.AjaxContent.RaidLoot.status = 'loading';
+
+		OptionSvc.GetOptions()
+			.success(function(data) {
+				vm.Options = data;
+				vm.Options.wro_loot_time = TimeSvc.toJavaScriptTime(data.wro_loot_time);
+			});
 
 		RaidLootSvc.GetAll()
 			.success(function(data) {
@@ -37,7 +44,7 @@ app.controller("RaidLootCtrl", function($scope, $modal, RaidLootSvc) {
 	$scope.populate();
 
 	$scope.Remove = function(row) {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
 			templateUrl: plugin_url.app + '/raid-loot/templates/deleteLootModal.html',
 			controller: 'DeleteRaidLootModalCtrl',
 			resolve: {
@@ -49,6 +56,29 @@ app.controller("RaidLootCtrl", function($scope, $modal, RaidLootSvc) {
 				}
 			}
 		});
+	};
+
+	$scope.SaveSettings = function() {
+		var usedOptions = [
+			{ "key": "wro_loot_time",      "value": TimeSvc.toPhpTime(vm.Options.wro_loot_time) },
+			{ "key": "wro_loot_frequency", "value": vm.Options.wro_loot_frequency }
+		];
+
+		$scope.AjaxForm = "processing";
+		OptionSvc.UpdateOptions(usedOptions)
+			.success(function(data) {
+				toastr.success("Preferences updated!");
+			})
+			.error(function(message, status) {
+				toastr.error(message, status, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
+			})
+			.finally(function() {
+				$scope.AjaxForm = 'ready';
+			});
 	};
 
 	$scope.RefreshTable = Refresh;
