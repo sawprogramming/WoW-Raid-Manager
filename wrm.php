@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.2
+ * Version: 2.3.3
  * Author: Steven Williams
  * License: GPL2
  */

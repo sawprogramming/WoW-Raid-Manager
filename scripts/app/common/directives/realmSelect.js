@@ -6,8 +6,15 @@ app.directive('realmSelect', function(RealmSvc) {
 			region: "="
 		},
 		replace: true,
-		template: '<select ng-options="realm.Slug as realm.Name for realm in __RealmList"></select>',
+		template: '<select ng-options="realm.Slug as realm.Name for realm in __RealmList"><option value=\'\'>-- Choose a Realm -- </option></select>',
 		link: function(scope, elem, attrs, ctrl) {
+			if(attrs["region"] !== undefined) {
+				RealmSvc.GetRealms(attrs["region"])
+					.success(function(data) {
+						scope.__RealmList = data;
+					});
+			}
+
 			scope.$watch(
 				'region',
 				function(newValue, oldValue) {
@@ -17,7 +24,7 @@ app.directive('realmSelect', function(RealmSvc) {
 								scope.__RealmList = data;
 
 								if(oldValue !== undefined) {
-									ctrl.$setViewValue(data[0].Slug);
+									ctrl.$setViewValue('');
 								}
 							});
 					}

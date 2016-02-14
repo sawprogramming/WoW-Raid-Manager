@@ -42,6 +42,9 @@ app.controller('PlayerCtrl', function($scope, $uibModal, toastr, PlayerSvc, Opti
 			resolve: {
 				players: function() {
 					return vm.Players;
+				},
+				region: function() {
+					return vm.Options.wro_region;
 				}
 			}
 		});
@@ -69,6 +72,9 @@ app.controller('PlayerCtrl', function($scope, $uibModal, toastr, PlayerSvc, Opti
 			resolve: {
 				entity: function() {
 					return record;
+				},
+				region: function() {
+					return vm.Options.wro_region;
 				}
 			}
 		});

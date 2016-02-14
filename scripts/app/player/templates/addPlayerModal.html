@@ -37,6 +37,16 @@
 					<class-select class="form-control" ng-model="NewPlayer.ClassID"></class-select>
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">Realm:</label>
+				<div class="col-xs-9 select-fix">
+					<realm-select class="form-control" name="addPlayerRealm" ng-model="NewPlayer.Realm" region="us" ng-required="true"></realm-select>
+				</div>
+				<div ng-messages="formAddPlayer.addPlayerRealm.$error" class="col-xs-9 col-xs-offset-3 help-block error-text" 
+					 ng-if="formAddPlayer.$invalid && (formAddPlayer.addPlayerRealm.$touched || formAddPlayer.$submitted)">
+					<div ng-message="required">This field is required.</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<button class="btn btn-primary pull-right" type="submit" ng-click="add(formAddPlayer)">

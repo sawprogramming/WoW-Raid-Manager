@@ -20,9 +20,11 @@ class Update extends Procedures\StoredProcedure {
 					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s,
-				    Active = %d
+				    Active = %d,
+				    Region = %s,
+				    Realm = %s
 				WHERE ID = %u;
-			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->ID));
+			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->Region, $entity->Realm, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $playerTable->GetName() . "
@@ -30,9 +32,11 @@ class Update extends Procedures\StoredProcedure {
 					ClassID = %u, 
 				    Name = %s,
 				    Icon = %s,
-				    Active = %d
+				    Active = %d,
+				    Region = %s,
+				    Realm = %s
 				WHERE ID = %u;
-			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->ID));
+			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->Region, $entity->Realm, $entity->ID));
 		}
 
 		return $result;

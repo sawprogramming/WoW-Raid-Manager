@@ -80,9 +80,9 @@ class RaidLootService {
             $data = $lastImported = NULL;
             
             try {
-                $data = $wowApi->GetCharFeed($raider->Name);
+                $data = $wowApi->GetCharFeed($raider->Name, $raider->Realm);
             } catch (Exception $e) {
-                Logger::Write("Failed to fetch loot for '" . $raider->Name . "': character not found.");
+                Logger::Write("Failed to fetch loot for '" . $raider->Name . "-" . $raider->Realm . "': character not found.");
                 continue;
             }
 

@@ -15,14 +15,14 @@ class Add extends Procedures\StoredProcedure {
 
 		if($entity->UserID === NULL) {
 			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO " . $playerTable->GetName() . " (ClassID, Name, Icon)
-				VALUES (%u, %s, %s);
-			", $entity->ClassID, $entity->Name, $entity->Icon));
+				INSERT INTO " . $playerTable->GetName() . " (ClassID, Name, Icon, Region, Realm)
+				VALUES (%u, %s, %s, %s, %s);
+			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->Region, $entity->Realm));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
-				INSERT INTO " . $playerTable->GetName() . " (UserID, ClassID, Name, Icon)
-				VALUES (%u, %u, %s, %s);
-			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon));
+				INSERT INTO " . $playerTable->GetName() . " (UserID, ClassID, Name, Icon, Region, Realm)
+				VALUES (%u, %u, %s, %s, %s, %s);
+			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->Region, $entity->Realm));
 		}
 
 		return $result;

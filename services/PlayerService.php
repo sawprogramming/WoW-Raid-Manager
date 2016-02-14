@@ -4,6 +4,7 @@ require_once(plugin_dir_path(__FILE__)."../WowAPI.php");
 require_once(plugin_dir_path(__FILE__)."RaidLootService.php");
 require_once(plugin_dir_path(__FILE__)."../dao/PlayerDAO.php");
 require_once(plugin_dir_path(__FILE__)."AttendanceService.php");
+require_once(plugin_dir_path(__FILE__)."OptionService.php");
 require_once(plugin_dir_path(__FILE__)."ImportHistoryService.php");
 require_once(plugin_dir_path(__FILE__)."../entities/PlayerEntity.php");
 use Exception;
@@ -43,10 +44,12 @@ class PlayerService {
     //
     // Returns the ID of the added Player if successful.
     public function Add(Entities\PlayerEntity $entity) {
-        $wowApi = new \WRO\WowAPI();
+        $wowApi        = new \WRO\WowAPI();
+        $optionService = new OptionService();
 
-        $icon = $wowApi->GetCharIcon($entity->Name);
+        $icon = $wowApi->GetCharIcon($entity->Name, $entity->Realm);
         $entity->Icon = $icon;
+        $entity->Region = $optionService->Get("wro_region");
         
         return $this->dao_->Add($entity);
     }
@@ -66,10 +69,12 @@ class PlayerService {
     // 
     // Returns the ID of the updated Player if successful.
     public function Update(Entities\PlayerEntity $entity) {
-        $wowApi = new \WRO\WowAPI();
+        $wowApi        = new \WRO\WowAPI();
+        $optionService = new OptionService();
 
-        $icon = $wowApi->GetCharIcon($entity->Name);
+        $icon = $wowApi->GetCharIcon($entity->Name, $entity->Realm);
         $entity->Icon = $icon;
+        $entity->Region = $optionService->Get("wro_region");
         
         return $this->dao_->Update($entity);
     }
@@ -102,18 +107,12 @@ class PlayerService {
         $wowApi     = new \WRO\WowAPI();
 
         foreach($players as $player) {
-            try {
-                $icon = $wowApi->GetCharIcon($player->Name);
-            } catch (Exception $e) {
-                continue;
-            }
-
             array_push($newPlayers, new Entities\PlayerEntity(
                 $player->ID,
                 $player->UserID,
                 $player->ClassID,
-                $player->Name,
-                $icon
+                $player->Realm,
+                $player->Name
             ));
         }
 

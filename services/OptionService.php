@@ -49,5 +49,5 @@ class OptionService {
 
     private static $realmKeys_ = ["wro_realm_time", "wro_realm_frequency"];
     private static $lootKeys_  = ["wro_loot_time", "wro_loot_frequency"];
-    private static $validKeys_ = ["wro_faction", "wro_region","wro_default_realm"];
+    private static $validKeys_ = ["wro_faction", "wro_region", "wro_default_realm"];
 };

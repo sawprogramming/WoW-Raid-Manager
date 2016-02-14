@@ -55,12 +55,13 @@ class PlayerController {
 			$data = json_decode(stripslashes($_REQUEST['entity']));
 
 			// create entity
-			if(!(isset($data->Name, $data->ClassID) && array_key_exists("UserID", $data))) {
+			if(!(isset($data->Name, $data->ClassID, $data->Realm) && array_key_exists("UserID", $data))) {
 				throw new Exception("The entity object was missing required fields.");
 			}
-			$entity->Name = $data->Name;
-			$entity->UserID = $data->UserID;
+			$entity->Name    = $data->Name;
+			$entity->UserID  = $data->UserID;
 			$entity->ClassID = $data->ClassID;
+			$entity->Realm   = $data->Realm;
 
 			// add record
 			if(($result = $this->service->Add($entity)) === FALSE) {
@@ -138,14 +139,15 @@ class PlayerController {
 			$data = json_decode(stripslashes($_REQUEST['entity']));
 
 			// create entity
-			if(!(isset($data->ID, $data->ClassID, $data->Name) && array_key_exists("UserID", $data))) {
+			if(!(isset($data->ID, $data->ClassID, $data->Name, $data->Realm) && array_key_exists("UserID", $data))) {
 				throw new Exception("The entity object was missing required fields.");
 			}
-			$entity->ID = $data->ID;
-			$entity->UserID = $data->UserID;
+			$entity->ID      = $data->ID;
+			$entity->UserID  = $data->UserID;
+			$entity->Realm   = $data->Realm;
 			$entity->ClassID = $data->ClassID;
-			$entity->Name = $data->Name;
-			$entity->Active = $data->Active;
+			$entity->Name    = $data->Name;
+			$entity->Active  = $data->Active;
 
 			// update record
 			if(($result = $this->service->Update($entity)) === FALSE) {

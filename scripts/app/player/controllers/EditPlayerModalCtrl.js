@@ -1,4 +1,4 @@
-app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr, entity, PlayerSvc) {
+app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr, region, entity, PlayerSvc) {
 	$scope.reset = function() {
 		$scope.row = {
 			ID: entity.ID,
@@ -6,6 +6,7 @@ app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr
 			Active: entity.Active,
 			UserID: entity.UserID,
 			ClassID: entity.ClassID,
+			Realm: entity.Realm,
 			ClassName: entity.ClassName,
 			ClassStyle: entity.ClassStyle
 		};
@@ -13,6 +14,7 @@ app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr
 	};
 	$scope.reset();
 	$scope.AjaxForm = 'ready';
+	$scope.region = region;
 
 	$scope.save = function(form) {
 		if(!form.$invalid) {
@@ -21,12 +23,14 @@ app.controller("EditPlayerModalCtrl", function($scope, $uibModalInstance, toastr
 
 			PlayerSvc.EditPlayer($scope.row)
 				.success(function(data) {
-					entity.Name = data.Name;
-					entity.Active = data.Active;
-					entity.UserID = data.UserID;
-					entity.ClassID = data.ClassID;
-					entity.Username = data.Username;
-					entity.ClassName = data.ClassName;
+					entity.Name       = data.Name;
+					entity.Realm      = data.Realm;
+					entity.Active     = data.Active;
+					entity.UserID     = data.UserID;
+					entity.ClassID    = data.ClassID;
+					entity.Username   = data.Username;
+					entity.ClassName  = data.ClassName;
+					entity.RealmName  = data.RealmName;
 					entity.ClassStyle = ClassIdToCss(parseInt(data.ClassID));
 
 					toastr.success("Player updated!");

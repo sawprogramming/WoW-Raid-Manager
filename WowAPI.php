@@ -4,45 +4,44 @@ use Exception;
 use WRO\Services as Services;
 
 class WowApi {
+    const SUFFIX = "locale=en_US&apikey=d2vp8vre4d28eru2ex46kp7anqegtqry";
+
     function __construct() {
         $optionService = new Services\OptionService();
 
         $this->region = $optionService->Get("wro_region");
-        $this->realm  = $optionService->Get("wro_default_realm");
     }
     
     // public functions
-    public function GetCharIcon($name) {
-        $charUrl = self::BuildCharUrl($name);
+    public function GetCharIcon($name, $realm) {
+        $charUrl = self::BuildCharUrl($name, $realm);
 
-        if(($json = @file_get_contents($charUrl)) === FALSE) {
-            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $this->realm  . ".");
+        if(($json = @file_get_contents($charUrl . "?" . WowApi::SUFFIX)) === FALSE) {
+            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
         }
         $obj = json_decode($json);
 
         return $obj->thumbnail;
     }
 
-    public function GetCharFeed($name) {
-        $charUrl = self::BuildCharUrl($name);
+    public function GetCharFeed($name, $realm) {
+        $charUrl = self::BuildCharUrl($name, $realm);
         
-        if(($json = @file_get_contents($charUrl."?fields=feed")) === FALSE) {
-            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $this->realm  . ".");
+        if(($json = @file_get_contents($charUrl . "?fields=feed&" . WowApi::SUFFIX)) === FALSE) {
+            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
         }
         
         return json_decode($json);
     }
     
     public function GetRealmList($region) {
-        $json = file_get_contents("http://" . $region . ".battle.net/api/wow/realm/status");
+        $json = file_get_contents("https://" . $region . ".api.battle.net/wow/realm/status?" . WowApi::SUFFIX);
         return $json === FALSE ? NULL : json_decode($json);
     }
 
     // helper functions
-    private function BuildItemUrl($itemId) { return "http://" . $this->region . ".battle.net/api/wow/item/" . $itemId; }
-    private function BuildCharUrl($name)   { return "http://" . $this->region . ".battle.net/api/wow/character/" . $this->realm . "/" . $name; }
+    private function BuildCharUrl($name, $realm) { return "https://" . $this->region . ".api.battle.net/wow/character/" . $realm . "/" . $name; }
     
     // members
-    private $region;
     private $realm;
 };

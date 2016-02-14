@@ -1,10 +1,11 @@
-app.controller("AddPlayerModalCtrl", function($scope, $uibModalInstance, toastr, players, PlayerSvc) {
+app.controller("AddPlayerModalCtrl", function($scope, $uibModalInstance, toastr, region, players, PlayerSvc) {
 	$scope.NewPlayer = {
 		Name: null,
 		UserID: null,
 		ClassID: null
 	};
 	$scope.AjaxForm = 'ready';
+	$scope.region = region;
 
 	$scope.add = function(form) {
 		if(!form.$invalid) {
@@ -16,10 +17,12 @@ app.controller("AddPlayerModalCtrl", function($scope, $uibModalInstance, toastr,
 					players.push({
 						ID: data.ID,
 						Name: data.Name,
+						Realm: data.Realm,
 						UserID: data.UserID,
 						ClassID: data.ClassID,
 						Username: data.Username,
 						ClassName: data.ClassName,
+						RealmName: data.RealmName,
 						ClassStyle: ClassIdToCss(parseInt(data.ClassID))
 					});
 
