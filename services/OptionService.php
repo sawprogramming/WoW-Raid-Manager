@@ -21,8 +21,9 @@ class OptionService {
             $pairs[$key] = $this->Get($key);
         }
 
-        $pairs["wro_loot_time"]  = (int)$pairs["wro_loot_time"];
-        $pairs["wro_realm_time"] = (int)$pairs["wro_realm_time"];
+        $pairs["wro_loot_time"]   = (int)$pairs["wro_loot_time"];
+        $pairs["wro_realm_time"]  = (int)$pairs["wro_realm_time"];
+        $pairs["wro_drop_tables"] = (int)$pairs["wro_drop_tables"];
         return $pairs;
     }
 
@@ -49,5 +50,5 @@ class OptionService {
 
     private static $realmKeys_ = ["wro_realm_time", "wro_realm_frequency"];
     private static $lootKeys_  = ["wro_loot_time", "wro_loot_frequency"];
-    private static $validKeys_ = ["wro_faction", "wro_region", "wro_default_realm"];
+    private static $validKeys_ = ["wro_faction", "wro_region", "wro_default_realm", "wro_drop_tables"];
 };

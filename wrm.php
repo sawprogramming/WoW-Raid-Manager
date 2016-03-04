@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.3
+ * Version: 2.3.4
  * Author: Steven Williams
  * License: GPL2
  */
@@ -12,6 +12,8 @@ require_once(plugin_dir_path(__FILE__)."./WowAPI.php");
 require_once(plugin_dir_path(__FILE__)."./Logger.php");
 require_once(plugin_dir_path(__FILE__)."./database/DatabaseInstaller.php");
 require_once(plugin_dir_path(__FILE__)."./database/DatabaseSeeder.php");
+require_once(plugin_dir_path(__FILE__)."./database/DatabaseExporter.php");
+require_once(plugin_dir_path(__FILE__)."./database/DatabaseImporter.php");
 require_once(plugin_dir_path(__FILE__)."./services/RaidLootService.php");
 require_once(plugin_dir_path(__FILE__)."./services/RealmService.php");
 require_once(plugin_dir_path(__FILE__)."./api/AttendanceController.php");
@@ -25,6 +27,9 @@ require_once(plugin_dir_path(__FILE__)."./api/RaidTierController.php");
 require_once(plugin_dir_path(__FILE__)."./api/ExpansionController.php");
 require_once(plugin_dir_path(__FILE__)."./api/RealmController.php");
 require_once(plugin_dir_path(__FILE__)."./dashboard.php");
+use Exception;
+
+define("WRO_PATH", str_replace("\\", "/", plugin_dir_path(__FILE__)));
 
 class WRO {
     // Installation functions
@@ -40,6 +45,7 @@ class WRO {
         add_option('wro_loot_frequency',  'daily',     '', 'yes');
         add_option('wro_realm_time',      time(),      '', 'yes');
         add_option('wro_realm_frequency', 'daily',     '', 'yes');
+        add_option('wro_drop_tables',     '0',         '', 'yes');
 
         // database
         $dbInstaller->Install();
@@ -51,11 +57,15 @@ class WRO {
     }
 
     public function Uninstall() {
-        $dbInstaller = new Database\DatabaseInstaller();
+        $dbInstaller   = new Database\DatabaseInstaller();
+        $optionService = new Services\OptionService();
 
-        if(false) {
+        // drop tables if that's what the user wanted
+        if($optionService->Get("wro_drop_tables")) {
             $dbInstaller->Uninstall();
         }
+
+        // clear scheduled jobs
         wp_clear_scheduled_hook('update_guild_loot');
         wp_clear_scheduled_hook('update_realm_list');
     }
@@ -86,6 +96,7 @@ class WRO {
         wp_enqueue_script('panything',   "$appUrl/libs/js/dirPagination.js");
         wp_enqueue_script('angularui',   "$appUrl/libs/js/ui-bootstrap-tpls-0.14.3.min.js");
         wp_enqueue_script('toastr',      "$appUrl/libs/js/angular-toastr.tpls.min.js");
+        wp_enqueue_script('upload',      "$appUrl/libs/js/ng-file-upload.min.js");
         self::AddAngularScripts($appUrl);
         wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
         
@@ -107,6 +118,47 @@ class WRO {
         $realmSvc = new Services\RealmService();
         $realmSvc->UpdateRealmList();
         Logger::Write("update_realm_list finished.");
+    }
+    public function GetDatabaseBackup() {
+        $dbExporter = new Database\DatabaseExporter();
+        try {
+            $dbExporter->ExportToCsv();
+            $file = "../wp-content/plugins/WoWRaidOrganizer/wro_backup.zip";
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            unlink($file);
+        } catch(Exception $e) {
+            status_header(500);
+            echo($e->getMessage());
+        }
+        die();
+    }
+    public function RestoreDatabase() {
+        $extracted = false;
+        $dbImporter  = new Database\DatabaseImporter();
+
+        // get uploaded file
+        $filename    = $_FILES['file']['name'];
+        $destination = '../wp-content/plugins/WoWRaidOrganizer/wro_backup.zip';
+        move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+
+        // do the importing
+        try {
+           $dbImporter->ImportFromCsv();
+        } catch (Exception $e) {
+            status_header(422);
+            echo($e->getMessage());
+        }
+
+        unlink($destination);
+        die();
     }
 
     private static function AddAngularScripts($appUrl) {
@@ -130,6 +182,7 @@ class WRO {
         wp_register_script('UserSvc',        "$appUrl/scripts/app/common/services/UserSvc.js");
         wp_register_script('ClassSvc',       "$appUrl/scripts/app/common/services/ClassSvc.js");
         wp_register_script('OptionSvc',      "$appUrl/scripts/app/common/services/OptionSvc.js");
+        wp_register_script('DashboardSvc',   "$appUrl/scripts/app/dashboard/services/DashboardSvc.js");
         wp_register_script('RealmSvc',       "$appUrl/scripts/app/common/services/RealmSvc.js");
         wp_register_script('DisputeSvc',     "$appUrl/scripts/app/dispute/services/DisputeSvc.js");
         wp_register_script('AttendanceSvc',  "$appUrl/scripts/app/attendance/services/AttendanceSvc.js");
@@ -153,6 +206,7 @@ class WRO {
         wp_localize_script('RealmSvc',       'ajax_object', $ajax_object);
         wp_localize_script('DisputeSvc',     'ajax_object', $ajax_object);
         wp_localize_script('AttendanceSvc',  'ajax_object', $ajax_object);
+        wp_localize_script('DashboardSvc',   'ajax_object', $ajax_object);
         wp_localize_script('AttendanceCtrl', 'plugin_url',  $plugin_url);
         wp_localize_script('PlayerSvc',      'ajax_object', $ajax_object);
         wp_localize_script('PlayerCtrl',     'plugin_url',  $plugin_url);
@@ -162,6 +216,7 @@ class WRO {
         wp_localize_script('RaidLootCtrl',   'plugin_url',  $plugin_url);
         wp_localize_script('UserUICtrl',     'plugin_url',  $plugin_url);
         wp_localize_script('DashboardCtrl',  'plugin_url',  $plugin_url);
+        wp_localize_script('DashboardCtrl',  'ajax_url',    $ajax_object);
 
         // enqueue scripts
         wp_enqueue_script('app');
@@ -177,6 +232,7 @@ class WRO {
         wp_enqueue_script('ajaxForm');
         wp_enqueue_script('UserSvc');
         wp_enqueue_script('ClassSvc');
+        wp_enqueue_script('DashboardSvc');
         wp_enqueue_script('RealmSvc');
         wp_enqueue_script('OptionSvc');
         wp_enqueue_script('DisputeSvc');
@@ -205,6 +261,8 @@ register_activation_hook(__FILE__, array('WRO\WRO', 'Install'));
 register_deactivation_hook(__FILE__, array('WRO\WRO', 'Uninstall'));
 add_action('update_guild_loot', array('WRO\WRO', 'UpdateGuildLoot'));
 add_action('update_realm_list', array('WRO\WRO', 'UpdateRealmList'));
+add_action('wp_ajax_wro_backup_dl', array('WRO\WRO', 'GetDatabaseBackup'));
+add_action('wp_ajax_wro_restore_ul', array('WRO\WRO', 'RestoreDatabase'));
 add_action('wp_enqueue_scripts', array('WRO\WRO', 'EnqueueScriptsStyles'));
 add_action('admin_enqueue_scripts', array('WRO\WRO', 'AdminEnqueueScriptsStyles'));
 add_action('plugins_loaded', array('PageTemplater', 'get_instance')); ?>

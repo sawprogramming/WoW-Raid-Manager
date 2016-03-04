@@ -142,6 +142,44 @@
 								</div>
 							</div>
 						</form>
+						<h4>Backup/Restore</h4>
+						<hr />
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-md-4"><span class="glyphicon glyphicon-download pull-left"></span>Backup:</label>
+								<div class="col-md-8">
+									<button class="btn btn-primary btn-block" ng-click="DownloadBackup()">
+										Download Backup
+									</button>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4"><span class="glyphicon glyphicon-upload pull-left"></span>Restore:</label>
+								<div class="col-md-8">
+								<div class="input-group">
+						            <input type="text" class="form-control" ng-model="model.UploadFile.name" readonly>
+									<span class="input-group-btn">
+										<span class="btn btn-primary btn-file">
+											Browse&hellip; <input type="file" ngf-select ng-model="model.UploadFile" ngf-max-size="2MB">
+							             </span>
+						            </span>
+					            </div>
+					            </div>
+							</div>
+						</form>
+						<h4>Danger Zone</h4>
+						<hr />
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-md-8"><span class="glyphicon glyphicon-trash pull-left"></span>Drop Tables on Uninstall:</label>
+								<div class="col-md-4">
+									<div class="btn-group">
+					                    <label class="btn btn-danger" ng-model="model.Options.wro_drop_tables" uib-btn-radio="0">Off</label>
+					                    <label class="btn btn-danger" ng-model="model.Options.wro_drop_tables" uib-btn-radio="1">On</label>
+					            	</div>
+					            </div>
+							</div>
+						</form>
 					</div>
 					<div class="panel-footer" align="right">
 						<button class="btn btn-primary" ng-click="SaveSettings()">

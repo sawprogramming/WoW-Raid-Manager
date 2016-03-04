@@ -33,9 +33,12 @@ class DatabaseInstaller {
 	}
 
 	public function Uninstall() {
+		global $wpdb;
+		$wpdb->query("SET FOREIGN_KEY_CHECKS = 0;");
 		for($i = count($this->_tables) - 1; $i >= 0; --$i) {	
 			$this->_tables[$i]->DropTable();
 		}
+		$wpdb->query("SET FOREIGN_KEY_CHECKS = 1;");
 	}
 
 	private $_tables;

@@ -1,10 +1,11 @@
-app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toastr, PlayerSvc, DisputeSvc, OptionSvc, TimeSvc) {
+app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toastr, PlayerSvc, DisputeSvc, OptionSvc, TimeSvc, DashboardSvc, Upload) {
 	$scope.model = {
 		Tab: 0,
 		DailyEntities: [],
 		DisputeEntities: [],
 		DailyDate: new Date(),
 		Options: {},
+		UploadFile: {},
 		AjaxContent: {
 			Daily:   { status: 'loading', message: '' },
 			Dispute: { status: 'loading', message: '' }
@@ -13,6 +14,42 @@ app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toast
 	$scope.AjaxForm = 'ready';
 	var vm = $scope.model;
 
+	$scope.DownloadBackup = function() {
+		DashboardSvc.DownloadBackup()
+			.success(function (response, status, headers, config) {
+		        var myBlob = new Blob([response],{type:"application/octet-stream"})
+				var blobURL = (window.URL || window.webkitURL).createObjectURL(myBlob);
+				var anchor = document.createElement("a");
+				anchor.download = "wro_backup.zip";
+				anchor.href = blobURL;
+				anchor.click();
+			});
+	};
+
+	$scope.UploadBackup = function() {
+		vm.UploadFile.upload = Upload.upload({
+			url: ajax_object.ajax_url,
+			data: {
+				'action': 'wro_restore_ul',
+				'file': vm.UploadFile
+			}
+		});
+
+		vm.UploadFile.upload.then(
+			function(response) {
+				vm.UploadFile = {};
+				toastr.success("Database successfully restored!");
+			},
+			function(errmsg) {
+				toastr.error(errmsg.data, errmsg.statusText, { 
+					closeButton: true,
+					progressBar: true,
+					timeOut: 30000,
+			 	});
+			}
+		);
+	};
+	
 	$scope.RefreshDaily = function() {
 		vm.AjaxContent.Daily.status   = 'loading';
 		vm.AjaxContent.Dispute.status = 'loading';
@@ -141,7 +178,8 @@ app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toast
 	$scope.SaveSettings = function() {
 		var usedOptions = [
 			{ "key": "wro_realm_time",      "value": TimeSvc.toPhpTime(vm.Options.wro_realm_time) },
-			{ "key": "wro_realm_frequency", "value": vm.Options.wro_realm_frequency }
+			{ "key": "wro_realm_frequency", "value": vm.Options.wro_realm_frequency },
+			{ "key": "wro_drop_tables",     "value": vm.Options.wro_drop_tables }
 		];
 
 		$scope.AjaxForm = "processing";
@@ -159,5 +197,9 @@ app.controller("DashboardCtrl", function($scope, $uibModal, AttendanceSvc, toast
 			.finally(function() {
 				$scope.AjaxForm = 'ready';
 			});
+
+		if(vm.UploadFile.name != null) {
+			$scope.UploadBackup();
+		}
 	};
 });

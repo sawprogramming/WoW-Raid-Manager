@@ -35,5 +35,10 @@ abstract class Table {
 		return $wpdb->get_results("DROP TABLE IF EXISTS " . $this->GetName() . ";");
 	}
 
+	public function TruncateTable() {
+		global $wpdb;
+		return $wpdb->get_results("TRUNCATE TABLE " . $this->GetName() . ";");
+	}
+	
 	protected $_name;
 };
