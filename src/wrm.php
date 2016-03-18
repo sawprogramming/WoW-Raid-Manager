@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.5
+ * Version: 2.3.6
  * Author: Steven Williams
  * License: GPL2
  */
@@ -87,7 +87,7 @@ class WRO {
     public function ActualEnqueue() {
         $appUrl = plugins_url()."/WoWRaidOrganizer";
         
-        // add scripts
+        // add script libraries
         wp_enqueue_script('blah',        "$appUrl/libs/js/jquery-2.1.3.min.js");
         wp_enqueue_script('angular',     "$appUrl/libs/js/angular.min.js");
         wp_enqueue_script('angularmsgs', "$appUrl/libs/js/angular-messages.js");
@@ -97,13 +97,13 @@ class WRO {
         wp_enqueue_script('angularui',   "$appUrl/libs/js/ui-bootstrap-tpls-0.14.3.min.js");
         wp_enqueue_script('toastr',      "$appUrl/libs/js/angular-toastr.tpls.min.js");
         wp_enqueue_script('upload',      "$appUrl/libs/js/ng-file-upload.min.js");
-        self::AddAngularScripts($appUrl);
-        wp_enqueue_script('wrm',        "$appUrl/scripts/wrm.js");
         
-        // add styles
+        // add style libraries
         wp_enqueue_style('bootstrap',  "$appUrl/libs/css/bootstrap.min.css");
         wp_enqueue_style('toastr',     "$appUrl/libs/css/angular-toastr.min.css");
-        wp_enqueue_style('wrm',        "$appUrl/css/wrm.css");
+
+        // add WRO scripts/styles
+        self::EnqueueWroFiles($appUrl);
     }
 
     // jobs  
@@ -176,11 +176,7 @@ class WRO {
         return $files;
     }
 
-    private static function AddAngularScripts($appUrl) {
-        $plugin_url = $ajax_object = NULL;
-        $angular_files = WRO::ListFiles(WRO_PATH . "scripts/app");
-
-        // define localization
+    private static function EnqueueWroFiles($appUrl) {
         $plugin_url = array(
             'images' => $appUrl."/images", 
             'libs'   => $appUrl."/libs", 
@@ -191,21 +187,42 @@ class WRO {
             'ajax_url' => admin_url('admin-ajax.php')
         );
 
-        // add the module first then remove it from the list
-        wp_register_script("app.module.js", str_replace(WRO_PATH, $appUrl . "/", $angular_files["app.module.js"]));
-        wp_localize_script("app.module.js", "plugin_url", $plugin_url);
-        wp_enqueue_script("app.module.js");
-        unset($angular_files["app.module.js"]);
+        // add minified files if they exist
+        if(file_exists(WRO_PATH . 'scripts/wro.min.js')) {
+            // css
+            wp_enqueue_style('wrm', "$appUrl/css/wro.min.css");
 
-        // add the rest of the scripts
-        foreach($angular_files as $file => $path) {
-            if(pathinfo($path)["extension"] == "js") {
-                wp_register_script($file, str_replace(WRO_PATH, $appUrl . "/", $path));
+            // js
+            wp_register_script("wro.min.js", $appUrl . "/scripts/wro.min.js");
+            wp_localize_script("wro.min.js", "plugin_url",  $plugin_url);
+            wp_localize_script("wro.min.js", "ajax_object", $ajax_object);
+            wp_enqueue_script("wro.min.js");
+        } 
+        
+        // otherwise add the individual files
+        else {
+            $angular_files = WRO::ListFiles(WRO_PATH . "scripts/app");
+            
+            wp_enqueue_style('wrm',  "$appUrl/css/wrm.css");
+            wp_enqueue_script('wrm', "$appUrl/scripts/wrm.js");
 
-                wp_localize_script($file, "plugin_url",  $plugin_url);
-                wp_localize_script($file, "ajax_object", $ajax_object);
 
-                wp_enqueue_script($file);
+            // add the module first then remove it from the list
+            wp_register_script("app.module.js", str_replace(WRO_PATH, $appUrl . "/", $angular_files["app.module.js"]));
+            wp_localize_script("app.module.js", "plugin_url", $plugin_url);
+            wp_enqueue_script("app.module.js");
+            unset($angular_files["app.module.js"]);
+
+            // add the rest of the scripts
+            foreach($angular_files as $file => $path) {
+                if(pathinfo($path)["extension"] == "js") {
+                    wp_register_script($file, str_replace(WRO_PATH, $appUrl . "/", $path));
+
+                    wp_localize_script($file, "plugin_url",  $plugin_url);
+                    wp_localize_script($file, "ajax_object", $ajax_object);
+
+                    wp_enqueue_script($file);
+                }
             }
         }
     }

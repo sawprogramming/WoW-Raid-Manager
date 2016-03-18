@@ -1,0 +1,17 @@
+{
+  "name": "wow_raid_organizer",
+  "version": "2.3.6",
+  "description": "Attendance and loot modules for a World of Warcraft raid group.",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.3",
+    "gulp-concat": "^2.6.0",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-zip": "^3.2.0"
+  },
+  "scripts": {},
+  "author": "Steven Williams",
+  "license": "GPL2"
+}
