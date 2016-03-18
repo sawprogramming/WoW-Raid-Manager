@@ -1,16 +1,16 @@
 <div class="wrap">
-	<div class="row" ng-app="WRO" ng-controller="RaidLootCtrl">
+	<div class="row" ng-app="WRO" ng-controller="RaidLootCtrl as vm">
 		<div class="col-md-8">
 			<div class="panel panel-primary sublime">
 				<div class="panel-heading">
 					<span class="glyphicon glyphicon-list"></span> Raid Loot Table
 					<div class="btn-group pull-right">
-						<button type="button" class="btn btn-info btn-xs" ng-click="RefreshTable()">
+						<button type="button" class="btn btn-info btn-xs" ng-click="vm.RefreshTable()">
 						    Refresh <span class="glyphicon glyphicon-refresh"></span>
 						</button>
 					</div>
 				</div>
-				<ajax-content status="model.AjaxContent.RaidLoot" src="model.RaidLoot">
+				<ajax-content status="vm.AjaxContent.RaidLoot" src="vm.RaidLoot">
 					<div class="panel-body">
 					    <div class="col-xs-6 form-inline">
 					    	Show&nbsp;
@@ -43,14 +43,14 @@
 					        </tr>
 					    </thead>
 					    <tbody>
-					        <tr dir-paginate="row in model.RaidLoot | filter:q | itemsPerPage: r">
+					        <tr dir-paginate="row in vm.RaidLoot | filter:q | itemsPerPage: r">
 					            <td><span ng-bind="row.ID"></span></td>
 					            <td><span ng-class="row.ClassStyle" ng-bind="row.PlayerName"></span></td>
 					            <td><span ng-class="row.ClassStyle" ng-bind="row.ClassName"></span></td>
 					            <td><a ng-href="{{row.Item}}"></a></td>
 					            <td><span ng-bind="row.Date | date: 'MM/dd/yyyy'"></span></td>
 					            <td align="right">
-					                <button type="button" class="btn-xs btn-danger" ng-click="Remove(row)">
+					                <button type="button" class="btn-xs btn-danger" ng-click="vm.Remove(row)">
 					                    <span class="glyphicon glyphicon-remove"></span>
 					                </button>
 					            </td> 
@@ -58,14 +58,14 @@
 					    </tbody>
 					</table>
 					<div class="panel-footer clearfix">
-						<dir-pagination-controls on-page-change="RefreshLootLinks()"></dir-pagination-controls>
+						<dir-pagination-controls on-page-change="vm.RefreshLootLinks()"></dir-pagination-controls>
 					</div>
 				</ajax-content>
 			</div>
 		</div>
 
 		<div class="col-md-3">
-			<ajax-form status="AjaxForm">
+			<ajax-form status="vm.ActiveRequests">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<span class="glyphicon glyphicon-cog"></span> Table Settings
@@ -73,27 +73,29 @@
 					<div class="panel-body">
 						<h4>Check for New Loot</h4>
 						<hr />
-						<form class="form-horizontal" role="form">
-							<div class="form-group">
-								<label class="control-label col-md-4"><span class="glyphicon glyphicon-calendar pull-left"></span>Frequency:</label>
-								<div class="select-fix col-md-8">
-									<select class="form-control" ng-model="model.Options.wro_loot_frequency">
-										<option value="hourly">Hourly</option>
-										<option value="twicedaily">Twice Daily</option>
-										<option value="daily">Daily</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="kappa" class="control-label col-md-4"><span class="glyphicon glyphicon-time pull-left"></span>Time:</label>
-								<div class="col-md-8">
-									<uib-timepicker id="kappa" ng-model="model.Options.wro_loot_time"></uib-timepicker>
-								</div>
-							</div>
-						</form>
-					</div>
+                        <ajax-content status="vm.AjaxContent.Options" src="vm.Options">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><span class="glyphicon glyphicon-calendar pull-left"></span>Frequency:</label>
+                                    <div class="select-fix col-md-8">
+                                        <select class="form-control" ng-model="vm.Options.wro_loot_frequency">
+                                            <option value="hourly">Hourly</option>
+                                            <option value="twicedaily">Twice Daily</option>
+                                            <option value="daily">Daily</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kappa" class="control-label col-md-4"><span class="glyphicon glyphicon-time pull-left"></span>Time:</label>
+                                    <div class="col-md-8">
+                                        <uib-timepicker id="kappa" ng-model="vm.Options.wro_loot_time"></uib-timepicker>
+                                    </div>
+                                </div>
+                            </form>
+                        </ajax-content>
+                    </div>
 					<div class="panel-footer" align="right">
-						<button class="btn btn-primary" ng-click="SaveSettings()">
+						<button class="btn btn-primary" ng-click="vm.SaveSettings()">
 							Save <small><span class="glyphicon glyphicon-floppy-disk"></span></small>
 						</button>
 					</div>

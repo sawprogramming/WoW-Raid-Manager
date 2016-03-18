@@ -1,0 +1,118 @@
+<div class="modal-body">
+	<button type="button" class="close" aria-label="Close" ng-click="vm.cancel()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<div class="row">
+		<div class="col-md-2">
+			<figure style="text-align: center;">
+				<img ng-src="http://us.battle.net/static-render/us/{{vm.BreakdownEntity.Icon}}" height="128" width="128"/>
+				<figcaption>
+					<b ng-class="vm.BreakdownEntity.ClassID" ng-bind="vm.BreakdownEntity.Name"></b>
+				</figcaption>
+			</figure>
+		</div>
+		<div class="col-md-2">
+            <ajax-content status="vm.AjaxContent.Breakdown" src="vm.BreakdownEntity">
+                <b>Attendance Stats</b>
+                <hr class="no-margin" />
+                <p class="half-margin">
+                    <b>2 Week:</b>
+                    <span class="pull-right">
+                        <span ng-bind="vm.BreakdownEntity.TwoWeek"></span>%
+                    </span>
+                </p>
+                <p class="half-margin">
+                    <b>Month:</b>
+                    <span class="pull-right">
+                        <span ng-bind="vm.BreakdownEntity.Month"></span>%
+                    </span>
+                </p>
+                <p class="half-margin">
+                    <b>All Time:</b>
+                    <span class="pull-right">
+                        <span ng-bind="vm.BreakdownEntity.AllTime"></span>%
+                    </span>
+                </p>
+                <p class="half-margin">
+                    <b>This Tier:</b>
+                    <span class="pull-right">
+                        <span ng-bind="vm.BreakdownEntity.Tier"></span>%
+                    </span>
+                </p>
+            </ajax-content>
+        </div>
+		<div class="col-md-8">
+			<ajax-content status="vm.AjaxContent.Chart" src="vm.ChartData">
+				<div id="calendar_basic" align="left" onload="DrawChart()"></div>
+			</ajax-content>
+		</div>
+	</div>
+</div>
+<hr />
+
+<ajax-content status="vm.AjaxContent.Attendance" src="vm.AttendanceEntities">
+	<div class="col-xs-6 form-inline">
+		Show&nbsp;
+		<select class="form-control input-sm" ng-model="r" ng-init="r = '5'">
+	    	<option value="5">5</option>
+	    	<option value="10">10</option>
+	    	<option value="25">25</option>
+	    	<option value="50">50</option>
+	    	<option value="100">100</option>
+		</select>
+		&nbsp;entries
+	</div>
+	<div class="col-xs-6 form-inline">
+		<div class="form-group has-feedback pull-right">
+			Search: &nbsp;
+			<input type="text" class="form-control input-sm" ng-model="q" placeholder="Filter text">
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+	</div>
+
+	<table class="table table-striped">
+	    <thead>
+	    	<tr>
+	    		<th>Date</th>
+	    		<th>Points</th>
+	    		<th>Options</th>
+	    	</tr>
+		</thead>
+		<tbody>
+	        <tr dir-paginate="entity in vm.AttendanceEntities | filter:q | itemsPerPage: r">
+	            <td><span ng-bind="entity.Date | date: 'MM/dd/yyyy'"></span></td>
+	            <td><span ng-bind="entity.Points"></span></td>
+	            <td>
+					<div class="btn-sm btn-danger pull-right" uib-popover-template="'disputeTemplate.html'" popover-placement="left">
+	    				Dispute &ne;
+	    			</div>
+				</td>
+	        </tr>
+	    </tbody>
+	</table>
+	<dir-pagination-controls></dir-pagination-controls><br /><br /><br />
+</ajax-content>
+
+<script type="text/ng-template" id="disputeTemplate.html">
+	<ajax-form status="vm.AjaxForm.Dispute">
+		<form style="width: 350px;" name="formDispute">
+			<label class="control-label">Arrival Time:</label>
+			<div class="btn-group btn-group-sm">
+	            <label class="btn btn-danger"  ng-model="entity.Dispute.Points" uib-btn-radio="0.00">Absent</label>
+	            <label class="btn btn-default" ng-model="entity.Dispute.Points" uib-btn-radio="0.25">10:00+</label>
+	            <label class="btn btn-warning" ng-model="entity.Dispute.Points" uib-btn-radio="0.50">9:00+</label>
+	            <label class="btn btn-primary" ng-model="entity.Dispute.Points" uib-btn-radio="0.75">7:40+</label>
+	            <label class="btn btn-success" ng-model="entity.Dispute.Points" uib-btn-radio="1.00">Present</label>
+			</div>
+			<div class="help-block error-text" ng-if="formDispute.$submitted && entity.Dispute.Points == null">
+				Please indicate when you arrived.
+			</div><br /><br />
+
+			<div class="form-group">
+				<label class="control-label">Comment:</label>
+				<textarea rows="5" class="form-control" ng-model="entity.Dispute.Comment" maxlength="255"></textarea>
+			</div>
+			<button class="btn-sm btn-primary pull-right" ng-click="vm.SubmitDispute(formDispute, entity)">Submit</button>
+		</form>
+	</ajax-form>
+</script>	

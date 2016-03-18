@@ -40,7 +40,7 @@ class OptionController {
 			if(isset($_REQUEST['key'])) $result = $this->service_->Get($_REQUEST['key']);
 			else                        $result = $this->service_->GetAll();
 
-			if($result === FALSE) throw new Exception("That key doesn't belong to this plugin.");
+			if($result === FALSE) throw new Exception("Key '" . $_REQUEST["key"] . "' doesn't belong to this plugin.");
 		} catch (Exception $e) {
 			status_header(422);
 			echo($e->getMessage());

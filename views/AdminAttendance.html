@@ -1,19 +1,19 @@
 <div class="wrap">
-	<div class="row" ng-app="WRO" ng-controller="AttendanceCtrl">
+	<div class="row" ng-app="WRO" ng-controller="AttendanceCtrl as vm">
 		<div class="col-md-8">
 			<div class="panel panel-primary sublime">
 				<div class="panel-heading">
 					<span class="glyphicon glyphicon-list"></span> Attendance Table
 					<div class="btn-group pull-right">
-						<button type="button" class="btn btn-info btn-xs" ng-click="RefreshRecords()">
+						<button type="button" class="btn btn-info btn-xs" ng-click="vm.Refresh()">
 						    Refresh <span class="glyphicon glyphicon-refresh"></span>
 						</button>
-						<button type="button" class="btn btn-info btn-xs" ng-click="AddRecord()">
+						<button type="button" class="btn btn-info btn-xs" ng-click="vm.AddRecord()">
 						    Add <span class="glyphicon glyphicon-plus"></span>
 						</button>
 					</div>
 				</div>
-				<ajax-content status="model.AjaxContent.Attendance" src="model.AttendanceEntities">
+				<ajax-content status="vm.AjaxContent.Attendance" src="vm.AttendanceEntities">
 					<div class="panel-body">
 					    <div class="col-xs-6 form-inline">
 					    	Show&nbsp;
@@ -46,17 +46,17 @@
 					        </tr>
 					    </thead>
 					    <tbody>
-					    	<tr dir-paginate="record in model.AttendanceEntities | filter:q | itemsPerPage: r">
+					    	<tr dir-paginate="record in vm.AttendanceEntities | filter:q | itemsPerPage: r">
 					    		<td><span ng-bind="record.ID"></span></td>
 					    		<td><span ng-class="record.ClassStyle" ng-bind="record.Name"></span></td>
 					    		<td><span ng-class="record.ClassStyle" ng-bind="record.ClassName"></span></td>
 					    		<td><span ng-bind="record.Points"></span></td>
 					    		<td><span ng-bind="record.Date | date: 'MM/dd/yyyy'"></span></td>
 					    		<td align="right">
-					    			<button type="button" class="btn-xs btn-info" ng-click="EditRecord(record)">
+					    			<button type="button" class="btn-xs btn-info" ng-click="vm.EditRecord(record)">
 					    				<span class="glyphicon glyphicon-edit"></span>
 					    			</button>
-					    			<button type="button" class="btn-xs btn-danger" ng-click="DeleteRecord(record)">
+					    			<button type="button" class="btn-xs btn-danger" ng-click="vm.DeleteRecord(record)">
 					    				<span class="glyphicon glyphicon-remove"></span>
 					    			</button>
 					    		</td>

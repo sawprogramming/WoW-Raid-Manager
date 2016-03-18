@@ -66,6 +66,9 @@ class DisputeService {
         $current_user = wp_get_current_user();
         $record       = $attendanceSvc->Get($entity->AttendanceID);
 
+        // don't allow anonymous users to dispute records for players with no UserID
+        if($current_user->ID == 0) return false;
+
         // make sure the disputed attendance record is for this user
         for($i = 0; $i < count($players); ++$i) {
             if($players[$i]->ID == $record->PlayerID) {

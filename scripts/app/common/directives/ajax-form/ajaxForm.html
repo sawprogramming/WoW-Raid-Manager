@@ -1,7 +1,7 @@
-<fieldset ng-disabled="status == 'processing'">
+<fieldset ng-disabled="status > 0">
 	<div ng-transclude></div>
-	<div ng-if="status =='processing'">
+	<div ng-if="status > 0">
 		<div class="absolute-center form-processing"></div>
 		<img ng-src="{{ __images.ajaxLoaderLg }}" class="absolute-center" />
 	</div>
-<fieldset>
+</fieldset>

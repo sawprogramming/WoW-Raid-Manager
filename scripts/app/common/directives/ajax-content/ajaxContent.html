@@ -1,8 +1,8 @@
 <div ng-switch on="content.status">
-	<div ng-switch-when="loading" class="text-center">
+	<div ng-switch-when="0" class="text-center">
 		<img ng-src="{{ __images.ajaxLoaderLg }}">
 	</div>
-	<div ng-switch-when="error" class="text-center">
+	<div ng-switch-when="-1" class="text-center">
 		<h3>
 			<span class="glyphicon glyphicon-warning-sign text-red"></span>
 			Error
@@ -11,10 +11,7 @@
 		<p>This data could not be loaded. Error details:</p>
 		<p class="text-red" ng-bind="content.message"></p>
 	</div>
-	<div ng-switch-when="empty" class="text-center">
-		<h4>There's no content to display.</h4>
-	</div>
-	<div ng-switch-when="success">
+	<div ng-switch-when="1">
 		<div ng-transclude ng-if="src.length || ((src != null) ? src.length != 0 : false)"></div>
 		<div ng-if="src == null || ((!src.length) ? src.length == 0 : false)" class="text-center">
 			<h4>There's no content to display.</h4>

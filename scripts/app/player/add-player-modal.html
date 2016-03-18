@@ -1,0 +1,59 @@
+<div class="modal-header bg-primary">
+	<button type="button" class="close" aria-label="Close" ng-click="vm.cancel()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title">Add New Player</h4>
+</div>
+<div class="modal-body form-horizontal">
+	<ajax-form status="vm.ActiveRequests">
+		<form name="formAddPlayer" novalidate>
+			<div class="form-group">
+				<label class="control-label col-xs-3">User Name:</label>
+				<div class="col-xs-9">
+					<div class="input-group select-fix">
+						<span class="input-group-addon">
+							<input type="checkbox" ng-model="HasUserID">
+						</span>
+						<user-select class="form-control" ng-model="vm.UserID" ng-disabled="!HasUserID" />
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">Name:</label>
+				<div class="col-xs-9">
+					<input class="form-control" name="addPlayerName" ng-model="vm.Name" ng-required="true"
+						   ng-pattern="'\\p{L}+'" ng-minlength="3" maxlength="12">
+				</div>
+				<div ng-messages="formAddPlayer.addPlayerName.$error" class="col-xs-9 col-xs-offset-3 help-block error-text" 
+					 ng-if="formAddPlayer.$invalid && (formAddPlayer.addPlayerName.$touched || formAddPlayer.$submitted)">
+					<div ng-message="required">This field is required.</div>
+					<div ng-message="minlength">Player name must be at least 3 characters long.</div>
+					<div ng-message="pattern">Player names must only contain letters.</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">Class:</label>
+				<div class="col-xs-9 select-fix">
+					<class-select class="form-control" ng-model="vm.ClassID"></class-select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">Realm:</label>
+				<div class="col-xs-9 select-fix">
+					<realm-select class="form-control" name="addPlayerRealm" ng-model="vm.Realm" region="vm.region" ng-required="true"></realm-select>
+				</div>
+				<div ng-messages="formAddPlayer.addPlayerRealm.$error" class="col-xs-9 col-xs-offset-3 help-block error-text" 
+					 ng-if="formAddPlayer.$invalid && (formAddPlayer.addPlayerRealm.$touched || formAddPlayer.$submitted)">
+					<div ng-message="required">This field is required.</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<button class="btn btn-primary pull-right" type="submit" ng-click="vm.add(formAddPlayer)">
+						Add <small><i class="glyphicon glyphicon-plus" /></small>
+					</button>
+				</div>
+			</div>
+		</form>
+	</ajax-form>
+</div>

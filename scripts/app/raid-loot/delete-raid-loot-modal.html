@@ -1,0 +1,24 @@
+<div class="modal-header bg-primary">
+		<button type="button" class="close" aria-label="Close" ng-click="vm.cancel()">
+			<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title">Delete Record</h4>
+</div>
+<div class="modal-body form-horizontal">
+	<ajax-form status="vm.ActiveRequests">
+		<div class="text-center">
+			<h4>
+				Are you sure you want to delete 
+				<span ng-class="vm.ClassStyle" ng-bind="vm.PlayerName"></span>'s 
+				loot record for <a ng-href="{{vm.Item}}"></a> on <span ng-bind="vm.Date | date: 'MM/dd/yyyy'"></span>?
+			</h4>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-primary pull-right" ng-click="vm.delete()">
+					Delete <small><i class="glyphicon glyphicon-trash" /></small>
+				</button>
+			</div>
+		</div>
+	</ajax-form>
+</div>
