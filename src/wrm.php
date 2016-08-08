@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.6
+ * Version: 2.3.7
  * Author: Steven Williams
  * License: GPL2
  */
@@ -43,6 +43,7 @@ class WRO {
         add_option('wro_default_realm',   'stormrage', '', 'yes');
         add_option('wro_loot_time',       time(),      '', 'yes');
         add_option('wro_loot_frequency',  'daily',     '', 'yes');
+        add_option('wro_loot_itemid',     '113598',    '', 'yes');
         add_option('wro_realm_time',      time(),      '', 'yes');
         add_option('wro_realm_frequency', 'daily',     '', 'yes');
         add_option('wro_drop_tables',     '0',         '', 'yes');

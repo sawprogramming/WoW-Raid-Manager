@@ -96,16 +96,16 @@
 <script type="text/ng-template" id="disputeTemplate.html">
 	<ajax-form status="vm.AjaxForm.Dispute">
 		<form style="width: 350px;" name="formDispute">
-			<label class="control-label">Arrival Time:</label>
+			<label class="control-label">Points:</label>
 			<div class="btn-group btn-group-sm">
 	            <label class="btn btn-danger"  ng-model="entity.Dispute.Points" uib-btn-radio="0.00">Absent</label>
-	            <label class="btn btn-default" ng-model="entity.Dispute.Points" uib-btn-radio="0.25">10:00+</label>
-	            <label class="btn btn-warning" ng-model="entity.Dispute.Points" uib-btn-radio="0.50">9:00+</label>
-	            <label class="btn btn-primary" ng-model="entity.Dispute.Points" uib-btn-radio="0.75">7:40+</label>
+	            <label class="btn btn-default" ng-model="entity.Dispute.Points" uib-btn-radio="0.25">0.25</label>
+	            <label class="btn btn-warning" ng-model="entity.Dispute.Points" uib-btn-radio="0.50">0.50</label>
+	            <label class="btn btn-primary" ng-model="entity.Dispute.Points" uib-btn-radio="0.75">0.75</label>
 	            <label class="btn btn-success" ng-model="entity.Dispute.Points" uib-btn-radio="1.00">Present</label>
 			</div>
 			<div class="help-block error-text" ng-if="formDispute.$submitted && entity.Dispute.Points == null">
-				Please indicate when you arrived.
+				Please select the points for this dispute.
 			</div><br /><br />
 
 			<div class="form-group">

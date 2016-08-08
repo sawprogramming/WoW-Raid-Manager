@@ -93,6 +93,18 @@
                                 </div>
                             </form>
                         </ajax-content>
+                        <h4>Retrieval Settings:</h4>
+                        <hr />
+                        <ajax-content status="vm.AjaxContent.Options" src="vm.Options">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5"><span class="glyphicon glyphicon-list-alt pull-left"></span>Minimum Item ID:</label>
+                                    <div class="col-md-7">
+                                        <input type="text" class="form-control" ng-model="vm.Options.wro_loot_itemid"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </ajax-content>
                     </div>
 					<div class="panel-footer" align="right">
 						<button class="btn btn-primary" ng-click="vm.SaveSettings()">

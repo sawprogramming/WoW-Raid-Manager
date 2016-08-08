@@ -76,7 +76,8 @@
         function SaveSettings() {
             var usedOptions = [
 			    { "key": "wro_loot_time",      "value": TimeSvc.toPhpTime(vm.Options.wro_loot_time) },
-			    { "key": "wro_loot_frequency", "value": vm.Options.wro_loot_frequency }
+			    { "key": "wro_loot_frequency", "value": vm.Options.wro_loot_frequency },
+                { "key": "wro_loot_itemid",    "value": vm.Options.wro_loot_itemid }
             ];
             vm.ActiveRequests = 1;
 

@@ -45,7 +45,8 @@ class DatabaseSeeder {
 			        (3, 'Wrath of the Lich King', '2008-11-13', '2010-12-06'),
 			        (4, 'Cataclysm',              '2010-12-07', '2012-09-24'),
 	   		        (5, 'Mists of Pandaria',      '2012-09-25', '2014-11-12'),
-			        (6, 'Warlords of Draenor',    '2014-12-02', NULL)
+			        (6, 'Warlords of Draenor',    '2014-12-02', '2016-08-29'),
+                    (7, 'Legion',                 '2016-08-30', NULL);
 		");
 	}
 
@@ -88,7 +89,10 @@ class DatabaseSeeder {
 
 				   (27, 6, 'Highmaul',                  '2014-12-02', '2015-02-02'),
 			       (28, 6, 'Blackrock Foundry',         '2015-02-03', '2015-06-22'),
-			       (29, 6, 'Hellfire Citadel',          '2015-06-23', NULL);
+			       (29, 6, 'Hellfire Citadel',          '2015-06-23', '2016-08-29'),
+
+                   (30, 7, 'The Emerald Nightmare',     '2016-09-27', NULL),
+                   (31, 7, 'Nighthold',                 '2016-09-27', NULL);
 		");
 	}
 };

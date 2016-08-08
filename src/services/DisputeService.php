@@ -95,7 +95,13 @@ class DisputeService {
     //
     // Returns ?
     public function Add(Entities\DisputeEntity $entity) {
-        $disputes = $this->dao_->GetUnresolved();
+        $attendanceSvc = new AttendanceService();
+        $disputes      = $this->dao_->GetUnresolved();
+
+        // if the dispute is for the same amount of points, ignore it
+        if($attendanceSvc->Get($entity->AttendanceID)->Points == $entity->Points) {
+            throw new Exception("You were already awarded that many points!");   
+        }
 
         // if there is a pending dispute, don't let another one be created
         for($i = 0; $i < count($disputes); ++$i) {

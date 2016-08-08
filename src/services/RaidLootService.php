@@ -1,6 +1,7 @@
 <?php
 namespace WRO\Services;
 require_once(plugin_dir_path(__FILE__)."PlayerService.php");
+require_once(plugin_dir_path(__FILE__)."OptionService.php");
 require_once(plugin_dir_path(__FILE__)."../dao/RaidLootDAO.php");
 require_once(plugin_dir_path(__FILE__)."ImportHistoryService.php");
 use Exception;
@@ -73,7 +74,9 @@ class RaidLootService {
         $wowApi    = new \WRO\WowApi();
         $playerSvc = new PlayerService();
         $importSvc = new ImportHistoryService();
-        
+        $optionSvc = new OptionService();
+        $minId     = $optionSvc->Get("wro_loot_itemid");
+
         // fetch the news for each raider
         $raiders = $playerSvc->GetAll();
         foreach($raiders as $raider) {
@@ -95,7 +98,7 @@ class RaidLootService {
                 if(!($lastImported == NULL) && $event->timestamp < $lastImported->LastImported) break;
 
                 // only add loot events from current expansion's raids
-                if($event->type == "LOOT" && $event->itemId > 113598 && strpos($event->context, "raid") !== false) {
+                if($event->type == "LOOT" && $event->itemId > $minId && strpos($event->context, "raid") !== false) {
                     $entity = new Entities\RaidLootEntity(
                         0, 
                         $raider->ID, 
