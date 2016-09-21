@@ -32,7 +32,7 @@ class AttendanceController {
 				break;
 			default:
 				// return bad request error
-				status_header(400);
+				status_header(400);-
 				die();
 				break;
 		}
@@ -46,15 +46,17 @@ class AttendanceController {
 		global $wpdb;
 
 		try {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+
 			// decode data
-			if(!isset($_REQUEST['dailyEntities']) ^ isset($_REQUEST['entity'])) {
+			if(!isset($_POST['dailyEntities']) ^ isset($_POST['entity'])) {
 				throw new Exception("Missing the entities parameter.");
 			}
 
 			// daily attendance
-			if($_REQUEST['dailyEntities']) {
+			if($_POST['dailyEntities']) {
 				$entities = array();
-				$data = json_decode(stripslashes($_REQUEST['dailyEntities']));
+				$data = json_decode(stripslashes($_POST['dailyEntities']));
 
 				foreach($data as $entity) {
 					if(!isset($entity->ID, $entity->Date, $entity->Points)) {

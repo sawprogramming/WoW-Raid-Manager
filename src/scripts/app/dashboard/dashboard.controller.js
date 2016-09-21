@@ -153,11 +153,11 @@
 
                 AttendanceSvc.SaveGroupAttnd(vm.DailyEntities).then(
                     function success(response) {
-                        RefreshDaily();
+                        vm.RefreshDaily();
                         toastr.success("Attendance saved!");
                     },
                     function error(response) {
-                        toastr.error(errmsg.response, response.statusText, {
+                        toastr.error(response.data, response.statusText, {
                             closeButton : true,
                             progressBar : true,
                             timeOut     : 30000

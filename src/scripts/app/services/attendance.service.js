@@ -123,7 +123,9 @@
                 method: 'POST',
                 url: ajax_object.ajax_url,
                 params: {
-                    'action': 'wro_attendance',
+                    'action': 'wro_attendance'
+                },
+                data: {
                     'dailyEntities': JSON.stringify(entities)
                 }
             });
