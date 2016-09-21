@@ -78,7 +78,7 @@ class AttendanceController {
 
 			// single record
 			else {
-				$data = json_decode(stripslashes($_REQUEST['entity']));
+				$data = json_decode(stripslashes($_POST['entity']));
 
 				if(!isset($data->PlayerID, $data->Date, $data->Points)) {
 					throw new Exception("Missing expected properties for the Attendance Entity.");
@@ -103,7 +103,7 @@ class AttendanceController {
 
 		// success
 		status_header(201);
-		if($_REQUEST['entity']) {
+		if($_POST['entity']) {
 			echo(json_encode($this->service->Get($wpdb->insert_id)));
 		}
 		die();
