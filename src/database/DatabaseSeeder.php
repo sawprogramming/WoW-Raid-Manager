@@ -91,7 +91,7 @@ class DatabaseSeeder {
 			       (28, 6, 'Blackrock Foundry',         '2015-02-03', '2015-06-22'),
 			       (29, 6, 'Hellfire Citadel',          '2015-06-23', '2016-08-29'),
 
-                   (30, 7, 'The Emerald Nightmare',     '2016-09-21', NULL)
+                   (30, 7, 'The Emerald Nightmare',     '2016-09-20', NULL)
 		");
 	}
 };
