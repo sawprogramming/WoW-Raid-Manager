@@ -14,7 +14,7 @@ class Add extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			INSERT INTO " . $attendanceTable->GetName() . " (PlayerID, Date, Points)
-			VALUES (%u, %s, %f);
+			VALUES (%d, %s, %f);
 		", $entity->PlayerID, $entity->Date, $entity->Points));
 	}
 };

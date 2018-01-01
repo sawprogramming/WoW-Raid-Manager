@@ -14,7 +14,7 @@ class Add extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			INSERT INTO " . $importHistoryTable->GetName() . " (PlayerID, LastImported)
-        	VALUES (%u, %f);
+        	VALUES (%d, %f);
     	", $entity->PlayerID, $entity->LastImported));
 	}
 };

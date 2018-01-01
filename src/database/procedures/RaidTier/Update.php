@@ -16,20 +16,20 @@ class Update extends Procedures\StoredProcedure {
 		if($entity->EndDate === NULL) {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $raidTierTable->GetName() . "
-				SET ExpansionID = %u,
+				SET ExpansionID = %d,
 				    Name = %s, 
 				    StartDate = %s,
 				    EndDate = NULL
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->ExpansionID, $entity->Name, $entity->StartDate, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $raidTierTable->GetName() . "
-				SET ExpansionID = %u,
+				SET ExpansionID = %d,
 				    Name = %s, 
 				    StartDate = %s,
 				    EndDate = %s
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->ExpansionID, $entity->Name, $entity->StartDate, $entity->EndDate, $entity->ID));
 		}
 

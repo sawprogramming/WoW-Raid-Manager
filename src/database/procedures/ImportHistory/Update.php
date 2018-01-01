@@ -15,7 +15,7 @@ class Update extends Procedures\StoredProcedure {
 		return $wpdb->query($wpdb->prepare("
             UPDATE " . $importHistoryTable->GetName() . "
             SET LastImported = %f
-            WHERE PlayerID = %u
+            WHERE PlayerID = %d
         ", $entity->LastImported, $entity->PlayerID));
 	}
 };

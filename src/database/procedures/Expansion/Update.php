@@ -19,7 +19,7 @@ class Update extends Procedures\StoredProcedure {
 				SET Name = %s, 
 				    StartDate = %s,
 				    EndDate = NULL
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->Name, $entity->StartDate, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
@@ -27,7 +27,7 @@ class Update extends Procedures\StoredProcedure {
 				SET Name = %s, 
 				    StartDate = %s,
 				    EndDate = %s
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->Name, $entity->StartDate, $entity->EndDate, $entity->ID));
 		}
 

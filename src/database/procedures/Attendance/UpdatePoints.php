@@ -15,7 +15,7 @@ class UpdatePoints extends Procedures\StoredProcedure {
 		return $wpdb->query($wpdb->prepare("
 			UPDATE " . $attendanceTable->GetName() . "
 			SET Points = %f
-			WHERE ID = %u;
+			WHERE ID = %d;
 		", $entity->Points, $entity->ID));
 	}
 };

@@ -17,25 +17,25 @@ class Update extends Procedures\StoredProcedure {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $playerTable->GetName() . "
 				SET UserID = NULL,
-					ClassID = %u, 
+					ClassID = %d, 
 				    Name = %s,
 				    Icon = %s,
 				    Active = %d,
 				    Region = %s,
 				    Realm = %s
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->Region, $entity->Realm, $entity->ID));
 		} else {
 			$result = $wpdb->query($wpdb->prepare("
 				UPDATE " . $playerTable->GetName() . "
-				SET UserID = %u,
-					ClassID = %u, 
+				SET UserID = %d,
+					ClassID = %d, 
 				    Name = %s,
 				    Icon = %s,
 				    Active = %d,
 				    Region = %s,
 				    Realm = %s
-				WHERE ID = %u;
+				WHERE ID = %d;
 			", $entity->UserID, $entity->ClassID, $entity->Name, $entity->Icon, $entity->Active, $entity->Region, $entity->Realm, $entity->ID));
 		}
 

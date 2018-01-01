@@ -12,7 +12,7 @@ class DeleteRow extends Procedures\StoredProcedure {
 
     	return $wpdb->query($wpdb->prepare("
     		DELETE FROM " . $raidLootTable->GetName() . " 
-    		WHERE ID = %u;
+    		WHERE ID = %d;
 		", $id));
 	}
 };

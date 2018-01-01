@@ -12,7 +12,7 @@ class Delete extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			DELETE FROM " . $playerTable->GetName() . "
-			WHERE ID = %u;
+			WHERE ID = %d;
 		", $id));
 	}
 };

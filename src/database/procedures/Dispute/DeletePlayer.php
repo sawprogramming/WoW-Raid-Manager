@@ -15,7 +15,7 @@ class DeletePlayer extends Procedures\StoredProcedure {
 			DELETE ds
 			FROM " .        $disputeTable->GetName() . " as ds
 			    JOIN " . $attendanceTable->GetName() . " as at ON ds.AttendanceID = at.ID
-			WHERE at.PlayerID = %u;
+			WHERE at.PlayerID = %d;
 		", $id));
 	}
 };

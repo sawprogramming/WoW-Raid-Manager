@@ -15,14 +15,14 @@ class GetChart extends Procedures\StoredProcedure {
 				SELECT FLOOR((SUM(Points) / COUNT(Points)) * 100)
 				FROM " . $attendanceTable->GetName() . " 
 				WHERE Date <= at.Date 
-					AND PlayerID = %u
+					AND PlayerID = %d
 				) as PlayerAverage, (
 				SELECT FLOOR((SUM(Points) / COUNT(Points)) * 100)
 				FROM " . $attendanceTable->GetName() . " 
 				WHERE Date <= at.Date 
 				) as RaidAverage
 			FROM " . $attendanceTable->GetName() . " AS at
-			WHERE PlayerID = %u
+			WHERE PlayerID = %d
 			ORDER BY Date ASC;
 		", $id, $id));
 	}

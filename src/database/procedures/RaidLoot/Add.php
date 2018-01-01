@@ -14,7 +14,7 @@ class Add extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			INSERT INTO " . $raidLootTable->GetName() . " (PlayerID, Item, Date)
-        	VALUES (%u, %s, %s);
+        	VALUES (%d, %s, %s);
     	", $entity->PlayerID, $entity->Item, $entity->Date));
 	}
 };

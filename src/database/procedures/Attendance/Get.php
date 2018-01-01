@@ -17,7 +17,7 @@ class Get extends Procedures\StoredProcedure {
 			FROM " . $attendanceTable->GetName() . " as at
 				JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 				JOIN " .  $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
-			WHERE at.ID = %u;
+			WHERE at.ID = %d;
 		", $id));
 	}
 };

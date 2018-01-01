@@ -17,7 +17,7 @@ class GetAllById extends Procedures\StoredProcedure {
 			FROM " . $attendanceTable->GetName() . " as at
 				JOIN " . $playerTable->GetName() . " as pl ON at.PlayerID = pl.ID
 				JOIN " .  $classTable->GetName() . " as cl ON pl.ClassID = cl.ID
-			WHERE at.PlayerID = %u
+			WHERE at.PlayerID = %d
 			ORDER BY at.Date DESC;
 		", $id));
 	}

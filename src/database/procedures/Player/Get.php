@@ -18,7 +18,7 @@ class Get extends Procedures\StoredProcedure {
 				JOIN " . $classTable->GetName() .  " as cl ON pl.ClassID = cl.ID
 				LEFT JOIN " . $wpdb->prefix . "users as wp ON pl.UserID = wp.ID
 				JOIN " . $realmTable->GetName() . " as rt on pl.Region = rt.Region AND pl.Realm = rt.Slug
-			WHERE pl.ID = %u;
+			WHERE pl.ID = %d;
 		", $id));
 	}
 };

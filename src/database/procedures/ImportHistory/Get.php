@@ -12,7 +12,7 @@ class Get extends Procedures\StoredProcedure {
 
 		return $wpdb->get_row($wpdb->prepare("
 			SELECT * FROM " . $importHistoryTable->GetName() . "
-			WHERE PlayerID = %u;
+			WHERE PlayerID = %d;
 		", $id));
 	}
 };

@@ -14,8 +14,8 @@ class Update extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			UPDATE " . $attendanceTable->GetName() . "
-			SET PlayerID = %u, Date = %s, Points = %f
-			WHERE ID = %u;
+			SET PlayerID = %d, Date = %s, Points = %f
+			WHERE ID = %d;
 		", $entity->PlayerID, $entity->Date, $entity->Points, $entity->ID));
 	}
 };

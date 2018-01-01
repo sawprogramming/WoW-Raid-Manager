@@ -15,7 +15,7 @@ class Update extends Procedures\StoredProcedure {
 		return $wpdb->query($wpdb->prepare("
 			UPDATE " . $disputeTable->GetName() . "
 			SET Verdict = %d
-			WHERE ID = %u;
+			WHERE ID = %d;
 		", $entity->Verdict, $entity->ID));
 	}
 };

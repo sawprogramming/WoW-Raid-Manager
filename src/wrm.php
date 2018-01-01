@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.3.8
+ * Version: 2.3.9
  * Author: Steven Williams
  * License: GPL2
  */
@@ -53,8 +53,8 @@ class WRO {
         Database\DatabaseSeeder::Seed();
 
         // schedule jobs
-        wp_schedule_event($optionService->Get("wro_loot_time"),  $optionService->Get("wro_loot_frequency"),  'update_guild_loot');
         wp_schedule_event($optionService->Get("wro_realm_time"), $optionService->Get("wro_realm_frequency"), 'update_realm_list');
+        wp_schedule_event($optionService->Get("wro_loot_time"),  $optionService->Get("wro_loot_frequency"),  'update_guild_loot');
     }
 
     public function Uninstall() {

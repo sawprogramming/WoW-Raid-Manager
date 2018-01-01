@@ -14,7 +14,7 @@ class Add extends Procedures\StoredProcedure {
 
 		return $wpdb->query($wpdb->prepare("
 			INSERT INTO " . $disputeTable->GetName() . " (AttendanceID, Points, Comment)
-			VALUES (%u, %f, %s);
+			VALUES (%d, %f, %s);
 		", $entity->AttendanceID, $entity->Points, $entity->Comment));
 	}
 };

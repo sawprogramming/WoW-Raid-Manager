@@ -15,12 +15,12 @@ class Add extends Procedures\StoredProcedure {
 		if($entity->EndDate == NULL) {
 			return $wpdb->query($wpdb->prepare("
 				INSERT INTO " . $raidTierTable->GetName() . " (ExpansionID, Name, StartDate)
-	        	VALUES (%u, %s, %s);
+	        	VALUES (%d, %s, %s);
 	    	", $entity->ExpansionID, $entity->Name, $entity->StartDate));
 		} else {
 			return $wpdb->query($wpdb->prepare("
 				INSERT INTO " . $raidTierTable->GetName() . " (ExpansionID, Name, StartDate, EndDate)
-	        	VALUES (%u, %s, %s, %s);
+	        	VALUES (%d, %s, %s, %s);
 	    	", $entity->ExpansionID, $entity->Name, $entity->StartDate, $entity->EndDate));
 		}
 	}
