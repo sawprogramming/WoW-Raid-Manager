@@ -5,7 +5,7 @@
 	<div class="row">
 		<div class="col-md-2">
 			<figure style="text-align: center;">
-				<img ng-src="http://us.battle.net/static-render/us/{{vm.BreakdownEntity.Icon}}" height="128" width="128"/>
+                <img ng-src="http://render-{{vm.BreakdownEntity.Region}}.worldofwarcraft.com/character/{{vm.BreakdownEntity.Icon}}" height="128" width="128" />
 				<figcaption>
 					<b ng-class="vm.BreakdownEntity.ClassID" ng-bind="vm.BreakdownEntity.Name"></b>
 				</figcaption>

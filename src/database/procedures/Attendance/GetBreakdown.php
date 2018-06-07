@@ -15,7 +15,7 @@ class GetBreakdown extends Procedures\StoredProcedure {
 		$attendanceTable = new Tables\AttendanceTable();
 
 		return $wpdb->get_row($wpdb->prepare("
-			SELECT pl.ID, pl.Name, pl.ClassID, cl.Name as ClassName, pl.Icon, IFNULL(tw.TwoWeek, 0) as TwoWeek, IFNULL(m.Month, 0) as Month, at.AllTime, ti.Tier
+			SELECT pl.ID, pl.Name, pl.Region, pl.ClassID, cl.Name as ClassName, pl.Icon, IFNULL(tw.TwoWeek, 0) as TwoWeek, IFNULL(m.Month, 0) as Month, at.AllTime, ti.Tier
 			FROM " . $playerTable->GetName() . " as pl
 				LEFT JOIN (SELECT PlayerID, FLOOR((SUM(Points) / COUNT(Points)) * 100) as TwoWeek
 					  FROM " . $attendanceTable->GetName() . "
