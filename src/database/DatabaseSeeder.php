@@ -46,7 +46,8 @@ class DatabaseSeeder {
 			        (4, 'Cataclysm',              '2010-12-07', '2012-09-24'),
 	   		        (5, 'Mists of Pandaria',      '2012-09-25', '2014-11-12'),
 			        (6, 'Warlords of Draenor',    '2014-12-02', '2016-08-29'),
-                    (7, 'Legion',                 '2016-08-30', NULL);
+                    (7, 'Legion',                 '2016-08-30', '2018-08-13'),
+                    (8, 'Battle for Azeroth',     '2018-08-14', NULL);
 		");
 	}
 
@@ -95,7 +96,9 @@ class DatabaseSeeder {
                    (31, 7, 'Trial of Valor',              '2016-10-25', '2017-01-09'),
                    (32, 7, 'Nighthold',                   '2017-01-10', '2017-06-19'),
                    (33, 7, 'Tomb of Sargeras',            '2017-06-20', '2017-08-28'),
-                   (34, 7, 'Antorus, The Burning Throne', '2017-08-29', NULL)
+                   (34, 7, 'Antorus, The Burning Throne', '2017-08-29', '2018-08-13'),
+
+                   (35, 8, 'Uldir',                       '2018-09-04', NULL)
 		");
 	}
 };
