@@ -133,6 +133,6 @@
 <script type="text/javascript">
 	google.load('visualization', '1.1', {packages: ['line']});
 </script>
-<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
 <script>var wowhead_tooltips = { "colorlinks": true, "iconizelinks": true, "renamelinks": true }</script>
+<script type="text/javascript" src="http://wow.zamimg.com/widgets/power.js"></script>
 <?php get_footer(); ?>
