@@ -9,6 +9,7 @@ require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetCha
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeleteRow.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAllById.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBreakdown.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetBreakdownCount.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/UpdatePoints.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAveragesInRange.php");
@@ -43,6 +44,10 @@ class AttendanceDAO {
 	
 	public function GetBreakdown($id) {
 		return Procedures\GetBreakdown::Run($id);
+	}
+
+    public function GetBreakdownCount($id) {
+		return Procedures\GetBreakdownCount::Run($id);
 	}
 
 	public function GetChart($id) {

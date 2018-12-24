@@ -32,6 +32,32 @@ class AttendanceService {
     }
 
     // Parameters:
+    //   unsigned long id - ID of the Player to retrieve the BreakdownEntity for.
+    //
+    // Returns: 
+    //   Object[]
+    //     TwoWeekPresent - Number of raids present for the previous two weeks for this Player.
+    //     TwoWeekAbsent  - Number of raids absent for the previous two weeks for this Player.
+    //     TwoWeekLate    - Number of raids late for the previous two weeks for this Player.
+    //     TwoWeekTotal   - Number of raids total for the previous two weeks for this Player.
+    //     MonthlyPresent - Number of raids present for the previous thirty days for this Player.
+    //     MonthlyAbsent  - Number of raids absent for the previous thirty days for this Player.
+    //     MonthlyLate    - Number of raids late for the previous thirty days for this Player.
+    //     MonthlyTotal   - Number of raids total for the previous thirty days for this Player.
+    //     AllTimePresent - Number of raids present for all Attendance records for this Player.
+    //     AllTimeAbsent  - Number of raids absent for all Attendance records for this Player.
+    //     AllTimeLate    - Number of raids late for all Attendance records for this Player.
+    //     AllTimeTotal   - Number of raids total for all Attendance records for this Player.
+    //     TierPresent    - Number of raids present for the most recent tier for this Player.
+    //     TierAbsent     - Number of raids absent for the most recent tier for this Player.
+    //     TierLate       - Number of raids late for the most recent tier for this Player.
+    //     TierTotal      - Number of raids total for the most recent tier for this Player.
+    //     PlayerID - The Player these statistics are for.
+    public function GetBreakdownCount($id) {
+        return $this->dao_->GetBreakdownCount($id);
+    }
+
+    // Parameters:
     //   unsigned long id - ID of the Attendance record to retrieve.
     //
     // Returns the corresponding AttendanceEntity object from the database with the passed in ID. 

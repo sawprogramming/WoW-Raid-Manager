@@ -34,7 +34,12 @@
             vm.ID         = entity.ID;
             vm.Name       = entity.Name;
             vm.PlayerID   = entity.PlayerID;
-            vm.Points     = entity.Points;
+            vm.Points = entity.Points;
+
+            // take the timezone out of the JavaScript date to prevent issues
+            var date       = vm.Date;
+            var simpleDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            vm.Date = simpleDate;
         }
 
         function EditRecord(form) {
@@ -46,6 +51,11 @@
                     Points   : vm.Points
                 };
                 vm.ActiveRequests = 1;
+
+                // take the timezone out of the JavaScript date to prevent issues
+                var date       = vm.Date;
+                var simpleDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                Entity.Date = simpleDate;
 
                 AttendanceSvc.UpdateRecord(Entity).then(
                     function success(response) {

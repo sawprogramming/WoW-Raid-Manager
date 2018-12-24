@@ -153,6 +153,10 @@ class AttendanceController {
 					if(!isset($_REQUEST['id'])) throw new Exception("Missing the required 'id' parameter for this function.");
 					else                        $result = $this->service->GetBreakdown($_REQUEST['id']);
 					break;
+                case 'breakdowncount':
+					if(!isset($_REQUEST['id'])) throw new Exception("Missing the required 'id' parameter for this function.");
+					else                        $result = $this->service->GetBreakdownCount($_REQUEST['id']);
+					break;
 				case 'chart':
 					if(!isset($_REQUEST['id']))	throw new Exception("Missing the required 'id' parameter for this function.");
 					else                        $result = $this->service->GetChart($_REQUEST['id']);

@@ -28,15 +28,15 @@
                     </span>
                 </p>
                 <p class="half-margin">
-                    <b>All Time:</b>
-                    <span class="pull-right">
-                        <span ng-bind="vm.BreakdownEntity.AllTime"></span>%
-                    </span>
-                </p>
-                <p class="half-margin">
                     <b>This Tier:</b>
                     <span class="pull-right">
                         <span ng-bind="vm.BreakdownEntity.Tier"></span>%
+                    </span>
+                </p>
+                <p class="half-margin">
+                    <b>All Time:</b>
+                    <span class="pull-right">
+                        <span ng-bind="vm.BreakdownEntity.AllTime"></span>%
                     </span>
                 </p>
             </ajax-content>
@@ -48,6 +48,50 @@
 		</div>
 	</div>
 </div>
+
+<ajax-content status="vm.AjaxContent.Breakdown" src="vm.BreakdownEntity">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Absent</th>
+                <th>Late</th>
+                <th>Present</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Two Week</td>
+                <td ng-bind="vm.BreakdownCountEntity.TwoWeekPresent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TwoWeekAbsent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TwoWeekLate"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TwoWeekTotal"></td>
+            </tr>
+            <tr>
+                <td>Month</td>
+                <td ng-bind="vm.BreakdownCountEntity.MonthPresent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.MonthAbsent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.MonthLate"></td>
+                <td ng-bind="vm.BreakdownCountEntity.MonthTotal"></td>
+            </tr>
+            <tr>
+                <td>This Tier</td>
+                <td ng-bind="vm.BreakdownCountEntity.TierPresent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TierAbsent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TierLate"></td>
+                <td ng-bind="vm.BreakdownCountEntity.TierTotal"></td>
+            </tr>
+            <tr>
+                <td>All Time</td>
+                <td ng-bind="vm.BreakdownCountEntity.AllTimePresent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.AllTimeAbsent"></td>
+                <td ng-bind="vm.BreakdownCountEntity.AllTimeLate"></td>
+                <td ng-bind="vm.BreakdownCountEntity.AllTimeTotal"></td>
+            </tr>
+        </tbody>
+    </table>
+</ajax-content>
 <hr />
 
 <ajax-content status="vm.AjaxContent.Attendance" src="vm.AttendanceEntities">

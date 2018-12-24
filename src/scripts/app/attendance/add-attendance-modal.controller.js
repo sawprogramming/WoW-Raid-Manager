@@ -31,6 +31,11 @@
                 };
                 vm.ActiveRequests = 1;
 
+                // take the timezone out of the JavaScript date to prevent issues
+                var date       = vm.Date;
+                var simpleDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                Entity.Date = simpleDate;
+
                 AttendanceSvc.AddRecord(Entity).then(
                     function success(response) {
                         var data = response.data;

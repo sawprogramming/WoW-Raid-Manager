@@ -147,8 +147,10 @@
 
         function SaveDaily(form) {
             if (!form.$invalid) {
-                for(var i = 0; i < vm.DailyEntities.length; ++i) {
-                    vm.DailyEntities[i].Date = vm.DailyDate;
+                for (var i = 0; i < vm.DailyEntities.length; ++i) {
+                    var date       = vm.DailyDate;
+                    var simpleDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                    vm.DailyEntities[i].Date = simpleDate;
                 }
 
                 AttendanceSvc.SaveGroupAttnd(vm.DailyEntities).then(

@@ -11,13 +11,14 @@
         var vm = this;
 
         // data
-        vm.AttendanceEntities = [];
-        vm.BreakdownEntity    = {};
-        vm.ChartData          = {};
+        vm.AttendanceEntities   = [];
+        vm.BreakdownEntity      = {};
+        vm.BreakdownCountEntity = {};
+        vm.ChartData            = {};
 
         // controller functions/variables
         vm.ActiveRequests = 0;
-        vm.AjaxContent    = { Attendance: {}, Breakdown: {}, Chart: {} };
+        vm.AjaxContent    = { Attendance: {}, Breakdown: {}, BreakdownCount: {}, Chart: {} };
         vm.cancel         = function () { $uibModalInstance.dismiss('cancel'); }
         vm.SubmitDispute  = SubmitDispute;
 
@@ -26,9 +27,10 @@
         ///////////////////////////////////////////////////////////////////////
         function initialize() {
             var chart, chartOptions;
-            vm.AjaxContent.Attendance.status = 0;
-            vm.AjaxContent.Breakdown.status  = 0;
-            vm.AjaxContent.Chart.status      = 0;
+            vm.AjaxContent.Attendance.status     = 0;
+            vm.AjaxContent.Breakdown.status      = 0;
+            vm.AjaxContent.BreakdownCount.status = 0;
+            vm.AjaxContent.Chart.status          = 0;
 
             AttendanceSvc.GetAllById(entity.ID).then(
                 function success(response) {
@@ -58,6 +60,17 @@
                 function error(response) {
                     vm.AjaxContent.Breakdown.status  = -1;
                     vm.AjaxContent.Breakdown.message = response.data;
+                }
+            );
+
+            AttendanceSvc.GetBreakdownCount(entity.ID).then(
+                function success(response) {
+                    vm.BreakdownCountEntity = response.data;
+                    vm.AjaxContent.BreakdownCount.status = 1
+                },
+                function error(response) {
+                    vm.AjaxContent.BreakdownCount.status  = -1;
+                    vm.AjaxContent.BreakdownCount.message = response.data;
                 }
             );
             
