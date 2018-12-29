@@ -14,10 +14,12 @@
             GetAll                     : GetAll,
             GetAllById                 : GetAllById,
             GetAbsoluteAveragesInRange : GetAbsoluteAveragesInRange,
+            GetAbsoluteCountsInRange   : GetAbsoluteCountsInRange,
             GetAveragesInRange         : GetAveragesInRange,
             GetBreakdown               : GetBreakdown,
             GetBreakdownCount          : GetBreakdownCount,
             GetChart                   : GetChart,
+            GetCountsInRange           : GetCountsInRange,
             SaveGroupAttnd             : SaveGroupAttnd,
             UpdateRecord               : UpdateRecord
         };
@@ -84,6 +86,19 @@
             });
         }
 
+        function GetAbsoluteCountsInRange(startDate, endDate) {
+            return $http({
+                method: 'GET',
+                url: ajax_object.ajax_url,
+                params: {
+                    'action': 'wro_attendance',
+                    'func': 'absolutecount',
+                    'startDate': startDate,
+                    'endDate': endDate
+                }
+            });
+        }
+
         function GetAveragesInRange(startDate, endDate) {
             return $http({
                 method: 'GET',
@@ -129,6 +144,19 @@
                     'action': 'wro_attendance',
                     'func': 'chart',
                     'id': id
+                }
+            });
+        }
+
+        function GetCountsInRange(startDate, endDate) {
+            return $http({
+                method: 'GET',
+                url: ajax_object.ajax_url,
+                params: {
+                    'action': 'wro_attendance',
+                    'func': 'count',
+                    'startDate': startDate,
+                    'endDate': endDate
                 }
             });
         }

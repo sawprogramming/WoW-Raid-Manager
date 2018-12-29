@@ -56,7 +56,7 @@ class DatabaseSeeder {
 		$raidTierTable = new Tables\RaidTierTable();
 		
 		$wpdb->query("
-			INSERT IGNORE INTO " . $raidTierTable->GetName() . " (ID, ExpansionID, Name, StartDate, EndDate)
+			REPLACE INTO " . $raidTierTable->GetName() . " (ID, ExpansionID, Name, StartDate, EndDate)
 			VALUES (1,  1, 'Molten Core',                 '2004-11-23', '2005-07-11'),
 			       (2,  1, 'Blackwing Lair',              '2005-07-12', '2006-01-02'),
 			       (3,  1, 'Zul\'Gurub',                  '2005-09-13', '2006-01-02'),
@@ -98,7 +98,8 @@ class DatabaseSeeder {
                    (33, 7, 'Tomb of Sargeras',            '2017-06-20', '2017-08-28'),
                    (34, 7, 'Antorus, The Burning Throne', '2017-08-29', '2018-08-13'),
 
-                   (35, 8, 'Uldir',                       '2018-09-04', NULL)
+                   (35, 8, 'Uldir',                       '2018-09-04', '2019-01-21'),
+                   (36, 8, 'Dazar\'alor',                 '2019-01-22', NULL)
 		");
 	}
 };

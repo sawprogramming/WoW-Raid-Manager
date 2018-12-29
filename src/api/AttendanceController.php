@@ -163,13 +163,17 @@ class AttendanceController {
 					break;
 				case 'absolute':
 				case 'range':
+				case 'count':
+				case 'absolutecount':
 					$startDate = $endDate = null;
 
 					if(isset($_REQUEST['startDate'])) $startDate = (new \DateTime($_REQUEST['startDate']))->format('Y-m-d');
 					if(isset($_REQUEST['endDate']))   $endDate   = (new \DateTime($_REQUEST['endDate']))->format('Y-m-d');
 
-					if($_REQUEST['func'] == 'absolute') $result = $this->service->GetAbsoluteAveragesInRange($startDate, $endDate);
-					else                                $result = $this->service->GetAveragesInRange($startDate, $endDate);
+					if      ($_REQUEST['func'] == 'absolute') $result = $this->service->GetAbsoluteAveragesInRange($startDate, $endDate);
+					else if ($_REQUEST['func'] == 'range')    $result = $this->service->GetAveragesInRange($startDate, $endDate);
+                    else if ($_REQUEST['func'] == 'count')    $result = $this->service->GetCountsInRange($startDate, $endDate);
+                    else                                      $result = $this->service->GetAbsoluteCountsInRange($startDate, $endDate);
 					break;
 				default:
 					status_header(400);

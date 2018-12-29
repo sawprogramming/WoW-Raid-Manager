@@ -61,6 +61,12 @@
 					        			<input type="checkbox" class="pull-right" ng-model="vm.ShowAbsoluteAttendance" ng-change="vm.ChangeAbsolute()">
 				        			</a>
 					        	</li>
+                                <li>
+					        		<a href="javascript:void(0)">
+					        			Show Attendance Counts
+					        			<input type="checkbox" class="pull-right" ng-model="vm.ShowCounts" ng-change="vm.ChangeCount()">
+				        			</a>
+					        	</li>
 					     	</ul>
 					    </div>
 					    <div class="btn-group pull-right" uib-dropdown>
@@ -85,7 +91,7 @@
 			    		<ajax-content status="vm.AjaxContent.Breakdown" src="vm.BreakdownEntities">
 					        <ul class="player-columns">
 					        	<li ng-repeat="entity in vm.BreakdownEntities | inactivePlayers: vm.ShowInactivePlayers | orderBy: vm.OrderMode" ng-class="{ inactive: entity.Active == false }">
-					        		<span class="pull-right"><span ng-bind="entity.Average"></span>%</span>
+					        		<span class="pull-right"><span ng-bind="entity.Metric"></span><span ng-show="!vm.ShowCounts">%</span></span>
 					        		<span ng-class="entity.ClassID" ng-bind="entity.Name" ng-click="vm.ShowDetails(entity)"></span>
 					        	</li>
 					        </ul>

@@ -23,16 +23,22 @@
                     var tiers = response.data
                     ExpansionSvc.GetAll().then(
                         function success(response) {
-                            var expansions = response.data;
+                            var expansions  = response.data;
+                            var now         = new Date();
+                            var currentTier = 0;
 
                             for (var i = 0; i < tiers.length; ++i) {
                                 tiers[i].StartDate     = DateSvc.toJavaScriptDate(tiers[i].StartDate);
                                 tiers[i].EndDate       = DateSvc.toJavaScriptDate(tiers[i].EndDate);
                                 tiers[i].ExpansionName = expansions[tiers[i].ExpansionID - 1].Name;
+
+                                if (now >= tiers[i].StartDate && (now <= tiers[i].EndDate || tiers[i].EndDate == null)) {
+                                    currentTier = i;
+                                }
                             }
 
-                            scope.__RaidTiers = tiers;
-                            ctrl.$setViewValue(tiers[tiers.length - 1]);
+                            scope.__RaidTiers = tiers;                           
+                            ctrl.$setViewValue(tiers[currentTier]);
                         }
                     );
                 }

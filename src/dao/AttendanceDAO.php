@@ -14,6 +14,8 @@ require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/Update
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/DeletePlayer.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAveragesInRange.php");
 require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAbsoluteAveragesInRange.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetCountsInRange.php");
+require_once(plugin_dir_path(__FILE__)."../database/procedures/Attendance/GetAbsoluteCountsInRange.php");
 use WRO\Entities                       as Entities;
 use WRO\Database\Procedures\Attendance as Procedures;
 
@@ -28,6 +30,10 @@ class AttendanceDAO {
 
 	public function GetAbsoluteAveragesInRange($startRange, $endRange) {
 		return Procedures\GetAbsoluteAveragesInRange::Run($startRange, $endRange);
+	}
+
+    public function GetAbsoluteCountsInRange($startRange, $endRange) {
+		return Procedures\GetAbsoluteCountsInRange::Run($startRange, $endRange);
 	}
 
 	public function GetAll() {
@@ -52,6 +58,10 @@ class AttendanceDAO {
 
 	public function GetChart($id) {
 		return Procedures\GetChart::Run($id);
+	}
+
+    public function GetCountsInRange($startRange, $endRange) {
+		return Procedures\GetCountsInRange::Run($startRange, $endRange);
 	}
 
 	public function Update(Entities\AttendanceEntity $entity) {

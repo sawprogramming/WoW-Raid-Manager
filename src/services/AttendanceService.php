@@ -75,6 +75,15 @@ class AttendanceService {
     }
 
     // Parameters:
+    //   Date startDate - Starting date of the range to retreive the attendance count for.
+    //   Date endDate   - Ending date of the range to retrieve the attendance count for.
+    //
+    // Returns the absolute attendance count for each Player that was active during the supplied range.
+    public function GetAbsoluteCountsInRange($startDate, $endDate) {
+        return $this->dao_->GetAbsoluteCountsInRange($startDate, $endDate);
+    }
+
+    // Parameters:
     //   unsigned long id - PlayerID to retrieve the Attendance records for.
     //
     // Returns all of the AttendanceEntity objects from the database belonging to the passed in PlayerID.
@@ -90,7 +99,6 @@ class AttendanceService {
     public function GetAveragesInRange($startDate, $endDate) {
         return $this->dao_->GetAveragesInRange($startDate, $endDate);
     }
-
 
     // Adds a new Attendance record to the database with the values from the passed in AttendanceEntity object.
     // The ID member is set by the function; the value passed in will not be used.
@@ -149,6 +157,15 @@ class AttendanceService {
     //     PlayerAverage - Player's average attendance up to this Date
     public function GetChart($id) {
         return $this->dao_->GetChart($id);
+    }
+
+    // Parameters:
+    //   Date startDate - Starting date of the range to retreive the attendance count for.
+    //   Date endDate   - Ending date of the range to retrieve the attendance count for.
+    //
+    // Returns the attendance count for each Player that was active during the supplied range.
+    public function GetCountsInRange($startDate, $endDate) {
+        return $this->dao_->GetCountsInRange($startDate, $endDate);
     }
 
     // Updates the Attendance record in the database corresponding to the passed in AttendanceEntity object.

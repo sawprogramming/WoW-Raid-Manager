@@ -20,10 +20,12 @@
         vm.OrderMode              = 'Name';
         vm.ShowInactivePlayers    = true;
         vm.ShowAbsoluteAttendance = false;
+        vm.ShowCounts             = false;
         vm.RefreshLootLinks       = RefreshLootLinks;
         vm.ShowDetails            = ShowDetails;
         vm.ChangeRange            = GetAllData;
         vm.ChangeAbsolute         = GetPlayerData;
+        vm.ChangeCount            = GetPlayerData;
 
         ///////////////////////////////////////////////////////////////////////
         function GetAllData() {
@@ -55,8 +57,10 @@
             var promise;
             vm.AjaxContent.Breakdown.status = 0;
 
-            if (vm.ShowAbsoluteAttendance == true) promise = AttendanceSvc.GetAbsoluteAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
-            else                                   promise = AttendanceSvc.GetAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
+            if      (vm.ShowAbsoluteAttendance  && !vm.ShowCounts) promise = AttendanceSvc.GetAbsoluteAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
+            else if (!vm.ShowAbsoluteAttendance && !vm.ShowCounts) promise = AttendanceSvc.GetAveragesInRange(vm.Range.StartDate, vm.Range.EndDate);
+            else if (vm.ShowAbsoluteAttendance  && vm.ShowCounts)  promise = AttendanceSvc.GetAbsoluteCountsInRange(vm.Range.StartDate, vm.Range.EndDate);
+            else                                                   promise = AttendanceSvc.GetCountsInRange(vm.Range.StartDate, vm.Range.EndDate);
 
             promise.then(
                 function success(response) {
@@ -65,6 +69,7 @@
                     // transform ClassID to CSS class name
                     angular.forEach(vm.BreakdownEntities, function (value, key) {
                         value.ClassID = ClassIdToCss(parseInt(value.ClassID));
+                        value.Metric  = vm.ShowCounts ? value.Count : value.Average;
                     });
 
                     vm.AjaxContent.Breakdown.status = 1;
