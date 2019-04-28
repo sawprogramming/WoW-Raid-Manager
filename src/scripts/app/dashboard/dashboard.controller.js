@@ -171,9 +171,11 @@
 
         function SaveSettings() {
             var usedOptions = [
-                { "key": "wro_realm_time",      "value": TimeSvc.toPhpTime(vm.Options.wro_realm_time) },
-                { "key": "wro_realm_frequency", "value": vm.Options.wro_realm_frequency               },
-                { "key": "wro_drop_tables",     "value": vm.Options.wro_drop_tables                   }
+                { "key": "wro_realm_time",             "value": TimeSvc.toPhpTime(vm.Options.wro_realm_time) },
+                { "key": "wro_realm_frequency",        "value": vm.Options.wro_realm_frequency               },
+                { "key": "wro_drop_tables",            "value": vm.Options.wro_drop_tables                   },
+                { "key": "wro_blizzard_client_id",     "value": vm.Options.wro_blizzard_client_id            },
+                { "key": "wro_blizzard_client_secret", "value": vm.Options.wro_blizzard_client_secret        },
             ];
 
             vm.ActiveRequests |= 1;

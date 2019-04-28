@@ -3,7 +3,7 @@ namespace WRO;
 /**
  * Plugin Name: WoW Raid Organizer
  * Description: Modules for loot and attendance.
- * Version: 2.4.1
+ * Version: 2.4.2
  * Author: Steven Williams
  * License: GPL2
  */
@@ -34,19 +34,23 @@ define("WRO_PATH", str_replace("\\", "/", plugin_dir_path(__FILE__)));
 class WRO {
     // Installation functions
     public function Install() {
-        $dbInstaller   = new Database\DatabaseInstaller();
-        $optionService = new Services\OptionService();
+        $dbInstaller         = new Database\DatabaseInstaller();
+        $optionService       = new Services\OptionService();
+        $encodedClientId     = "ZDYwNzRmZDMxNDU2NGZkZWFhZmMyZTdjZmIxNDBiODU=";
+        $encodedClientSecret = "dzJUZnV5d2JtM1N1Tmk4TE5xdlBNZTYwMGw5dWpIY2g=";
 
         // add options if they haven't been already
-        add_option('wro_region',          'us',        '', 'yes');
-        add_option('wro_faction',         'alliance',  '', 'yes');
-        add_option('wro_default_realm',   'stormrage', '', 'yes');
-        add_option('wro_loot_time',       time(),      '', 'yes');
-        add_option('wro_loot_frequency',  'daily',     '', 'yes');
-        add_option('wro_loot_itemid',     '113598',    '', 'yes');
-        add_option('wro_realm_time',      time(),      '', 'yes');
-        add_option('wro_realm_frequency', 'daily',     '', 'yes');
-        add_option('wro_drop_tables',     '0',         '', 'yes');
+        add_option('wro_region',                 'us',                                '', 'yes');
+        add_option('wro_faction',                'alliance',                          '', 'yes');
+        add_option('wro_default_realm',          'stormrage',                         '', 'yes');
+        add_option('wro_loot_time',              time(),                              '', 'yes');
+        add_option('wro_loot_frequency',         'daily',                             '', 'yes');
+        add_option('wro_loot_itemid',            '113598',                            '', 'yes');
+        add_option('wro_realm_time',             time(),                              '', 'yes');
+        add_option('wro_realm_frequency',        'daily',                             '', 'yes');
+        add_option('wro_drop_tables',            '0',                                 '', 'yes');
+        add_option('wro_blizzard_client_id',     base64_decode($encodedClientId),     '', 'yes');
+        add_option('wro_blizzard_client_secret', base64_decode($encodedClientSecret), '', 'yes');
 
         // database
         $dbInstaller->Install();

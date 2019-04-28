@@ -1,6 +1,6 @@
 {
   "name": "wow_raid_organizer",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Attendance and loot modules for a World of Warcraft raid group.",
   "dependencies": {},
   "devDependencies": {
