@@ -18,29 +18,64 @@ class WowApi {
     
     // methods ////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function GetCharIcon($name, $realm) {
-        $charUrl = self::BuildCharUrl($name, $realm);
+        $charUrl = $this->BuildCharUrl($name, $realm);
 
-        if(($json = @file_get_contents($charUrl . "?" . $this->GetSuffix())) === FALSE) {
-            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
-        }
-        $obj = json_decode($json);
+        // build the request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,            $charUrl . "?" . $this->GetSuffix());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-        return $obj->thumbnail;
+        // run the request and make sure it ran successfully
+        $response = curl_exec($ch);
+        try {
+            if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200) {
+                throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
+            }
+        } finally { curl_close($ch); }
+
+        return json_decode($response)->thumbnail;
     }
 
     public function GetCharFeed($name, $realm) {
-        $charUrl = self::BuildCharUrl($name, $realm);
+        $charUrl = $this->BuildCharUrl($name, $realm);
+
+        // build the request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,            $charUrl . "?fields=feed&" . $this->GetSuffix());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
-        if(($json = @file_get_contents($charUrl . "?fields=feed&" . $this->GetSuffix())) === FALSE) {
-            throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
-        }
+        // run the request and make sure it ran successfully
+        $response = curl_exec($ch);
+        try {
+            if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200) {
+                throw new Exception("Character '". $name . "' could not be found on " . $this->region . "-" . $realm  . ".");
+            }
+        } finally { curl_close($ch); }
         
-        return json_decode($json);
+        return json_decode($response);
     }
     
     public function GetRealmList($region) {
-        $json = file_get_contents("https://" . $region . ".api.blizzard.com/wow/realm/status?" . $this->GetSuffix());
-        return $json === FALSE ? NULL : json_decode($json);
+        // build the request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,            "https://" . $region . ".api.blizzard.com/wow/realm/status?" . $this->GetSuffix());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+        // run the request and make sure it ran successfully
+        $response = curl_exec($ch);
+        try {
+            if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200) {
+                return NULL;
+            }
+        } finally { curl_close($ch); }
+        
+        return json_decode($response);
     }
 
     // helper functions ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,13 +88,21 @@ class WowApi {
     }
 
     private function GetOAuthToken() {
-        $tokenUrl = "https://" . $this->region . ".battle.net/oauth/token?grant_type=client_credentials&client_id=" . $this->clientId . "&client_secret=" . $this->clientSecret;
+        // build the request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,            "https://" . $this->region . ".battle.net/oauth/token?grant_type=client_credentials&client_id=" . $this->clientId . "&client_secret=" . $this->clientSecret);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
-        if(($json = @file_get_contents($tokenUrl)) === FALSE) {
-            throw new Exception("Unable to retrieve access token for API using URL '" . $tokenUrl . "'.");
-        }
-        $obj = json_decode($json);
+        // run the request and make sure it ran successfully
+        $response = curl_exec($ch);
+        try {
+            if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200) {
+                throw new Exception("Unable to retrieve access token for API.");
+            }
+        } finally { curl_close($ch); }
 
-        return $obj->access_token;
+        return json_decode($response)->access_token;
     }
 };

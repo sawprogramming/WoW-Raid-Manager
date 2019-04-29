@@ -38,7 +38,9 @@
 
             // take the timezone out of the JavaScript date to prevent issues
             var date       = vm.Date;
-            var simpleDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            var simpleDate = ('0' + (date.getMonth() + 1)).slice(-2) + "/"
+                           + ('0' + date.getDate()).slice(-2)        + "/"
+                           + date.getFullYear();
             vm.Date = simpleDate;
         }
 
