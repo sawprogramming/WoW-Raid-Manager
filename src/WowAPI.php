@@ -80,7 +80,7 @@ class WowApi {
 
     // helper functions ///////////////////////////////////////////////////////////////////////////////////////////////
     private function BuildCharUrl($name, $realm) {
-        return "https://" . $this->region . ".api.blizzard.com/wow/character/" . $realm . "/" . $name; 
+        return "https://" . $this->region . ".api.blizzard.com/wow/character/" . $realm . "/" . urlencode($name); 
     }
 
     private function GetSuffix() {

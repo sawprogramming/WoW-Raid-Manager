@@ -99,7 +99,8 @@ class DatabaseSeeder {
                    (34, 7, 'Antorus, The Burning Throne', '2017-08-29', '2018-08-13'),
 
                    (35, 8, 'Uldir',                       '2018-09-04', '2019-01-21'),
-                   (36, 8, 'Dazar\'alor',                 '2019-01-22', NULL)
+                   (36, 8, 'Dazar\'alor',                 '2019-01-22', '2019-07-08'),
+                   (37, 8, 'Eternal Palace',              '2019-07-09', NULL)
 		");
 	}
 };
