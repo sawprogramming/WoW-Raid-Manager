@@ -100,7 +100,8 @@ class DatabaseSeeder {
 
                    (35, 8, 'Uldir',                       '2018-09-04', '2019-01-21'),
                    (36, 8, 'Dazar\'alor',                 '2019-01-22', '2019-07-08'),
-                   (37, 8, 'Eternal Palace',              '2019-07-09', NULL)
+                   (37, 8, 'Eternal Palace',              '2019-07-09', '2020-01-20'),
+                   (38, 8, 'Ny\'alotha, the Waking City', '2020-01-21',  NULL)
 		");
 	}
 };
